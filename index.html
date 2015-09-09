@@ -1,0 +1,214 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Guild Wars 2 - Gold per Hour</title>
+        <meta name="description" content="How much gold you made since you started the application">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="favicon.ico">
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/goldPerHour.css">
+        <link rel="stylesheet" href="css/spinner.css">
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900' rel='stylesheet' type='text/css'>
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <h1>Guild Wars 2 - Gold per Hour</h1>
+        
+        <div id="intro">
+            <div id="introBG">
+                <h2>Welcome to Guild Wars 2 - Gold per Hour</h2>
+                <p>This application tracks everything (<em>almost!</em>) that is going on with your account and displays how much gold you would get if you were to sell all the items you acquired, and how much gold you've lost from the items that were removed from your account (sold, destroyed, consumed, etc.).</p>
+                <p>I said <em>almost</em>, because for now I can't track items and gold that are waiting to be picked up at the trading post, nor the items in your guild banks. When Arenanet will add new APIs to access this, I will update the application.</p>
+                <p>Note that in some case, it might take 2 or 3 refreshes for the acquired or lost items to appear. The API doesn't return live data each time it's called, so please be patient :)</p>
+                <hr>
+                <h2>To begin, enter your API key here:</h2>
+                <input type="text" id="apiKey" maxwidth="100" value="">
+                <button id="continueIntro">Go!</button>
+                <label class="small" for="saveAPIKey"><input type="checkbox" id="saveAPIKey"> Save my API key locally, so I won't have to enter it next time</label>
+                
+                <p>You don't have one? <a href="https://account.arena.net/login" target="_blank">Click here</a> to access your account. Then, in the <strong>Applications</strong> tab, create a new API key. Make sure you grant <em>wallet, tradingpost, account, inventories</em> and <em>characters</em> permissions.</p>
+                <div class="borderTop"></div>
+                <div class="borderRight"></div>
+                <div class="borderBottom"></div>
+                <div class="borderLeft"></div>
+            </div>
+        </div>
+        
+        <div id="menu" style="display:none;">
+            <span id="about"><img src="img/about.png" alt="about" title="About">About</span>
+            <span class="separator">|</span>
+            <span id="settings"><img src="img/settings.png" alt="settings" title="Settings">Settings</span>
+            <span class="separator">|</span>
+            <span id="countdown"></span>
+            <button id="stop">Stop</button>
+            <button id="restart">Restart</button>
+        </div>
+        
+        <div id="main">
+            <h2>Summary <span id="toggleSummary">(toggle)</span></h2>
+            <div id="header">
+                <div id="headerLeft">
+                    <table id="summary">
+                        <tr>
+                            <td>Initial gold (<span id="startTime"></span>):</td>
+                            <td id="initialGold"></td>
+                        </tr>
+                        <tr>
+                            <td class="bottomBorder">Current gold (<span id="currentTime"></span>):</td>
+                            <td id="currentGold" class="price bottomBorder"></td>
+                        </tr>
+                        <tr>
+                            <td>Gold difference: </td>
+                            <td id="overallGoldDifference" class="price"></td>
+                        </tr>
+                        <tr>
+                            <td>+ Gains (before fees): </td>
+                            <td id="overallGains" class="price"></td>
+                        </tr>
+                        <tr>
+                            <td>- Listing and selling fees (15%): </td>
+                            <td id="overallFees" class="price"></td>
+                        </tr>
+                        <tr>
+                            <td class="bottomBorder">- Losses (<em>including</em> fees): </td>
+                            <td id="overallLosses" class="price bottomBorder"></td>
+                        </tr>
+                        <tr>
+                            <td class="bottomBorder">Result: </td>
+                            <td id="overallResult" class="price bottomBorder"></td>
+                        </tr>
+                        <tr>
+                            <td>Average gold per hour: </td>
+                            <td id="overallAverage" class="price"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="headerRight">
+                    <div id="chart"></div>
+                </div>
+            </div>
+            
+            <h2>Acquired items <span id="toggleNew">(toggle)</span></h2>
+            <div id="newItems">
+                <div id="gridNew"></div>
+                <div id="spinnerNew" class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <p class="none">None so far...</p>
+                <div class="results" id="totalNew" style="display: none;"></div>
+            </div>
+            
+            <h2>Lost items <span id="toggleOld">(toggle)</span></h2>
+            <div id="oldItems">
+                <div id="gridOld"></div>
+                <div id="spinnerOld" class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <p class="none">None so far...</p>
+                <div class="results" id="totalOld" style="display: none;"></div>
+            </div>
+
+            <div class="borderTop"></div>
+            <div class="borderRight"></div>
+            <div class="borderBottom"></div>
+            <div class="borderLeft"></div>
+        </div>
+
+        <footer>
+            September 2015 - Made by Deviljeff.1946
+        </footer>
+
+        <div id="aboutPopup">
+            <h2>About</h2>
+            <p>This application tracks everything (<em>almost!</em>) that is going on with your account and displays how much gold you would get if you were to sell all the items you acquired, and how much gold you've lost from the items that were removed from your account (sold, destroyed, consumed, etc.).</p>
+            <p>I said <em>almost</em>, because for now I can't track items and gold that are waiting to be picked up at the trading post, nor the items in your guild banks. When Arenanet will add new APIs to access this, I will update the application.</p>
+            <p>Note that in some case, it might take 2 or 3 refreshes for the acquired or lost items to appear. The API doesn't return live data each time it's called, so please be patient :)</p>
+            <hr>
+            <p>Check out the <strong>Settings</strong> to customize the interface and your preferences. These settings will be saved locally for the next time you use this application!<p>
+            <hr>
+            <p>I had some free time and I wanted to do something useful for the community. I hope you enjoy it as much as I had doing this project! A special thanks to my friends who helped me test this application. If you find bugs or have any suggestion on how I could improve it, send me an in-game mail at <strong>Deviljeff.1946</strong></p>
+        </div>
+
+        <div id="settingsPopup">
+            <h2>Settings</h2>
+            <label for="toggleDetails"><input type="checkbox" id="toggleDetails"> Show item details</label>
+            <hr>
+            <strong>Sort by:</strong> <label for="sortByRarity"><input type="radio" value="rarity" name="sortBy" id="sortByRarity"> Rarity</label>
+                                      <label for="sortByValue"><input type="radio" value="value" name="sortBy" id="sortByValue"> Descending value</label>
+            <hr>
+            <strong>For item values, use:</strong> <label for="lowestSeller"><input type="radio" value="lowestSeller" name="valueFrom" id="lowestSeller"> Lowest seller (list items)</label>
+                                                   <label for="highestBuyer"><input type="radio" value="highestBuyer" name="valueFrom" id="highestBuyer"> Highest buyer (sell instantly)</label>
+            <hr>
+            <table id="typesList">
+                <thead>
+                    <th><input type="checkbox" id="checkAllTypes" checked="checked"></th>
+                    <th colspan="7">Show items of these types:</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" data-type="Armor" id="ArmorItem" class="itemType"></td>
+                        <td><label for="ArmorItem">Armor</label></td>
+                        <td><input type="checkbox" data-type="Back" id="BackItem" class="itemType"></td>
+                        <td><label for="BackItem">Back item</label></td>
+                        <td><input type="checkbox" data-type="Bag" id="BagItem" class="itemType"></td>
+                        <td><label for="BagItem">Bags</label></td>
+                        <td><input type="checkbox" data-type="Consumable" id="ConsumableItem" class="itemType"></td>
+                        <td><label for="ConsumableItem">Consumables</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" data-type="Container" id="ContainerItem" class="itemType"></td>
+                        <td><label for="ContainerItem">Containers</label></td>
+                        <td><input type="checkbox" data-type="CraftingMaterial" id="CraftingMaterialItem" class="itemType"></td>
+                        <td><label for="CraftingMaterialItem">Crafting materials</label></td>
+                        <td><input type="checkbox" data-type="Gathering" id="GatheringItem" class="itemType"></td>
+                        <td><label for="GatheringItem">Gathering tools</label></td>
+                        <td><input type="checkbox" data-type="Gizmo" id="GizmoItem" class="itemType"></td>
+                        <td><label for="GizmoItem">Gizmos</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" data-type="MiniPet" id="MiniPetItem" class="itemType"></td>
+                        <td><label for="MiniPetItem">Miniatures</label></td>
+                        <td><input type="checkbox" data-type="Tool" id="ToolItem" class="itemType"></td>
+                        <td><label for="ToolItem">Salvage kits</label></td>
+                        <td><input type="checkbox" data-type="Trait" id="TraitItem" class="itemType"></td>
+                        <td><label for="TraitItem">Trait guides</label></td>
+                        <td><input type="checkbox" data-type="Trinket" id="TrinketItem" class="itemType"></td>
+                        <td><label for="TrinketItem">Trinkets</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" data-type="Trophy" id="TrophyItem" class="itemType"></td>
+                        <td><label for="TrophyItem">Trophies</label></td>
+                        <td><input type="checkbox" data-type="UpgradeComponent" id="UpgradeComponentItem" class="itemType"></td>
+                        <td><label for="UpgradeComponentItem">Upgrade components</label></td>
+                        <td><input type="checkbox" data-type="Weapon" id="WeaponItem" class="itemType"></td>
+                        <td><label for="WeaponItem">Weapons</label></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <label for="ignoreHidden"><input type="checkbox" id="ignoreHidden"> Ignore the value of discarded item types</label>
+        </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')</script>
+        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <!--<script src="js/vendor/jquery.flot.min.js"></script>
+        <script src="js/vendor/jquery.flot.time.min.js"></script>-->
+        <script src="js/vendor/highcharts.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
