@@ -7,7 +7,7 @@
             return;
         }
 
-        if(!filename) filename = 'console.json'
+        if(!filename) filename = 'log.json'
 
         if(typeof data === "object"){
             data = JSON.stringify(data, undefined, 4)
