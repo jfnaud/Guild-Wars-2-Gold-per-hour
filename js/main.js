@@ -1276,4 +1276,30 @@
     $('#toggleOld').on('click', function() {
         $('#oldItems').toggle(animationDelay);
     });
+
+
+    $('#saveCurrentState').on('click', function() {
+        var currentState = {
+            "startedOn": startedOn,
+            "keepGoing": keepGoing,
+            "intervalCount": intervalCount,
+            "refreshRate": refreshRate,
+            "timeElapsed": timeElapsed,
+            "token": token,
+            "initialGold" : initialGold,
+            "currentGold" : currentGold,
+            /*"initialIndex" : initialIndex,
+            "currentIndex" : currentIndex,*/
+            "newItems" : newItems,
+            "oldItems" : oldItems,
+            "refreshID" : refreshID,
+            "gains" : gains,
+            "losses" : losses,
+            "itemTypes" : itemTypes,
+            "updating" : updating,
+
+            "localStorage" : localStorage
+        };
+        console.save(currentState);
+    });
 }());
