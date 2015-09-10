@@ -1,6 +1,5 @@
 //Created by : Deviljeff.1946
-//August 2015
-
+//September 2015
 (function () {
 //Variables
     //Application started on
@@ -271,25 +270,9 @@
             var goldDiff = currentGold - initialGold;
             var goldPerHour;
 
-            //Compute gains and losses
-            /*gains = 0;
-            losses = 0;
-
-            $('#gridNew .item:visible').each(function () {
-                if ($(this).data('value') !== '') {
-                    gains += parseInt($(this).data('value'));
-                }
-            });*/
-
             $('#totalNew').html('Gains (listing, before fees): <span class="price">' + displayGold(gains) + '</span>' +
                     '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(gains * 0.15)) + '</span>' +
                     '<br>Result: <span class="price">' + displayGold(parseInt(gains * 0.85)) + '</span>');
-
-            /*$('#gridOld .item:visible').each(function () {
-                if ($(this).data('value') !== '') {
-                    losses += parseInt($(this).data('value'));
-                }
-            });*/
 
             $('#totalOld').html('Losses (listing, before fees): <span class="price">' + displayGold(losses) + '</span>' +
                     '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(losses * 0.15)) + '</span>' +
@@ -602,6 +585,63 @@
             updating = false;
             updateTotal();
         });
+    }
+
+    //This function compute the gains and the losses, based on the item filters and value type
+    function computeGainsAndLosses() {
+        //Don't refresh now
+        updating = true;
+        gains = 0;
+        losses = 0;
+
+        //I know it's ugly, but better do the comparison once than in every loops...
+        if(localStorage.getItem('ignoreHidden') === 'true') {
+            if(localStorage.getItem('valueFrom') === 'lowestSeller') {
+                Object.keys(newItems).forEach(function(id) {
+                    if(itemTypes.indexOf(newItems[id].type) >= 0) {
+                        gains += (newItems[id].count * newItems[id].sellValue);
+                    }
+                });
+
+                Object.keys(oldItems).forEach(function(id) {
+                    if(itemTypes.indexOf(oldItems[id].type) >= 0) {
+                        losses += (oldItems[id].count * oldItems[id].sellValue);
+                    }
+                });
+            } else {
+                Object.keys(newItems).forEach(function(id) {
+                    if(itemTypes.indexOf(newItems[id].type) >= 0) {
+                        gains += (newItems[id].count * newItems[id].buyValue);
+                    }
+                });
+
+                Object.keys(oldItems).forEach(function(id) {
+                    if(itemTypes.indexOf(oldItems[id].type) >= 0) {
+                        losses += (oldItems[id].count * oldItems[id].buyValue);
+                    }
+                });
+            }
+        } else {
+            if(localStorage.getItem('valueFrom') === 'lowestSeller') {
+                Object.keys(newItems).forEach(function(id) {
+                    gains += (newItems[id].count * newItems[id].sellValue);
+                });
+
+                Object.keys(oldItems).forEach(function(id) {
+                    losses += (oldItems[id].count * oldItems[id].sellValue);
+                });
+            } else {
+                Object.keys(newItems).forEach(function(id) {
+                    gains += (newItems[id].count * newItems[id].buyValue);
+                });
+
+                Object.keys(oldItems).forEach(function(id) {
+                    losses += (oldItems[id].count * oldItems[id].buyValue);
+                });
+            }
+        }
+
+        updating = false;
     }
 
     //This function fetch the items from the trading post
@@ -1128,8 +1168,34 @@
         //Check or uncheck all item types
         if ($(this).prop('checked')) {
             $('.itemType:not(:checked)').prop('checked', true);
+
+            $('.item').show(animationDelay, function() {
+                if ($('#gridNew .item:visible').length === 0) {
+                    $('#newItems .none').show();
+                    $('#totalNew').hide();
+                } else {
+                    $('#newItems .none').hide();
+                    $('#totalNew').show();
+                }
+
+                if ($('#gridOld .item:visible').length === 0) {
+                    $('#oldItems .none').show();
+                    $('#totalOld').hide();
+                } else {
+                    $('#oldItems .none').hide();
+                    $('#totalOld').show();
+                }
+            });
         } else {
             $('.itemType:checked').prop('checked', false);
+
+            $('.item').hide(animationDelay, function() {
+                $('#newItems .none').hide();
+                $('#totalNew').show();
+
+                $('#oldItems .none').hide();
+                $('#totalOld').show();
+            });
         }
 
         //Save settings to localStorage
@@ -1141,25 +1207,6 @@
         itemTypes = [];
         $('.itemType:checked').each(function() {
             itemTypes.push($(this).data('type'));
-        });
-
-        //Animate toggle, then show or hide totals
-        $.when($('.item').toggle(animationDelay)).then(function() {
-            if ($('#gridNew .item:visible').length === 0) {
-                $('#newItems .none').show();
-                $('#totalNew').hide();
-            } else {
-                $('#newItems .none').hide();
-                $('#totalNew').show();
-            }
-
-            if ($('#gridOld .item:visible').length === 0) {
-                $('#oldItems .none').show();
-                $('#totalOld').hide();
-            } else {
-                $('#oldItems .none').hide();
-                $('#totalOld').show();
-            }
         });
 
         //Compute the new gains / losses
@@ -1187,7 +1234,7 @@
         });
 
         //Animate toggle, then show or hide totals
-        $.when($('.' + $(this).data('type')).toggle(animationDelay)).then(function() {
+        $('.' + $(this).data('type')).toggle(animationDelay, function() {
             if ($('#gridNew .item:visible').length === 0) {
                 $('#newItems .none').show();
                 $('#totalNew').hide();
@@ -1229,60 +1276,4 @@
     $('#toggleOld').on('click', function() {
         $('#oldItems').toggle(animationDelay);
     });
-
-    function computeGainsAndLosses() {
-        //Don't refresh now
-        updating = true;
-        gains = 0;
-        losses = 0;
-
-        //I know it's ugly, but better do the comparison once than in every loops...
-        if(localStorage.getItem('ignoreHidden') === 'true') {
-            if(localStorage.getItem('valueFrom') === 'lowestSeller') {
-                Object.keys(newItems).forEach(function(id) {
-                    if(itemTypes.indexOf(newItems[id].type) >= 0) {
-                        gains += (newItems[id].count * newItems[id].sellValue);
-                    }
-                });
-
-                Object.keys(oldItems).forEach(function(id) {
-                    if(itemTypes.indexOf(oldItems[id].type) >= 0) {
-                        losses += (oldItems[id].count * oldItems[id].sellValue);
-                    }
-                });
-            } else {
-                Object.keys(newItems).forEach(function(id) {
-                    if(itemTypes.indexOf(newItems[id].type) >= 0) {
-                        gains += (newItems[id].count * newItems[id].buyValue);
-                    }
-                });
-
-                Object.keys(oldItems).forEach(function(id) {
-                    if(itemTypes.indexOf(oldItems[id].type) >= 0) {
-                        losses += (oldItems[id].count * oldItems[id].buyValue);
-                    }
-                });
-            }
-        } else {
-            if(localStorage.getItem('valueFrom') === 'lowestSeller') {
-                Object.keys(newItems).forEach(function(id) {
-                    gains += (newItems[id].count * newItems[id].sellValue);
-                });
-
-                Object.keys(oldItems).forEach(function(id) {
-                    losses += (oldItems[id].count * oldItems[id].sellValue);
-                });
-            } else {
-                Object.keys(newItems).forEach(function(id) {
-                    gains += (newItems[id].count * newItems[id].buyValue);
-                });
-
-                Object.keys(oldItems).forEach(function(id) {
-                    losses += (oldItems[id].count * oldItems[id].buyValue);
-                });
-            }
-        }
-
-        updating = false;
-    }
 }());
