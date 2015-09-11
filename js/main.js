@@ -1062,7 +1062,7 @@
         var negative = false;
 
         if(isNaN(coppers)) {
-            return 'Value error.';
+            return 'Value error';
         } else {
             if (coppers < 0) {
                 negative = true;
