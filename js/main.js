@@ -1061,20 +1061,24 @@
         var c, s, g;
         var negative = false;
 
-        if (coppers < 0) {
-            negative = true;
+        if(isNaN(coppers)) {
+            return 'Value error.';
+        } else {
+            if (coppers < 0) {
+                negative = true;
+            }
+
+            coppers = Math.abs(coppers);
+
+            c = coppers % 100;
+            s = (coppers / 100) % 100;
+            g = coppers / 10000;
+
+            return ((negative ? '- ' : '') +
+                    parseInt(g, 10) + ' <img src="img/Gold_coin.png"> ' +
+                    parseInt(s, 10).toString().paddingLeft('00') + ' <img src="img/Silver_coin.png"> ' +
+                    parseInt(c, 10).toString().paddingLeft('00') + ' <img src="img/Copper_coin.png">');
         }
-
-        coppers = Math.abs(coppers);
-
-        c = coppers % 100;
-        s = (coppers / 100) % 100;
-        g = coppers / 10000;
-
-        return ((negative ? '- ' : '') +
-                parseInt(g, 10) + ' <img src="img/Gold_coin.png"> ' +
-                parseInt(s, 10).toString().paddingLeft('00') + ' <img src="img/Silver_coin.png"> ' +
-                parseInt(c, 10).toString().paddingLeft('00') + ' <img src="img/Copper_coin.png">');
     }
 
 //Events binding
