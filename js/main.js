@@ -1190,11 +1190,11 @@
             $('.itemType:checked').prop('checked', false);
 
             $('.item').hide(animationDelay, function() {
-                $('#newItems .none').hide();
-                $('#totalNew').show();
+                $('#newItems .none').show();
+                $('#totalNew').hide();
 
-                $('#oldItems .none').hide();
-                $('#totalOld').show();
+                $('#oldItems .none').show();
+                $('#totalOld').hide();
             });
         }
 
@@ -1278,6 +1278,7 @@
     });
 
 
+    //Debug button
     $('#saveCurrentState').on('click', function() {
         var currentState = {
             "startedOn": startedOn,
