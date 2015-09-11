@@ -398,15 +398,15 @@
                                         found = false;
                                         //Find the value of this item
                                         prices.forEach(function (price) {
-                                            if (price.id === item.id && (price.sells || price.buys)) {
+                                            if (price.id === item.id) {
                                                 found = true;
                                                 createItem('new',
                                                         item.id,
                                                         item.name,
                                                         item.icon,
                                                         newItems[item.id].count,
-                                                        price.sells.unit_price,
-                                                        price.buys.unit_price,
+                                                        (price.sells ? price.sells.unit_price : null),
+                                                        (price.buys ? price.buys.unit_price : null),
                                                         item.rarity,
                                                         item.type);
                                             }
@@ -429,7 +429,7 @@
                                 deferredNew.resolve();
                             }).fail(function (jqxhr) {
                                 if (jqxhr.status === 400) {
-                                    $('body').html('<b>Error!</b> GW2 API is not working, try later :(');
+                                    failedRequest(jqxhr);
                                 } else {
                                     $('#spinnerNew').hide();
 
@@ -495,15 +495,15 @@
                                         found = false;
                                         //Find the price of this item
                                         prices.forEach(function (price) {
-                                            if (price.id === item.id && (price.sells || price.buys)) {
+                                            if (price.id === item.id) {
                                                 found = true;
                                                 createItem('old',
                                                         item.id,
                                                         item.name,
                                                         item.icon,
                                                         oldItems[item.id].count,
-                                                        price.sells.unit_price,
-                                                        price.buys.unit_price,
+                                                        (price.sells ? price.sells.unit_price : null),
+                                                        (price.buys ? price.buys.unit_price : null),
                                                         item.rarity,
                                                         item.type);
                                             }
@@ -526,7 +526,7 @@
                                 deferredOld.resolve();
                             }).fail(function (jqxhr) {
                                 if (jqxhr.status === 400) {
-                                    $('body').html('<b>Error!</b> GW2 API is not working, try later :(');
+                                    failedRequest(jqxhr);
                                 } else {
                                     $('#spinnerOld').hide();
 
