@@ -654,7 +654,7 @@
         $.getJSON('https://api.guildwars2.com/v2/commerce/transactions/current/buys?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null) {
+                if (item !== null && item.quantity) {
                     if (first) {
                         //If not already in the index we add it
                         if (initialIndex['' + item.item_id] === undefined) {
@@ -685,7 +685,7 @@
         $.getJSON('https://api.guildwars2.com/v2/commerce/transactions/current/sells?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null) {
+                if (item !== null && item.quantity) {
                     if (first) {
                         //If not already in the index we add it
                         if (initialIndex['' + item.item_id] === undefined) {
@@ -726,7 +726,7 @@
         $.getJSON('https://api.guildwars2.com/v2/account/bank?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null) {
+                if (item !== null && item.count) {
                     if (first) {
                         //If not already in the index we add it
                         if (initialIndex['' + item.id] === undefined) {
@@ -763,7 +763,7 @@
         $.getJSON('https://api.guildwars2.com/v2/account/materials?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null) {
+                if (item !== null && item.count) {
                     if (first) {
                         //If not already in the index we add it
                         if (initialIndex['' + item.id] === undefined) {
@@ -802,24 +802,26 @@
             json.forEach(function (character) {
                 //Currently equipped items
                 character.equipment.forEach(function (item) {
-                    if (first) {
-                        //If not already in the index we add it
-                        if (initialIndex['' + item.id] === undefined) {
-                            initialIndex['' + item.id] = {
-                                count: 1
-                            };
+                    if(item !== null) {
+                        if (first) {
+                            //If not already in the index we add it
+                            if (initialIndex['' + item.id] === undefined) {
+                                initialIndex['' + item.id] = {
+                                    count: 1
+                                };
+                            } else {
+                                //Else we add to the total count
+                                initialIndex['' + item.id].count += 1;
+                            }
                         } else {
-                            //Else we add to the total count
-                            initialIndex['' + item.id].count += 1;
-                        }
-                    } else {
-                        //Build an index for current items
-                        if (currentIndex['' + item.id] === undefined) {
-                            currentIndex['' + item.id] = {
-                                count: 1
-                            };
-                        } else {
-                            currentIndex['' + item.id].count += 1;
+                            //Build an index for current items
+                            if (currentIndex['' + item.id] === undefined) {
+                                currentIndex['' + item.id] = {
+                                    count: 1
+                                };
+                            } else {
+                                currentIndex['' + item.id].count += 1;
+                            }
                         }
                     }
                 });
@@ -829,7 +831,7 @@
                     if (bag !== null) {
                         //Loop on each slots
                         bag.inventory.forEach(function (item) {
-                            if (item !== null) {
+                            if (item !== null && item.count) {
                                 if (first) {
                                     //If not already in the index we add it
                                     if (initialIndex['' + item.id] === undefined) {
