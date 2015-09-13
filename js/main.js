@@ -885,84 +885,88 @@
 
     //This function creates an item and adds it to the specified container. Filters will also be applied based on what the user chose in the settings.
     function createItem(container, id, name, icon, count, sellValue, buyValue, rarity, type) {
-        var itemValue = (localStorage.getItem('valueFrom') === 'lowestSeller' ? sellValue : buyValue);
-        var rarityLevel;
+        if(count !== null) {
+            var itemValue = (localStorage.getItem('valueFrom') === 'lowestSeller' ? sellValue : buyValue);
+            var totalSell = (sellValue !== null ? sellValue * count : 0);
+            var totalBuy = (buyValue !== null ? buyValue * count : 0);
+            var rarityLevel;
 
-        switch (rarity) {
-        case 'Junk':
-            rarityLevel = 1;
-            break;
-        case 'Basic':
-            rarityLevel = 2;
-            break;
-        case 'Fine':
-            rarityLevel = 3;
-            break;
-        case 'Masterwork':
-            rarityLevel = 4;
-            break;
-        case 'Rare':
-            rarityLevel = 5;
-            break;
-        case 'Exotic':
-            rarityLevel = 6;
-            break;
-        case 'Ascended':
-            rarityLevel = 7;
-            break;
-        case 'Legendary':
-            rarityLevel = 8;
-            break;
-        }
+            switch (rarity) {
+            case 'Junk':
+                rarityLevel = 1;
+                break;
+            case 'Basic':
+                rarityLevel = 2;
+                break;
+            case 'Fine':
+                rarityLevel = 3;
+                break;
+            case 'Masterwork':
+                rarityLevel = 4;
+                break;
+            case 'Rare':
+                rarityLevel = 5;
+                break;
+            case 'Exotic':
+                rarityLevel = 6;
+                break;
+            case 'Ascended':
+                rarityLevel = 7;
+                break;
+            case 'Legendary':
+                rarityLevel = 8;
+                break;
+            }
 
-        var item = $('<div class="item ' + rarity + ' ' + type + '" style="display:none;"' +
-                'data-id="' + id + '" data-type="' + type + '"' +
-                'data-rarity="' + rarityLevel + '" data-name="' + name + '" ' +
-                'data-sellvalue="' + (sellValue * count) + '" ' + 
-                'data-buyvalue="' + (buyValue * count) + '" ' + '>' +
-                '<table><tr><td class="icon"></td><td><div class="description"' + ($('#toggleDetails').prop('checked') ? '' : 'style="display:none;"') + '></div></td></tr></table>' +
-                '</div>');
+            var item = $('<div class="item ' + rarity + ' ' + type + '" style="display:none;"' +
+                    'data-id="' + id + '" data-type="' + type + '"' +
+                    'data-rarity="' + rarityLevel + '" data-name="' + name + '" ' +
+                    'data-sellvalue="' + totalSell + '" ' + 
+                    'data-buyvalue="' + totalBuy + '" ' + '>' +
+                    '<table><tr><td class="icon"></td><td><div class="description"' + ($('#toggleDetails').prop('checked') ? '' : 'style="display:none;"') + '></div></td></tr></table>' +
+                    '</div>');
 
-        item.find('.icon').css('background-image', 'url(' + icon + ')')
-            .append('<span class="count">' + count + '</span>');
+            item.find('.icon').css('background-image', 'url(' + icon + ')')
+                .append('<span class="count">' + count + '</span>');
 
-        item.find('.description').html('<div class="itemName"><a href="https://wiki.guildwars2.com/index.php?search=' + encodeURIComponent(name) + '" target="_blank">' + name + '</a></div>');
+            item.find('.description').html('<div class="itemName"><a href="https://wiki.guildwars2.com/index.php?search=' + encodeURIComponent(name) + '" target="_blank">' + name + '</a></div>');
 
 
-        if(sellValue !== null) {
-            item.find('.description').append('<div class="itemSellValue" ' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? '' : 'style="display: none;"') + '>Unit value : ' + displayGold(sellValue) +
-                    '<br>Total value : ' + displayGold(sellValue * count) + '</div>');
-        }
+            if(sellValue !== null) {
+                item.find('.description').append('<div class="itemSellValue" ' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? '' : 'style="display: none;"') + '>Unit value : ' + displayGold(sellValue) +
+                        '<br>Total value : ' + displayGold(totalSell) + '</div>');
+            }
 
-        if(buyValue !== null) {
-             item.find('.description').append('<div class="itemBuyValue" ' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'style="display: none;"' : '') + '>Unit value : ' + displayGold(buyValue) +
-                    '<br>Total value : ' + displayGold(buyValue * count) + '</div>');
-        }
+            if(buyValue !== null) {
+                 item.find('.description').append('<div class="itemBuyValue" ' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'style="display: none;"' : '') + '>Unit value : ' + displayGold(buyValue) +
+                        '<br>Total value : ' + displayGold(totalBuy) + '</div>');
+            }
 
-        if(container === 'new') {
-            $('#gridNew').append(item);
-            newItems['' + id].type = type;
-            newItems['' + id].rarity = rarity;
-            newItems['' + id].sellValue = sellValue;
-            newItems['' + id].buyValue = buyValue;
-        } else {
-            $('#gridOld').append(item);
-            oldItems['' + id].type = type;
-            oldItems['' + id].rarity = rarity;
-            oldItems['' + id].sellValue = sellValue;
-            oldItems['' + id].buyValue = sellValue;
-        }
-
-        //Show the item only if the item type is allowed by the user
-        if(itemTypes.indexOf(type) >= 0) {
-            item.fadeIn(animationDelay);
-        }
-
-        if(itemTypes.indexOf(type) >= 0 || localStorage.getItem('ignoreHidden') === 'false') {
             if(container === 'new') {
-                gains += (count * itemValue);
+                $('#gridNew').append(item);
+                newItems['' + id].type = type;
+                newItems['' + id].rarity = rarity;
+                newItems['' + id].sellValue = sellValue;
+                newItems['' + id].buyValue = buyValue;
             } else {
-                losses += (count * itemValue);
+                $('#gridOld').append(item);
+                oldItems['' + id].type = type;
+                oldItems['' + id].rarity = rarity;
+                oldItems['' + id].sellValue = sellValue;
+                oldItems['' + id].buyValue = sellValue;
+            }
+
+            //Show the item only if the item type is allowed by the user
+            if(itemTypes.indexOf(type) >= 0) {
+                item.fadeIn(animationDelay);
+            }
+
+            if(itemTypes.indexOf(type) >= 0 || localStorage.getItem('ignoreHidden') === 'false') {
+                if(container === 'new') {
+                    gains += (count * itemValue);
+                } else {
+                    losses += (count * itemValue);
+                }
             }
         }
     }
