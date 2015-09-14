@@ -405,8 +405,8 @@
                                                         item.name,
                                                         item.icon,
                                                         newItems[item.id].count,
-                                                        (price.sells ? price.sells.unit_price : null),
-                                                        (price.buys ? price.buys.unit_price : null),
+                                                        (price.sells && price.sells.quantity > 0 ? price.sells.unit_price : null),
+                                                        (price.buys && price.buys.quantity > 0 ? price.buys.unit_price : null),
                                                         item.rarity,
                                                         item.type);
                                             }
@@ -502,8 +502,8 @@
                                                         item.name,
                                                         item.icon,
                                                         oldItems[item.id].count,
-                                                        (price.sells ? price.sells.unit_price : null),
-                                                        (price.buys ? price.buys.unit_price : null),
+                                                        (price.sells && price.sells.quantity > 0 ? price.sells.unit_price : null),
+                                                        (price.buys && price.buys.quantity > 0 ? price.buys.unit_price : null),
                                                         item.rarity,
                                                         item.type);
                                             }
