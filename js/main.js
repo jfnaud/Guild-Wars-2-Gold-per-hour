@@ -137,7 +137,6 @@
         chart = $('#chart').highcharts({
             chart: {
                 type: 'spline',
-                //animation: Highcharts.svg, // don't animate in old IE
                 animation: false,
                 marginRight: 10,
                 width: 700,
@@ -168,11 +167,6 @@
                 title: {
                     text: 'Gold per hour'
                 },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }],
                 labels: {
                     //useHTML: true,
                     formatter: function() {
