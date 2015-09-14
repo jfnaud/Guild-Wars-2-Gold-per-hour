@@ -19,8 +19,8 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <h1>Guild Wars 2 - Gold per Hour <button id="saveCurrentState">DEBUG</button></h1>
-        
+        <h1>Guild Wars 2 - Gold per Hour</h1>
+
         <div id="intro">
             <h2>Welcome to Guild Wars 2 - Gold per Hour</h2>
             <p>This application tracks everything (<em>almost!</em>) that is going on with your account and displays how much gold you would get if you were to sell all the items you acquired, and how much gold you've lost from the items that were removed from your account (sold, destroyed, consumed, etc.).</p>
@@ -67,7 +67,7 @@
                             <td id="overallGoldDifference" class="price"></td>
                         </tr>
                         <tr>
-                            <td>+ Gains (before fees): </td>
+                            <td>+ Gains from acquired items (before fees): </td>
                             <td id="overallGains" class="price"></td>
                         </tr>
                         <tr>
@@ -75,7 +75,7 @@
                             <td id="overallFees" class="price"></td>
                         </tr>
                         <tr>
-                            <td class="bottomBorder">- Losses (<em>including</em> fees): </td>
+                            <td class="bottomBorder">- Losses from lost items (<em>including</em> fees): </td>
                             <td id="overallLosses" class="price bottomBorder"></td>
                         </tr>
                         <tr>
@@ -125,6 +125,7 @@
 
         <footer>
             September 2015 - Made by Deviljeff.1946
+            <!--<br><button id="saveCurrentState">Debug</button>-->
         </footer>
 
         <div id="aboutPopup">
@@ -141,9 +142,10 @@
         <div id="settingsPopup">
             <h2>Settings</h2>
             <label for="toggleDetails"><input type="checkbox" id="toggleDetails"> Show item details</label>
+            <label for="toggleSound"><input type="checkbox" id="toggleSound"> Play a sound effect when refreshing</label>
             <hr>
-            <strong>Sort by:</strong> <label for="sortByRarity"><input type="radio" value="rarity" name="sortBy" id="sortByRarity"> Rarity</label>
-                                      <label for="sortByValue"><input type="radio" value="value" name="sortBy" id="sortByValue"> Descending value</label>
+            <strong>Sort items by:</strong> <label for="sortByRarity"><input type="radio" value="rarity" name="sortBy" id="sortByRarity"> Rarity</label>
+                                            <label for="sortByValue"><input type="radio" value="value" name="sortBy" id="sortByValue"> Descending value</label>
             <hr>
             <strong>For item values, use:</strong> <label for="lowestSeller"><input type="radio" value="lowestSeller" name="valueFrom" id="lowestSeller"> Lowest seller (list items)</label>
                                                    <label for="highestBuyer"><input type="radio" value="highestBuyer" name="valueFrom" id="highestBuyer"> Highest buyer (sell instantly)</label>

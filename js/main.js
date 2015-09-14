@@ -42,6 +42,8 @@
     });
     //Are we currently updating the page? Used to avoid spikes on the chart
     var updating = false;
+    //Sound effect
+    var soundEffect = new Audio('sounds/ding.mp3');
 
     //Utility function for padding zeroes when displaying gold
     String.prototype.paddingLeft = function (paddingValue) {
@@ -64,6 +66,12 @@
         localStorage.setItem('showDetails', true);
     }
     $('#toggleDetails').prop('checked', (localStorage.getItem('showDetails') === 'true' ? true : false));
+
+    //Play a sound?
+    if (localStorage.getItem('playSound') === null) {
+        localStorage.setItem('playSound', false);
+    }
+    $('#toggleSound').prop('checked', (localStorage.getItem('playSound') === 'true' ? true : false));
 
     //Sort by
     if (localStorage.getItem('sortBy') === null) {
@@ -166,8 +174,10 @@
                     color: '#808080'
                 }],
                 labels: {
+                    //useHTML: true,
                     formatter: function() {
                         return (this.value / 10000).toFixed(2);
+                        //return displayGold(this.value);
                     }
                 }
             },
@@ -346,6 +356,10 @@
                 //Now that we know what is acquired and what is lost, update the page. Don't refresh the summary and the chart until we're done.
                 updating = true;
                 updatePage();
+
+                if(localStorage.getItem('playSound') === 'true') {
+                    soundEffect.play();
+                }
             }
         });
     }
@@ -1173,6 +1187,11 @@
         localStorage.setItem('showDetails', $(this).prop('checked'));
     });
 
+    //Changing the "Play a sound" option
+    $('#toggleSound').on('change', function () {
+        localStorage.setItem('playSound', $(this).prop('checked'));
+    });
+
     //Checking all item types
     $('#checkAllTypes').on('change', function () {
         //Check or uncheck all item types
@@ -1298,8 +1317,8 @@
             "token": token,
             "initialGold" : initialGold,
             "currentGold" : currentGold,
-            /*"initialIndex" : initialIndex,
-            "currentIndex" : currentIndex,*/
+            "initialIndex" : initialIndex,
+            "currentIndex" : currentIndex,
             "newItems" : newItems,
             "oldItems" : oldItems,
             "refreshID" : refreshID,

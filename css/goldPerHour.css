@@ -30,7 +30,7 @@ footer {
 h1 {
     color: white;
     margin-left: 3%;
-    text-shadow: 0px 0px 15px #A9A9A9
+    text-shadow: 0px 0px 15px #A9A9A9;
 }
 
 h2 {
@@ -41,6 +41,10 @@ h2 {
 h3 {
     margin: 0px;
     text-align: center;
+}
+
+label {
+    margin-right: 10px;
 }
 
 /* Borders */
