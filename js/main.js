@@ -158,7 +158,7 @@
             },
             yAxis: {
                 title: {
-                    text: 'Gold'
+                    text: 'Gold per hour'
                 },
                 plotLines: [{
                     value: 0,
@@ -654,7 +654,7 @@
         $.getJSON('https://api.guildwars2.com/v2/commerce/transactions/current/buys?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null && item.quantity) {
+                if (item !== null && item.quantity && typeof(item.quantity) === 'number') {
                     if (first) {
                         //If not already in the index we add it
                         if (initialIndex['' + item.item_id] === undefined) {
@@ -685,7 +685,7 @@
         $.getJSON('https://api.guildwars2.com/v2/commerce/transactions/current/sells?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null && item.quantity) {
+                if (item !== null && item.quantity && typeof(item.quantity) === 'number') {
                     if (first) {
                         //If not already in the index we add it
                         if (initialIndex['' + item.item_id] === undefined) {
@@ -726,7 +726,7 @@
         $.getJSON('https://api.guildwars2.com/v2/account/bank?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null && item.count) {
+                if (item !== null && item.count && typeof(item.count) === 'number') {
                     if (first) {
                         //If not already in the index we add it
                         if (initialIndex['' + item.id] === undefined) {
@@ -763,7 +763,7 @@
         $.getJSON('https://api.guildwars2.com/v2/account/materials?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null && item.count) {
+                if (item !== null && item.count && typeof(item.count) === 'number') {
                     if (first) {
                         //If not already in the index we add it
                         if (initialIndex['' + item.id] === undefined) {
@@ -831,7 +831,7 @@
                     if (bag !== null) {
                         //Loop on each slots
                         bag.inventory.forEach(function (item) {
-                            if (item !== null && item.count) {
+                            if (item !== null && item.count && typeof(item.count) === 'number') {
                                 if (first) {
                                     //If not already in the index we add it
                                     if (initialIndex['' + item.id] === undefined) {
@@ -1286,7 +1286,6 @@
     $('#toggleOld').on('click', function() {
         $('#oldItems').toggle(animationDelay);
     });
-
 
     //Debug button
     $('#saveCurrentState').on('click', function() {
