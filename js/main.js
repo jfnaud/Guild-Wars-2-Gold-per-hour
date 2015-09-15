@@ -134,9 +134,8 @@
         $('#currentTime').html(new Date().toLocaleString());
 
         //Chart of the gold per hour
-        chart = $('#chart').highcharts({
+        chart = $('#chart').highcharts('StockChart', {
             chart: {
-                type: 'spline',
                 animation: false,
                 marginRight: 10,
                 width: 700,
@@ -160,35 +159,45 @@
                 text: 'Gold per hour over the last hour'
             },
             xAxis: {
-                type: 'datetime',
+                //type: 'datetime',
                 tickPixelInterval: 150
             },
             yAxis: {
                 title: {
-                    text: 'Gold per hour'
+                    text: null
                 },
                 labels: {
-                    //useHTML: true,
+                    useHTML: true,
                     formatter: function() {
-                        return (this.value / 10000).toFixed(2);
-                        //return displayGold(this.value);
+                        //return (this.value / 10000).toFixed(2);
+                        return displayGold(this.value);
                     }
-                }
+                },
+                opposite: false
             },
             tooltip: {
                 hideDelay: 0,
                 animation: false,
                 formatter: function () {
-                    return '<b>' + this.series.name + '</b><br/>' +
+                    return '<b>' + this.points[0].series.name + '</b><br/>' +
                         Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
                         displayGold(this.y);
                 },
                 useHTML: true
             },
+            exporting: {
+                enabled: false
+            },
             legend: {
                 enabled: false
             },
-            exporting: {
+            navigator: {
+                enabled: false
+            },
+            rangeSelector: {
+                enabled: false
+            },
+            scrollbar: {
                 enabled: false
             },
             series: [{
@@ -1089,9 +1098,9 @@
             g = coppers / 10000;
 
             return ((negative ? '- ' : '') +
-                    parseInt(g, 10) + ' <img src="img/Gold_coin.png"> ' +
-                    parseInt(s, 10).toString().paddingLeft('00') + ' <img src="img/Silver_coin.png"> ' +
-                    parseInt(c, 10).toString().paddingLeft('00') + ' <img src="img/Copper_coin.png">');
+                    parseInt(g, 10) + ' <i class="goldIcon"></i> ' +
+                    parseInt(s, 10).toString().paddingLeft('00') + ' <i class="silverIcon"></i> ' +
+                    parseInt(c, 10).toString().paddingLeft('00') + ' <i class="copperIcon"></i>');
         }
     }
 

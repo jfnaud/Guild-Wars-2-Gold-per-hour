@@ -114,6 +114,27 @@ label {
 
 
 /* Main page */
+.goldIcon, .silverIcon, .copperIcon {
+    height: 15px;
+    width: 15px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: text-top;
+    margin-top: 1px;
+}
+
+.goldIcon {
+    background-image: url(../img/Gold_coin.png);
+}
+
+.silverIcon {
+    background-image: url(../img/Silver_coin.png);
+}
+
+.copperIcon {
+    background-image: url(../img/Copper_coin.png);
+}
+
 #main {
     background: url(../img/grey.png);
     box-sizing: border-box;
