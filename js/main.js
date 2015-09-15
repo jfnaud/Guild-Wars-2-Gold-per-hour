@@ -1320,8 +1320,8 @@
             "token": token,
             "initialGold" : initialGold,
             "currentGold" : currentGold,
-            "initialIndex" : initialIndex,
-            "currentIndex" : currentIndex,
+            /*"initialIndex" : initialIndex,
+            "currentIndex" : currentIndex,*/
             "newItems" : newItems,
             "oldItems" : oldItems,
             "refreshID" : refreshID,
