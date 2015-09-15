@@ -720,7 +720,7 @@
                                 count: item.quantity
                             };
                         } else {
-                            currentIndex['' + item.item_id] += item.quantity;
+                            currentIndex['' + item.item_id].count += item.quantity;
                         }
                     }
                 }
