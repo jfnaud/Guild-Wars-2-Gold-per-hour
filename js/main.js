@@ -333,12 +333,12 @@
                 //Check for new items in the current index
                 Object.keys(currentIndex).forEach(function(item) {
                     //If the item is not present in the initial index, that means it is new, so add it to newItems
-                    if (initialIndex['' + item] === undefined) {
-                        newItems['' + item] = currentIndex[item];
-                    } else if (initialIndex['' + item].count < currentIndex[item].count) {
+                    if (initialIndex[item] === undefined) {
+                        newItems[item] = currentIndex[item];
+                    } else if (initialIndex[item].count < currentIndex[item].count) {
                         //If the item count is now higher, add the difference to newItems
-                        newItems['' + item] = {
-                            count: (currentIndex[item].count - initialIndex['' + item].count)
+                        newItems[item] = {
+                            count: (currentIndex[item].count - initialIndex[item].count)
                         };
                     }
                 });
@@ -347,11 +347,11 @@
                 Object.keys(initialIndex).forEach(function(item) {
                     //If the item is not present in the current index, that means it doesn't belong to the account anymore, so add it to oldItems
                     if (currentIndex[item] === undefined) {
-                        oldItems['' + item] = initialIndex['' + item];
-                    } else if (initialIndex['' + item].count > currentIndex[item].count) {
+                        oldItems[item] = initialIndex[item];
+                    } else if (initialIndex[item].count > currentIndex[item].count) {
                         //If the item count is now lower, add the difference to oldItems
-                        oldItems['' + item] = {
-                            count: (initialIndex['' + item].count - currentIndex[item].count)
+                        oldItems[item] = {
+                            count: (initialIndex[item].count - currentIndex[item].count)
                         };
                     }
                 });
@@ -671,25 +671,25 @@
         $.getJSON('https://api.guildwars2.com/v2/commerce/transactions/current/buys?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null && item.quantity && typeof(item.quantity) === 'number') {
+                if (item !== null && item.quantity) {
                     if (first) {
                         //If not already in the index we add it
-                        if (initialIndex['' + item.item_id] === undefined) {
-                            initialIndex['' + item.item_id] = {
+                        if (initialIndex[item.item_id] === undefined) {
+                            initialIndex[item.item_id] = {
                                 count: item.quantity
                             };
                         } else {
                             //Else we add to the total count
-                            initialIndex['' + item.item_id].count += item.quantity;
+                            initialIndex[item.item_id].count += item.quantity;
                         }
                     } else {
                         //Build an index for current items
-                        if (currentIndex['' + item.item_id] === undefined) {
-                            currentIndex['' + item.item_id] = {
+                        if (currentIndex[item.item_id] === undefined) {
+                            currentIndex[item.item_id] = {
                                 count: item.quantity
                             };
                         } else {
-                            currentIndex['' + item.item_id].count += item.quantity;
+                            currentIndex[item.item_id].count += item.quantity;
                         }
                     }
                 }
@@ -702,25 +702,25 @@
         $.getJSON('https://api.guildwars2.com/v2/commerce/transactions/current/sells?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null && item.quantity && typeof(item.quantity) === 'number') {
+                if (item !== null && item.quantity) {
                     if (first) {
                         //If not already in the index we add it
-                        if (initialIndex['' + item.item_id] === undefined) {
-                            initialIndex['' + item.item_id] = {
+                        if (initialIndex[item.item_id] === undefined) {
+                            initialIndex[item.item_id] = {
                                 count: item.quantity
                             };
                         } else {
                             //Else we add to the total count
-                            initialIndex['' + item.item_id].count += item.quantity;
+                            initialIndex[item.item_id].count += item.quantity;
                         }
                     } else {
                         //Build an index for current items
-                        if (currentIndex['' + item.item_id] === undefined) {
-                            currentIndex['' + item.item_id] = {
+                        if (currentIndex[item.item_id] === undefined) {
+                            currentIndex[item.item_id] = {
                                 count: item.quantity
                             };
                         } else {
-                            currentIndex['' + item.item_id].count += item.quantity;
+                            currentIndex[item.item_id].count += item.quantity;
                         }
                     }
                 }
@@ -743,25 +743,25 @@
         $.getJSON('https://api.guildwars2.com/v2/account/bank?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null && item.count && typeof(item.count) === 'number') {
+                if (item !== null && item.count) {
                     if (first) {
                         //If not already in the index we add it
-                        if (initialIndex['' + item.id] === undefined) {
-                            initialIndex['' + item.id] = {
+                        if (initialIndex[item.id] === undefined) {
+                            initialIndex[item.id] = {
                                 count: item.count
                             };
                         } else {
                             //Else we add to the total count
-                            initialIndex['' + item.id].count += item.count;
+                            initialIndex[item.id].count += item.count;
                         }
                     } else {
                         //Build an index for current items
-                        if (currentIndex['' + item.id] === undefined) {
-                            currentIndex['' + item.id] = {
+                        if (currentIndex[item.id] === undefined) {
+                            currentIndex[item.id] = {
                                 count: item.count
                             };
                         } else {
-                            currentIndex['' + item.id].count += item.count;
+                            currentIndex[item.id].count += item.count;
                         }
                     }
                 }
@@ -780,25 +780,25 @@
         $.getJSON('https://api.guildwars2.com/v2/account/materials?access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (item) {
-                if (item !== null && item.count && typeof(item.count) === 'number') {
+                if (item !== null && item.count) {
                     if (first) {
                         //If not already in the index we add it
-                        if (initialIndex['' + item.id] === undefined) {
-                            initialIndex['' + item.id] = {
+                        if (initialIndex[item.id] === undefined) {
+                            initialIndex[item.id] = {
                                 count: item.count
                             };
                         } else {
                             //Else we add to the total count
-                            initialIndex['' + item.id].count += item.count;
+                            initialIndex[item.id].count += item.count;
                         }
                     } else {
                         //Build an index for current items
-                        if (currentIndex['' + item.id] === undefined) {
-                            currentIndex['' + item.id] = {
+                        if (currentIndex[item.id] === undefined) {
+                            currentIndex[item.id] = {
                                 count: item.count
                             };
                         } else {
-                            currentIndex['' + item.id].count += item.count;
+                            currentIndex[item.id].count += item.count;
                         }
                     }
                 }
@@ -822,22 +822,22 @@
                     if(item !== null) {
                         if (first) {
                             //If not already in the index we add it
-                            if (initialIndex['' + item.id] === undefined) {
-                                initialIndex['' + item.id] = {
+                            if (initialIndex[item.id] === undefined) {
+                                initialIndex[item.id] = {
                                     count: 1
                                 };
                             } else {
                                 //Else we add to the total count
-                                initialIndex['' + item.id].count += 1;
+                                initialIndex[item.id].count += 1;
                             }
                         } else {
                             //Build an index for current items
-                            if (currentIndex['' + item.id] === undefined) {
-                                currentIndex['' + item.id] = {
+                            if (currentIndex[item.id] === undefined) {
+                                currentIndex[item.id] = {
                                     count: 1
                                 };
                             } else {
-                                currentIndex['' + item.id].count += 1;
+                                currentIndex[item.id].count += 1;
                             }
                         }
                     }
@@ -848,25 +848,25 @@
                     if (bag !== null) {
                         //Loop on each slots
                         bag.inventory.forEach(function (item) {
-                            if (item !== null && item.count && typeof(item.count) === 'number') {
+                            if (item !== null && item.count) {
                                 if (first) {
                                     //If not already in the index we add it
-                                    if (initialIndex['' + item.id] === undefined) {
-                                        initialIndex['' + item.id] = {
+                                    if (initialIndex[item.id] === undefined) {
+                                        initialIndex[item.id] = {
                                             count: item.count
                                         };
                                     } else {
                                         //Else we add to the total count
-                                        initialIndex['' + item.id].count += item.count;
+                                        initialIndex[item.id].count += item.count;
                                     }
                                 } else {
                                     //Build an index for current items
-                                    if (currentIndex['' + item.id] === undefined) {
-                                        currentIndex['' + item.id] = {
+                                    if (currentIndex[item.id] === undefined) {
+                                        currentIndex[item.id] = {
                                             count: item.count
                                         };
                                     } else {
-                                        currentIndex['' + item.id].count += item.count;
+                                        currentIndex[item.id].count += item.count;
                                     }
                                 }
                             }
@@ -961,16 +961,16 @@
 
             if(container === 'new') {
                 $('#gridNew').append(item);
-                newItems['' + id].type = type;
-                newItems['' + id].rarity = rarity;
-                newItems['' + id].sellValue = sellValue;
-                newItems['' + id].buyValue = buyValue;
+                newItems[id].type = type;
+                newItems[id].rarity = rarity;
+                newItems[id].sellValue = sellValue;
+                newItems[id].buyValue = buyValue;
             } else {
                 $('#gridOld').append(item);
-                oldItems['' + id].type = type;
-                oldItems['' + id].rarity = rarity;
-                oldItems['' + id].sellValue = sellValue;
-                oldItems['' + id].buyValue = sellValue;
+                oldItems[id].type = type;
+                oldItems[id].rarity = rarity;
+                oldItems[id].sellValue = sellValue;
+                oldItems[id].buyValue = sellValue;
             }
 
             //Show the item only if the item type is allowed by the user
@@ -1132,12 +1132,12 @@
 
     //Clicking the "About" link
     $('#about').on('click', function () {
-        $('#aboutPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#about')}).hide().toggle(animationDelay);
+        $('#aboutPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#about'), collision: 'flipfit'}).hide().toggle(animationDelay);
     });
 
     //Clicking the "Settings" link
     $('#settings').on('click', function () {
-        $('#settingsPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#settings')}).hide().toggle(animationDelay);
+        $('#settingsPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#settings'), collision: 'flipfit'}).hide().toggle(animationDelay);
     });
 
     //When clicking anywhere but in the settings, close the settings popup
@@ -1170,6 +1170,17 @@
         init();
     });
 
+    //When toggling item details, show/hide item description
+    $('#toggleDetails').on('change', function () {
+        $('.description').toggle(animationDelay);
+        localStorage.setItem('showDetails', $(this).prop('checked'));
+    });
+
+    //Changing the "Play a sound" option
+    $('#toggleSound').on('change', function () {
+        localStorage.setItem('playSound', $(this).prop('checked'));
+    });
+
     //Changing the "Sort by" option, sort the currently displayed items and save the setting
     $('[name=sortBy]').on('change', function () {
         sortItems($(this).val());
@@ -1182,17 +1193,6 @@
         $('.itemSellValue, .itemBuyValue').toggle();
         computeGainsAndLosses();
         sortItems(localStorage.getItem('sortBy'));
-    });
-
-    //When toggling item details, show/hide item description
-    $('#toggleDetails').on('change', function () {
-        $('.description').toggle(animationDelay);
-        localStorage.setItem('showDetails', $(this).prop('checked'));
-    });
-
-    //Changing the "Play a sound" option
-    $('#toggleSound').on('change', function () {
-        localStorage.setItem('playSound', $(this).prop('checked'));
     });
 
     //Checking all item types
@@ -1294,6 +1294,58 @@
         computeGainsAndLosses();
     });
 
+    //Restoring defaults settings
+    $('#restoreDefaults').on('click', function() {
+        localStorage.setItem('saveAPIKey', true);
+        localStorage.setItem('showDetails', true);
+        localStorage.setItem('playSound', false);
+        localStorage.setItem('sortBy', 'rarity');
+        localStorage.setItem('valueFrom', 'lowestSeller');
+        localStorage.setItem('itemTypes', $.map($('.itemType'), function (n) {
+            return '#' + $(n).attr('id');
+        }).join(', '));
+        itemTypes = [];
+        $('.itemType').each(function() {
+            itemTypes.push($(this).data('type'));
+        });
+        localStorage.setItem('ignoreHidden', false);
+
+        $('#saveAPIKey').prop('checked', true);
+        $('#toggleDetails').prop('checked', true);
+        $('#toggleSound').prop('checked',false);
+        $('#sortByRarity').prop('checked', true);
+        $('#lowestSeller').prop('checked', true);
+        $('.itemType').prop('checked', true);
+        $('#checkAllTypes').prop('checked', true);
+        $('#ignoreHidden').prop('checked', false);
+
+        //Reset everything
+        $('.description').show(animationDelay);
+        $('.itemSellValue').show();
+        $('.itemBuyValue').hide();
+
+        $('.item').show(animationDelay, function() {
+            if ($('#gridNew .item:visible').length === 0) {
+                $('#newItems .none').show();
+                $('#totalNew').hide();
+            } else {
+                $('#newItems .none').hide();
+                $('#totalNew').show();
+            }
+
+            if ($('#gridOld .item:visible').length === 0) {
+                $('#oldItems .none').show();
+                $('#totalOld').hide();
+            } else {
+                $('#oldItems .none').hide();
+                $('#totalOld').show();
+            }
+
+            computeGainsAndLosses();
+            sortItems('rarity');
+        });
+    });
+
     //Toggling the summary
     $('#toggleSummary').on('click', function() {
         $('#header').toggle(animationDelay);
@@ -1307,6 +1359,13 @@
     //Toggling lost items
     $('#toggleOld').on('click', function() {
         $('#oldItems').toggle(animationDelay);
+    });
+
+    //Clear api key
+    $('#clearAPIKey').on('click', function() {
+        $('#apiKey').val('');
+        localStorage.setItem('APIKey', '');
+        alert('Your saved API key has been cleared');
     });
 
     //Debug button

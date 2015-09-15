@@ -40,7 +40,6 @@ h2 {
 
 h3 {
     margin: 0px;
-    text-align: center;
 }
 
 label {
@@ -298,12 +297,20 @@ label {
     z-index: 2;
 }
 
-#settingsPopup h2 {
-    margin-bottom: 0;
+#settingsPopup table {
+    width: 100%;
+}
+
+#settingsPopup label {
+    cursor: pointer;
 }
 
 #settingsPopup hr {
     margin: 0.5em 0;
+}
+
+.twoCols td {
+    width: 50%;
 }
 
 #typesList {
@@ -327,7 +334,12 @@ label {
 
 #typesList {
     background-color: white;
-    margin-bottom: 1em;
+    margin: 8px 0;
+}
+
+#restoreDefaults {
+    display: block;
+    margin: auto;
 }
 
 /* Items */
@@ -467,6 +479,12 @@ label {
     background-color: rgba(76, 19, 157, 0.15);
 }
 
+/* footer */
+#clearAPIKey {
+    display: block;
+    text-decoration: underline;
+    cursor: pointer;
+}
 
 /* to delete? */
 #main p {

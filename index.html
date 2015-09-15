@@ -125,6 +125,7 @@
 
         <footer>
             September 2015 - Made by Deviljeff.1946
+            <span id="clearAPIKey">Clear my saved API key</span>
             <!--<br><button id="saveCurrentState">Debug</button>-->
         </footer>
 
@@ -141,65 +142,84 @@
 
         <div id="settingsPopup">
             <h2>Settings</h2>
-            <label for="toggleDetails"><input type="checkbox" id="toggleDetails"> Show item details</label>
-            <label for="toggleSound"><input type="checkbox" id="toggleSound"> Play a sound effect when refreshing</label>
-            <hr>
-            <strong>Sort items by:</strong> <label for="sortByRarity"><input type="radio" value="rarity" name="sortBy" id="sortByRarity"> Rarity</label>
-                                            <label for="sortByValue"><input type="radio" value="value" name="sortBy" id="sortByValue"> Descending value</label>
-            <hr>
-            <strong>For item values, use:</strong> <label for="lowestSeller"><input type="radio" value="lowestSeller" name="valueFrom" id="lowestSeller"> Lowest seller (list items)</label>
-                                                   <label for="highestBuyer"><input type="radio" value="highestBuyer" name="valueFrom" id="highestBuyer"> Highest buyer (sell instantly)</label>
-            <hr>
-            <table id="typesList">
-                <thead>
-                    <th><input type="checkbox" id="checkAllTypes" checked="checked"></th>
-                    <th colspan="7">Show items of these types:</th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="checkbox" data-type="Armor" id="ArmorItem" class="itemType"></td>
-                        <td><label for="ArmorItem">Armor</label></td>
-                        <td><input type="checkbox" data-type="Back" id="BackItem" class="itemType"></td>
-                        <td><label for="BackItem">Back item</label></td>
-                        <td><input type="checkbox" data-type="Bag" id="BagItem" class="itemType"></td>
-                        <td><label for="BagItem">Bags</label></td>
-                        <td><input type="checkbox" data-type="Consumable" id="ConsumableItem" class="itemType"></td>
-                        <td><label for="ConsumableItem">Consumables</label></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" data-type="Container" id="ContainerItem" class="itemType"></td>
-                        <td><label for="ContainerItem">Containers</label></td>
-                        <td><input type="checkbox" data-type="CraftingMaterial" id="CraftingMaterialItem" class="itemType"></td>
-                        <td><label for="CraftingMaterialItem">Crafting materials</label></td>
-                        <td><input type="checkbox" data-type="Gathering" id="GatheringItem" class="itemType"></td>
-                        <td><label for="GatheringItem">Gathering tools</label></td>
-                        <td><input type="checkbox" data-type="Gizmo" id="GizmoItem" class="itemType"></td>
-                        <td><label for="GizmoItem">Gizmos</label></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" data-type="MiniPet" id="MiniPetItem" class="itemType"></td>
-                        <td><label for="MiniPetItem">Miniatures</label></td>
-                        <td><input type="checkbox" data-type="Tool" id="ToolItem" class="itemType"></td>
-                        <td><label for="ToolItem">Salvage kits</label></td>
-                        <td><input type="checkbox" data-type="Trait" id="TraitItem" class="itemType"></td>
-                        <td><label for="TraitItem">Trait guides</label></td>
-                        <td><input type="checkbox" data-type="Trinket" id="TrinketItem" class="itemType"></td>
-                        <td><label for="TrinketItem">Trinkets</label></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" data-type="Trophy" id="TrophyItem" class="itemType"></td>
-                        <td><label for="TrophyItem">Trophies</label></td>
-                        <td><input type="checkbox" data-type="UpgradeComponent" id="UpgradeComponentItem" class="itemType"></td>
-                        <td><label for="UpgradeComponentItem">Upgrade components</label></td>
-                        <td><input type="checkbox" data-type="Weapon" id="WeaponItem" class="itemType"></td>
-                        <td><label for="WeaponItem">Weapons</label></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
+            <table>
+            <tr class="twoCols">
+                <td><label for="toggleDetails"><input type="checkbox" id="toggleDetails"> Show item details</label></td>
+                <td><label for="toggleSound"><input type="checkbox" id="toggleSound"> Play a sound effect when refreshing</label></td>
+            </tr>
+            <tr class="twoCols">
+                <td>
+                    <h3>Sort items by:</h3> 
+                    <label for="sortByRarity"><input type="radio" value="rarity" name="sortBy" id="sortByRarity"> Rarity</label><br>
+                    <label for="sortByValue"><input type="radio" value="value" name="sortBy" id="sortByValue"> Descending value</label>
+                </td>
+                <td>
+                    <h3>For item values, use:</h3>
+                    <label for="lowestSeller"><input type="radio" value="lowestSeller" name="valueFrom" id="lowestSeller"> Lowest seller (list items)</label><br>
+                    <label for="highestBuyer"><input type="radio" value="highestBuyer" name="valueFrom" id="highestBuyer"> Highest buyer (sell instantly)</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table id="typesList">
+                    <thead>
+                        <th><input type="checkbox" id="checkAllTypes" checked="checked"></th>
+                        <th colspan="7">Show items of these types:</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" data-type="Armor" id="ArmorItem" class="itemType"></td>
+                            <td><label for="ArmorItem">Armor</label></td>
+                            <td><input type="checkbox" data-type="Back" id="BackItem" class="itemType"></td>
+                            <td><label for="BackItem">Back item</label></td>
+                            <td><input type="checkbox" data-type="Bag" id="BagItem" class="itemType"></td>
+                            <td><label for="BagItem">Bags</label></td>
+                            <td><input type="checkbox" data-type="Consumable" id="ConsumableItem" class="itemType"></td>
+                            <td><label for="ConsumableItem">Consumables</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" data-type="Container" id="ContainerItem" class="itemType"></td>
+                            <td><label for="ContainerItem">Containers</label></td>
+                            <td><input type="checkbox" data-type="CraftingMaterial" id="CraftingMaterialItem" class="itemType"></td>
+                            <td><label for="CraftingMaterialItem">Crafting materials</label></td>
+                            <td><input type="checkbox" data-type="Gathering" id="GatheringItem" class="itemType"></td>
+                            <td><label for="GatheringItem">Gathering tools</label></td>
+                            <td><input type="checkbox" data-type="Gizmo" id="GizmoItem" class="itemType"></td>
+                            <td><label for="GizmoItem">Gizmos</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" data-type="MiniPet" id="MiniPetItem" class="itemType"></td>
+                            <td><label for="MiniPetItem">Miniatures</label></td>
+                            <td><input type="checkbox" data-type="Tool" id="ToolItem" class="itemType"></td>
+                            <td><label for="ToolItem">Salvage kits</label></td>
+                            <td><input type="checkbox" data-type="Trait" id="TraitItem" class="itemType"></td>
+                            <td><label for="TraitItem">Trait guides</label></td>
+                            <td><input type="checkbox" data-type="Trinket" id="TrinketItem" class="itemType"></td>
+                            <td><label for="TrinketItem">Trinkets</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" data-type="Trophy" id="TrophyItem" class="itemType"></td>
+                            <td><label for="TrophyItem">Trophies</label></td>
+                            <td><input type="checkbox" data-type="UpgradeComponent" id="UpgradeComponentItem" class="itemType"></td>
+                            <td><label for="UpgradeComponentItem">Upgrade components</label></td>
+                            <td><input type="checkbox" data-type="Weapon" id="WeaponItem" class="itemType"></td>
+                            <td><label for="WeaponItem">Weapons</label></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label for="ignoreHidden"><input type="checkbox" id="ignoreHidden"> Ignore the value of discarded item types</label>
+                </td>
+            </tr>
             </table>
+            
             <hr>
-            <label for="ignoreHidden"><input type="checkbox" id="ignoreHidden"> Ignore the value of discarded item types</label>
+            <button id="restoreDefaults">Restore defaults</button>
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
