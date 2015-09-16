@@ -1,4 +1,4 @@
-# Guild-Wars-2-Gold-per-hour
+# [Guild Wars 2 - Gold per hour](http://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/)
 Tool using the official ArenaNet API to estimate how much gold a player is making while playging Guild Wars 2.
 
 To get started, you must create an API key in the Applications tab of your [account](https://account.arena.net/login). Make sure you grant the following permissions: wallet, tradingpost, account, inventories and characters.
