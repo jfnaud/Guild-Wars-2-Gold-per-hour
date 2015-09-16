@@ -1,13 +1,26 @@
+//Guild Wars 2 - Gold per Hour
+//
+//Tool using the official ArenaNet API to estimate the average gold per hour a player makes while playing Guild Wars 2.
+//
+//GitHub repository : https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour
 //Created by : Deviljeff.1946
 //September 2015
+
 (function () {
+//Constants
+    //After how many refresh shall we fetch the data again
+    var REFRESH_RATE = 180;
+    //Animation delay - used for all animations
+    var ANIMATION_DELAY = 200;
+    //Sound effect
+    var SOUND_EFFECT = new Audio('sounds/ding.mp3');
+
 //Variables
     //Application started on
     var startedOn;
     //Timer variables
     var keepGoing = true;
     var intervalCount = 0;
-    var refreshRate = 180;
     var timeElapsed;
     //API key
     var token = '';
@@ -30,11 +43,8 @@
     var losses = 0;
     //List of item types to display
     var itemTypes = [];
-    //Animation delay - used for all animations
-    var animationDelay = 200;
     //Gold per hour chart
     var chartSeries;
-    var maxPoints = 3600;
     Highcharts.setOptions({
         global: {
             useUTC: false
@@ -42,8 +52,6 @@
     });
     //Are we currently updating the page? Used to avoid spikes on the chart
     var updating = false;
-    //Sound effect
-    var soundEffect = new Audio('sounds/ding.mp3');
 
     //Utility function for padding zeroes when displaying gold
     String.prototype.paddingLeft = function (paddingValue) {
@@ -136,17 +144,19 @@
         //Chart of the gold per hour
         chart = $('#chart').highcharts('StockChart', {
             chart: {
-                animation: false,
+                animation: Highcharts.svg, // don't animate in old IE
                 marginRight: 10,
                 width: 700,
                 height: 250
             },
             plotOptions: {
                 series: {
-                    lineWidth: 2,
+                    dataGrouping: {
+                        groupPixelWidth: 1
+                    },
                     marker: {
                         enabled: null,
-                        radius: 4
+                        radius: 3
                     },
                     states: {
                         hover: {
@@ -155,21 +165,20 @@
                     }
                 }
             },
+            series: [{
+                name: 'Gold per hour',
+                data: []
+            }],
             title: {
-                text: 'Gold per hour over the last hour'
+                text: 'Average gold per hour over time'
             },
             xAxis: {
-                //type: 'datetime',
                 tickPixelInterval: 150
             },
             yAxis: {
-                title: {
-                    text: null
-                },
                 labels: {
                     useHTML: true,
                     formatter: function() {
-                        //return (this.value / 10000).toFixed(2);
                         return displayGold(this.value);
                     }
                 },
@@ -199,11 +208,7 @@
             },
             scrollbar: {
                 enabled: false
-            },
-            series: [{
-                name: 'Gold per hour',
-                data: []
-            }]
+            }
         });
         chartSeries = chart.highcharts().series[0];
 
@@ -250,7 +255,7 @@
             var minutes, seconds, elapsed;
 
             //Compute and display the time remaining until the next refresh
-            remaining = refreshRate - intervalCount;
+            remaining = REFRESH_RATE - intervalCount;
             minutes = (remaining / 60) | 0;
             seconds = (remaining % 60) | 0;
             minutes = minutes < 10 ? '0' + minutes : minutes;
@@ -262,7 +267,7 @@
 
             intervalCount++;
             //When reaching 0, fetch everything and compare with the initial items/gold
-            if (intervalCount === refreshRate) {
+            if (intervalCount === REFRESH_RATE) {
                 intervalCount = 0;
                 fetchAll(false);
             }
@@ -312,12 +317,8 @@
             $('#overallResult').html(displayGold(parseInt((gains - losses) * 0.85) + goldDiff));
             $('#overallAverage').html(displayGold(goldPerHour));
 
-            //Update the chart. As long as we don't have reached the maximum amount of points, keep adding.
-            if(chartSeries.data.length > maxPoints) {
-                chartSeries.addPoint([(new Date()).getTime(), goldPerHour], true, true);
-            } else {
-                chartSeries.addPoint([(new Date()).getTime(), goldPerHour], true, false);
-            }
+            //Update the chart. Highstock will group the data over time
+            chartSeries.addPoint([(new Date()).getTime(), goldPerHour], true, false);
         }
     }
 
@@ -361,7 +362,7 @@
                 updatePage();
 
                 if(localStorage.getItem('playSound') === 'true') {
-                    soundEffect.play();
+                    SOUND_EFFECT.play();
                 }
             }
         });
@@ -975,7 +976,7 @@
 
             //Show the item only if the item type is allowed by the user
             if(itemTypes.indexOf(type) >= 0) {
-                item.fadeIn(animationDelay);
+                item.fadeIn(ANIMATION_DELAY);
             }
 
             if(itemTypes.indexOf(type) >= 0 || localStorage.getItem('ignoreHidden') === 'false') {
@@ -1133,29 +1134,29 @@
     //Clicking the "About" link
     $('#about').on('click', function () {
         if($('#aboutPopup').is(':visible')) {
-            $('#aboutPopup').toggle(animationDelay);
+            $('#aboutPopup').toggle(ANIMATION_DELAY);
         } else {
-            $('#aboutPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#about'), collision: 'flipfit'}).hide().toggle(animationDelay);
+            $('#aboutPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#about'), collision: 'flipfit'}).hide().toggle(ANIMATION_DELAY);
         }
     });
 
     //Clicking the "Settings" link
     $('#settings').on('click', function () {
         if($('#settingsPopup').is(':visible')) {
-            $('#settingsPopup').toggle(animationDelay);
+            $('#settingsPopup').toggle(ANIMATION_DELAY);
         } else {
-            $('#settingsPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#settings'), collision: 'flipfit'}).hide().toggle(animationDelay);
+            $('#settingsPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#settings'), collision: 'flipfit'}).hide().toggle(ANIMATION_DELAY);
         }
     });
 
     //When clicking anywhere but in the settings, close the settings popup
     $('html').on('click', function (event) {
         if (!$(event.target).closest('#settingsPopup, #settings').length) {
-            $('#settingsPopup').hide(animationDelay);
+            $('#settingsPopup').hide(ANIMATION_DELAY);
         }
 
         if (!$(event.target).closest('#aboutPopup, #about').length) {
-            $('#aboutPopup').hide(animationDelay);
+            $('#aboutPopup').hide(ANIMATION_DELAY);
         }
     });
 
@@ -1180,7 +1181,7 @@
 
     //When toggling item details, show/hide item description
     $('#toggleDetails').on('change', function () {
-        $('.description').toggle(animationDelay);
+        $('.description').toggle(ANIMATION_DELAY);
         localStorage.setItem('showDetails', $(this).prop('checked'));
     });
 
@@ -1209,7 +1210,7 @@
         if ($(this).prop('checked')) {
             $('.itemType:not(:checked)').prop('checked', true);
 
-            $('.item').show(animationDelay, function() {
+            $('.item').show(ANIMATION_DELAY, function() {
                 if ($('#gridNew .item:visible').length === 0) {
                     $('#newItems .none').show();
                     $('#totalNew').hide();
@@ -1229,7 +1230,7 @@
         } else {
             $('.itemType:checked').prop('checked', false);
 
-            $('.item').hide(animationDelay, function() {
+            $('.item').hide(ANIMATION_DELAY, function() {
                 $('#newItems .none').show();
                 $('#totalNew').hide();
 
@@ -1274,7 +1275,7 @@
         });
 
         //Animate toggle, then show or hide totals
-        $('.' + $(this).data('type')).toggle(animationDelay, function() {
+        $('.' + $(this).data('type')).toggle(ANIMATION_DELAY, function() {
             if ($('#gridNew .item:visible').length === 0) {
                 $('#newItems .none').show();
                 $('#totalNew').hide();
@@ -1328,11 +1329,11 @@
         $('#ignoreHidden').prop('checked', false);
 
         //Reset everything
-        $('.description').show(animationDelay);
+        $('.description').show(ANIMATION_DELAY);
         $('.itemSellValue').show();
         $('.itemBuyValue').hide();
 
-        $('.item').show(animationDelay, function() {
+        $('.item').show(ANIMATION_DELAY, function() {
             if ($('#gridNew .item:visible').length === 0) {
                 $('#newItems .none').show();
                 $('#totalNew').hide();
@@ -1356,24 +1357,26 @@
 
     //Toggling the summary
     $('#toggleSummary').on('click', function() {
-        $('#header').toggle(animationDelay);
+        $('#header').toggle(ANIMATION_DELAY);
     });
 
     //Toggling acquired items
     $('#toggleNew').on('click', function() {
-        $('#newItems').toggle(animationDelay);
+        $('#newItems').toggle(ANIMATION_DELAY);
     });
 
     //Toggling lost items
     $('#toggleOld').on('click', function() {
-        $('#oldItems').toggle(animationDelay);
+        $('#oldItems').toggle(ANIMATION_DELAY);
     });
 
     //Clear api key
-    $('#clearAPIKey').on('click', function() {
-        $('#apiKey').val('');
-        localStorage.setItem('APIKey', '');
-        alert('Your saved API key has been cleared');
+    $('.clearAPIKey').on('click', function() {
+        if(confirm('Are you sure you want to clear your saved API key?')) {
+            $('#apiKey').val('');
+            localStorage.setItem('APIKey', '');
+            alert('Your saved API key has been cleared!');
+        }
     });
 
     //Debug button
@@ -1382,7 +1385,7 @@
             "startedOn": startedOn,
             "keepGoing": keepGoing,
             "intervalCount": intervalCount,
-            "refreshRate": refreshRate,
+            "REFRESH_RATE": REFRESH_RATE,
             "timeElapsed": timeElapsed,
             "token": token,
             "initialGold" : initialGold,

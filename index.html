@@ -124,8 +124,9 @@
         </div>
 
         <footer>
-            September 2015 - Made by Deviljeff.1946
-            <span id="clearAPIKey">Clear my saved API key</span>
+            Made by Deviljeff.1946 - <a href="https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour" target="_blank" title="Project on GitHub">Project on GitHub</a>
+            <br>
+            <span class="clearAPIKey">Clear my saved API key</span>
             <!--<br><button id="saveCurrentState">Debug</button>-->
         </footer>
 
@@ -213,13 +214,16 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <label for="ignoreHidden"><input type="checkbox" id="ignoreHidden"> Ignore the value of discarded item types</label>
+                    <label for="ignoreHidden"><input type="checkbox" id="ignoreHidden"> Ignore the value of hidden items</label>
                 </td>
             </tr>
             </table>
             
             <hr>
-            <button id="restoreDefaults">Restore defaults</button>
+            <div id="settingsButtons">
+                <button id="restoreDefaults">Restore default settings</button>
+                <button class="clearAPIKey">Clear my saved API key</button>
+            </div>
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

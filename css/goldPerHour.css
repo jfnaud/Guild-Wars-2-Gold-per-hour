@@ -1,6 +1,6 @@
 /* Basic elements */
 a {
-    color: #565656;
+    color: #7D7D7D;
 }
 
 body {
@@ -22,7 +22,7 @@ button:hover {
 }
 
 footer {
-    color: #8A8A8A;
+    color: #7D7D7D;
     margin-top: 30px;
     text-align: center;
 }
@@ -337,9 +337,8 @@ label {
     margin: 8px 0;
 }
 
-#restoreDefaults {
-    display: block;
-    margin: auto;
+#settingsButtons {
+    text-align: center;
 }
 
 /* Items */
@@ -480,8 +479,7 @@ label {
 }
 
 /* footer */
-#clearAPIKey {
-    display: block;
+span.clearAPIKey {
     text-decoration: underline;
     cursor: pointer;
 }
