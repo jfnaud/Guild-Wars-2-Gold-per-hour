@@ -946,7 +946,7 @@
             item.find('.icon').css('background-image', 'url(' + icon + ')')
                 .append('<span class="count">' + count + '</span>');
 
-            item.find('.description').html('<div class="itemName"><a href="https://wiki.guildwars2.com/index.php?search=' + encodeURIComponent(name) + '" target="_blank">' + name + '</a></div>');
+            item.find('.description').html('<div class="itemName"><a title="View item on the wiki (opens in a new tab)" href="https://wiki.guildwars2.com/index.php?search=' + encodeURIComponent(name) + '" target="_blank">' + name + '</a></div>');
 
 
             if(sellValue !== null) {
@@ -1132,12 +1132,20 @@
 
     //Clicking the "About" link
     $('#about').on('click', function () {
-        $('#aboutPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#about'), collision: 'flipfit'}).hide().toggle(animationDelay);
+        if($('#aboutPopup').is(':visible')) {
+            $('#aboutPopup').toggle(animationDelay);
+        } else {
+            $('#aboutPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#about'), collision: 'flipfit'}).hide().toggle(animationDelay);
+        }
     });
 
     //Clicking the "Settings" link
     $('#settings').on('click', function () {
-        $('#settingsPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#settings'), collision: 'flipfit'}).hide().toggle(animationDelay);
+        if($('#settingsPopup').is(':visible')) {
+            $('#settingsPopup').toggle(animationDelay);
+        } else {
+            $('#settingsPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#settings'), collision: 'flipfit'}).hide().toggle(animationDelay);
+        }
     });
 
     //When clicking anywhere but in the settings, close the settings popup
