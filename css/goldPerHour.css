@@ -289,9 +289,10 @@ label {
     background-color: white;
     border: 1px solid black;
     box-shadow: 0px 0px 20px #6F6F6F;
+    box-sizing: border-box;
     color: #565656;
     display: none;
-    padding: 10px;
+    padding: 25px;
     position: absolute;
     max-width: 800px;
     width: 100%;
@@ -303,9 +304,10 @@ label {
     background-color: white;
     border: 1px solid black;
     box-shadow: 0px 0px 20px #6F6F6F;
+    box-sizing: border-box;
     color: #565656;
     display: none;
-    padding: 10px;
+    padding: 25px;
     position: absolute;
     max-width: 800px;
     width: 100%;
