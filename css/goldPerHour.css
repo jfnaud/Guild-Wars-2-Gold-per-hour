@@ -1,6 +1,6 @@
 /* Basic elements */
 a {
-    color: #7D7D7D;
+    color: #565656;
 }
 
 body {
@@ -22,9 +22,13 @@ button:hover {
 }
 
 footer {
-    color: #7D7D7D;
+    color: #8A8A8A;
     margin-top: 30px;
     text-align: center;
+}
+
+footer a {
+    color: #8A8A8A;
 }
 
 h1 {
