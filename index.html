@@ -30,6 +30,7 @@
             <h2>To begin, enter your API key here:</h2>
             <input type="text" id="apiKey" maxwidth="100" value="">
             <button id="continueIntro">Go!</button>
+            <br>
             <label class="small" for="saveAPIKey"><input type="checkbox" id="saveAPIKey"> Save my API key locally, so I won't have to enter it next time</label>
             
             <p>You don't have one? <a href="https://account.arena.net/login" target="_blank">Click here</a> to access your account. Then, in the <strong>Applications</strong> tab, create a new API key. Make sure you grant <em>wallet, tradingpost, account, inventories</em> and <em>characters</em> permissions.</p>
@@ -123,6 +124,8 @@
             <div class="borderLeft"></div>
         </div>
 
+        <div id="error"></div>
+
         <footer>
             Made by Deviljeff.1946 - <a href="https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour" target="_blank" title="Project on GitHub">Project on GitHub</a>
             <br>
@@ -177,22 +180,24 @@
                             <td><label for="BackItem">Back item</label></td>
                             <td><input type="checkbox" data-type="Bag" id="BagItem" class="itemType"></td>
                             <td><label for="BagItem">Bags</label></td>
-                            <td><input type="checkbox" data-type="Consumable" id="ConsumableItem" class="itemType"></td>
-                            <td><label for="ConsumableItem">Consumables</label></td>
                         </tr>
                         <tr>
+                            <td><input type="checkbox" data-type="Consumable" id="ConsumableItem" class="itemType"></td>
+                            <td><label for="ConsumableItem">Consumables</label></td>
                             <td><input type="checkbox" data-type="Container" id="ContainerItem" class="itemType"></td>
                             <td><label for="ContainerItem">Containers</label></td>
                             <td><input type="checkbox" data-type="CraftingMaterial" id="CraftingMaterialItem" class="itemType"></td>
                             <td><label for="CraftingMaterialItem">Crafting materials</label></td>
+                        </tr>
+                        <tr>
                             <td><input type="checkbox" data-type="Gathering" id="GatheringItem" class="itemType"></td>
                             <td><label for="GatheringItem">Gathering tools</label></td>
                             <td><input type="checkbox" data-type="Gizmo" id="GizmoItem" class="itemType"></td>
                             <td><label for="GizmoItem">Gizmos</label></td>
-                        </tr>
-                        <tr>
                             <td><input type="checkbox" data-type="MiniPet" id="MiniPetItem" class="itemType"></td>
                             <td><label for="MiniPetItem">Miniatures</label></td>
+                        </tr>
+                        <tr>
                             <td><input type="checkbox" data-type="Tool" id="ToolItem" class="itemType"></td>
                             <td><label for="ToolItem">Salvage kits</label></td>
                             <td><input type="checkbox" data-type="Trait" id="TraitItem" class="itemType"></td>
@@ -207,8 +212,6 @@
                             <td><label for="UpgradeComponentItem">Upgrade components</label></td>
                             <td><input type="checkbox" data-type="Weapon" id="WeaponItem" class="itemType"></td>
                             <td><label for="WeaponItem">Weapons</label></td>
-                            <td></td>
-                            <td></td>
                         </tr>
                     </tbody>
                 </table>

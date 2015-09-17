@@ -146,7 +146,6 @@
             chart: {
                 animation: Highcharts.svg, // don't animate in old IE
                 marginRight: 10,
-                width: 700,
                 height: 250
             },
             plotOptions: {
@@ -179,7 +178,7 @@
                 labels: {
                     useHTML: true,
                     formatter: function() {
-                        return displayGold(this.value);
+                        return '<div style="white-space: nowrap">' + displayGold(this.value) + '</div>';
                     }
                 },
                 opposite: false
@@ -190,7 +189,7 @@
                 formatter: function () {
                     return '<b>' + this.points[0].series.name + '</b><br/>' +
                         Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
-                        displayGold(this.y);
+                        '<div style="white-space: nowrap">' + displayGold(this.y) + '</div>';
                 },
                 useHTML: true
             },
@@ -232,18 +231,17 @@
     //Handles failed request
     function failedRequest(jqxhr) {
         if (jqxhr.status === 400) {
-            $('#main').html('<b>Error!</b> The Guild Wars 2 API is currently not working, please try again later.');
+            $('#error').html('<b>Error!</b> The Guild Wars 2 API is currently not working, please try again later. <button id="goBack">Go back</button>');
         } else {
-            $('#main').html('<b>Error!</b> The API key you specified is invalid. Please make sure you granted all the necessary permissions.');
+            $('#error').html('<b>Error!</b> The API key you specified is invalid. Please make sure you granted all the necessary permissions. <button id="goBack">Go back</button>');
         }
 
-        $('#main').append('<div class="borderTop"></div>' +
+        $('#error').append('<div class="borderTop"></div>' +
             '<div class="borderRight"></div>' +
             '<div class="borderBottom"></div>' +
             '<div class="borderLeft"></div>').show();
 
-        $('#intro').hide();
-        $('#menu').hide();
+        $('#intro, #menu, #main').hide();
 
         //When something fails, stop everything
         keepGoing = false;
@@ -1386,6 +1384,12 @@
             localStorage.setItem('APIKey', '');
             alert('Your saved API key has been cleared!');
         }
+    });
+
+    //"Go back" button on error page
+    $('body').on('click', '#goBack', function() {
+        $('#error').hide();
+        $('#intro').show();
     });
 
     //Debug button

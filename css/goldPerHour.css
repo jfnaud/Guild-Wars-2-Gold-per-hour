@@ -7,6 +7,7 @@ body {
     background-image: url(../img/dark_mosaic.png);
     color: #565656;
     font-family: 'Source Sans Pro', sans-serif;
+    padding-bottom: 25px;
 }
 
 button {
@@ -173,6 +174,12 @@ label {
     flex-grow: 1;
 }
 
+#headerRight {
+    margin:auto;
+    max-width: 750px;
+    width: 100%;
+}
+
 .price {
     width: 175px;
 }
@@ -285,7 +292,8 @@ label {
     display: none;
     padding: 10px;
     position: absolute;
-    width: 700px;
+    max-width: 800px;
+    width: 100%;
     z-index: 3;
 }
 
@@ -298,7 +306,8 @@ label {
     display: none;
     padding: 10px;
     position: absolute;
-    width: 700px;
+    max-width: 800px;
+    width: 100%;
     z-index: 3;
 }
 
@@ -500,7 +509,48 @@ span.clearAPIKey {
     cursor: pointer;
 }
 
-/* to delete? */
-#main p {
-    margin: 0px;
+
+/* error page */
+#error {
+    background: url(../img/grey.png);
+    box-shadow: 0px 0px 65px 2px #000000;
+    box-sizing: border-box;
+    display: none;
+    margin: auto;
+    padding: 30px;
+    position: relative;
+    width: 675px;
+}
+
+#error button {
+    display: block;
+    margin: auto;
+}
+
+/* Responsive */
+@media (max-width: 970px) {
+    h1 {
+        white-space: nowrap;
+    }
+
+    #intro {
+        width: 75%;
+    }
+
+    #apiKey {
+        width: 75%;
+    }
+
+    #menu {
+        display: block;
+        float: none;
+        margin-bottom: 15px;
+        margin-left: 3%;
+        margin-top: -20px;
+        white-space: nowrap;
+    }
+
+    #aboutPopup, #settingsPopup {
+        max-width: 650px;
+    }
 }
