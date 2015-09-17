@@ -1123,10 +1123,6 @@
             $('#intro').hide();
             $('#main, #menu').show();
 
-            //Stupid position bug
-            $('#aboutPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#about')}).hide();
-            $('#settingsPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#settings')}).hide();
-
             init();
         }
     });
@@ -1134,29 +1130,42 @@
     //Clicking the "About" link
     $('#about').on('click', function () {
         if($('#aboutPopup').is(':visible')) {
-            $('#aboutPopup').toggle(ANIMATION_DELAY);
+            $('#aboutPopup').hide(ANIMATION_DELAY);
+            $('#popupOverlay').hide();
         } else {
-            $('#aboutPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#about'), collision: 'flipfit'}).hide().toggle(ANIMATION_DELAY);
+            $('#aboutPopup').show().position({my: 'center center', at: 'center center', of: window, collision: 'flipfit'}).hide().toggle(ANIMATION_DELAY);
+            $('#popupOverlay').show();
         }
     });
 
     //Clicking the "Settings" link
     $('#settings').on('click', function () {
         if($('#settingsPopup').is(':visible')) {
-            $('#settingsPopup').toggle(ANIMATION_DELAY);
+            $('#settingsPopup').hide(ANIMATION_DELAY);
+            $('#popupOverlay').hide();
         } else {
-            $('#settingsPopup').show().position({my: 'right top', at: 'right bottom+5', of: $('#settings'), collision: 'flipfit'}).hide().toggle(ANIMATION_DELAY);
+            $('#settingsPopup').show().position({my: 'center center', at: 'center center', of: window, collision: 'flipfit'}).hide().toggle(ANIMATION_DELAY);
+            $('#popupOverlay').show();
         }
     });
 
     //When clicking anywhere but in the settings, close the settings popup
     $('html').on('click', function (event) {
-        if (!$(event.target).closest('#settingsPopup, #settings').length) {
+        var target = $(event.target);
+        if (!target.closest('#settingsPopup, #settings').length) {
             $('#settingsPopup').hide(ANIMATION_DELAY);
+            
+            if (!target.closest('#aboutPopup, #about').length) {
+                $('#popupOverlay').hide();
+            }
         }
 
-        if (!$(event.target).closest('#aboutPopup, #about').length) {
+        if (!target.closest('#aboutPopup, #about').length) {
             $('#aboutPopup').hide(ANIMATION_DELAY);
+
+            if (!target.closest('#settingsPopup, #settings').length) {
+                $('#popupOverlay').hide();
+            }
         }
     });
 

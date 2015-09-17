@@ -250,6 +250,7 @@ label {
     margin-right: 3%;
     margin-top: -60px;
     position: relative;
+    z-index: 3;
 }
 
 #menu button {
@@ -285,7 +286,7 @@ label {
     padding: 10px;
     position: absolute;
     width: 700px;
-    z-index: 2;
+    z-index: 3;
 }
 
 /* "Settings" popup */
@@ -298,6 +299,17 @@ label {
     padding: 10px;
     position: absolute;
     width: 700px;
+    z-index: 3;
+}
+
+#popupOverlay {
+    background-color: rgba(0,0,0,0.2);
+    display: none;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
     z-index: 2;
 }
 
