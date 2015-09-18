@@ -306,13 +306,13 @@
                 $('#main').removeClass('overlayPositive overlayNegative');
             }
 
-            goldPerHour = parseInt((((gains - losses) * 0.85) + goldDiff) * timeDiff);
+            goldPerHour = parseInt(((gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + goldDiff)) * timeDiff);
 
             $('#overallGoldDifference').html(displayGold(goldDiff));
             $('#overallGains').html(displayGold(gains));
             $('#overallFees').html(displayGold(parseInt(gains * 0.15)));
-            $('#overallLosses').html(displayGold(parseInt(losses * 0.85)));
-            $('#overallResult').html(displayGold(parseInt((gains - losses) * 0.85) + goldDiff));
+            $('#overallLosses').html(displayGold(losses - parseInt(losses * 0.15)));
+            $('#overallResult').html(displayGold((gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + goldDiff));
             $('#overallAverage').html(displayGold(goldPerHour));
 
             //Update the chart. Highstock will group the data over time
