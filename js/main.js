@@ -306,7 +306,7 @@
                 $('#main').removeClass('overlayPositive overlayNegative');
             }
 
-            goldPerHour = parseInt(((gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + goldDiff)) * timeDiff);
+            goldPerHour = parseInt(((gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + goldDiff) * timeDiff);
 
             $('#overallGoldDifference').html(displayGold(goldDiff));
             $('#overallGains').html(displayGold(gains));
