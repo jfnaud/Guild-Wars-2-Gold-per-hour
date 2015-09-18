@@ -286,11 +286,11 @@
             var goldDiff = currentGold - initialGold;
             var goldPerHour;
 
-            $('#totalNew').html('Gains (listing, before fees): <span class="price">' + displayGold(gains) + '</span>' +
+            $('#totalNew').html('Gains (' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'listing' : 'sell instantly') + ', before fees): <span class="price">' + displayGold(gains) + '</span>' +
                     '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(gains * 0.15)) + '</span>' +
                     '<br>Result: <span class="price">' + displayGold(parseInt(gains * 0.85)) + '</span>');
 
-            $('#totalOld').html('Losses (listing, before fees): <span class="price">' + displayGold(losses) + '</span>' +
+            $('#totalOld').html('Losses (' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'listing' : 'sell instantly') + ', before fees): <span class="price">' + displayGold(losses) + '</span>' +
                     '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(losses * 0.15)) + '</span>' +
                     '<br>Result: <span class="price">' + displayGold(parseInt(losses * 0.85)) + '</span>');
 
