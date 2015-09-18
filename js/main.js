@@ -288,11 +288,11 @@
 
             $('#totalNew').html('Gains (' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'listing' : 'sell instantly') + ', before fees): <span class="price">' + displayGold(gains) + '</span>' +
                     '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(gains * 0.15)) + '</span>' +
-                    '<br>Result: <span class="price">' + displayGold(parseInt(gains * 0.85)) + '</span>');
+                    '<br>Result: <span class="price">' + displayGold(gains - parseInt(gains * 0.15)) + '</span>');
 
             $('#totalOld').html('Losses (' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'listing' : 'sell instantly') + ', before fees): <span class="price">' + displayGold(losses) + '</span>' +
                     '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(losses * 0.15)) + '</span>' +
-                    '<br>Result: <span class="price">' + displayGold(parseInt(losses * 0.85)) + '</span>');
+                    '<br>Result: <span class="price">' + displayGold(losses - parseInt(losses * 0.15)) + '</span>');
 
             //Change color based on gains or losses
             if ((gains - losses + goldDiff) > 0) {
@@ -969,7 +969,7 @@
                 oldItems[id].type = type;
                 oldItems[id].rarity = rarity;
                 oldItems[id].sellValue = sellValue;
-                oldItems[id].buyValue = sellValue;
+                oldItems[id].buyValue = buyValue;
             }
 
             //Show the item only if the item type is allowed by the user
