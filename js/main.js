@@ -8,16 +8,17 @@
 
 (function () {
 //Constants
-    //After how many refresh shall we fetch the data again
+    //After how many ticks shall we fetch the data again
     var REFRESH_RATE = 180;
-    //Animation delay - used for all animations
-    var ANIMATION_DELAY = 200;
+    //Animation duration - used for all animations
+    var ANIMATION_DURATION = 200;
     //Sound effect
     var SOUND_EFFECT = new Audio('sounds/ding.mp3');
 
 //Variables
     //Application started on
-    var startedOn;
+    var startedOn;      //First start
+    var initiatedOn;    //Updated when resuming
     //Timer variables
     var keepGoing = true;
     var intervalCount = 0;
@@ -52,10 +53,46 @@
     });
     //Are we currently updating the page? Used to avoid spikes on the chart
     var updating = false;
+    //Other currencies
+    var currenciesOrder = {
+        5: 1,   //AC
+        9: 2,   //CM
+        11: 3,  //TA
+        10: 4,  //SE
+        13: 5,  //CoF
+        12: 6,  //HotW
+        14: 7,  //CoE
+        6: 8,   //Arah
+
+        7: 9,   //Fractal relics
+        24: 10, //Pristine fractal relics
+        25: 11, //Geodes
+        27: 12, //Bandit crests
+
+        2: 13,  //Karma
+        15: 14, //Badges of honor
+        16: 15, //Guild commendations
+        23: 16, //Spirit shards
+
+        3: 17,  //Laurels
+        18: 18, //Transmutation charges
+        4: 19   //Gems
+    };
+    var intialCurrencies = [];
+    var currentCurrencies = [];
+    //Current version of the application
+    var currentVersion;
+    var checkVersion = true;
 
     //Utility function for padding zeroes when displaying gold
     String.prototype.paddingLeft = function (paddingValue) {
         return String(paddingValue + this).slice(-paddingValue.length);
+    };
+
+    //Utility function to format numbers
+    Number.prototype.format = function(n, x) {
+        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+        return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
     };
 
 //Launching the app
@@ -117,6 +154,18 @@
     }
     $('#ignoreHidden').prop('checked', (localStorage.getItem('ignoreHidden') === 'true' ? true : false));
 
+    //Get the current version of the application
+    $.getJSON('http://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/currentVersion.json').done(function(json) {
+        currentVersion = json.number;
+        $('#currentVersion').html(currentVersion);
+
+        if(localStorage.getItem('currentVersion') && localStorage.getItem('currentVersion') != currentVersion) {
+            $('#newVersion').html('Since the last time you came here, I updated the application. See what\'s new <a href="https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour/blob/master/CHANGELOG.md" target="_blank" alt="changelog">here</a>! <span class="close first">Got it!</span>').show().position({my: 'center top', at: 'center top', of: window});
+        }
+
+        localStorage.setItem('currentVersion', currentVersion);
+    });
+
 //Functions
     //Initialisation. Called after the user enters his API key and also when the user clicks the restart button.
     function init() {
@@ -124,6 +173,7 @@
 
         //Reset variables
         startedOn = Date.now();
+        initiatedOn = Date.now();
         timeElapsed = 0;
         initialIndex = {};
         currentIndex = {};
@@ -136,7 +186,7 @@
         $('#gridNew, #gridOld').html('');
         $('#newItems .none, #oldItems .none').show();
         $('#totalNew, #totalOld').hide();
-        $('#restart').hide();
+        $('#startOver, #resume').hide();
         $('#stop').show();
         $('#startTime').html(new Date().toLocaleString());
         $('#currentTime').html(new Date().toLocaleString());
@@ -211,6 +261,31 @@
         });
         chartSeries = chart.highcharts().series[0];
 
+        //Fetch all currencies
+        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,27').done(function(currencies) {
+            currencies.sort(function(a, b) {
+                if(currenciesOrder[a.id] > currenciesOrder[b.id]) {
+                    return 1;
+                } else if(currenciesOrder[a.id] < currenciesOrder[b.id]) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+
+            $('#currencies').html('');
+
+            currencies.forEach(function(currency) {
+                $('#currencies').append('<div class="currency" data-currencyID="' + currency.id + '">' +
+                        '<img width="25" height="25" src="' + currency.icon + '" alt="' + currency.name + '"> ' + currency.name + 
+                        '<table class="currencyValue">' + 
+                        '<thead><tr><th>Initial</th><th>Current</th><th>Difference</th></tr></thead>' +
+                        '<tbody><tr><td class="initialCurrencyValue"></td><td class="currentCurrencyValue"></td><td class="currencyDifference"></td></tr></body>' +
+                        '</table>' +
+                        '</div>');
+            });
+        }).fail(failedRequest);
+
         //Get initial gold
         $.getJSON('https://api.guildwars2.com/v2/account/wallet?access_token=' + token).done(function (wallet) {
             initialGold = wallet[0].value;
@@ -230,21 +305,22 @@
 
     //Handles failed request
     function failedRequest(jqxhr) {
-        if (jqxhr.status === 400) {
-            $('#error').html('<b>Error!</b> The Guild Wars 2 API is currently not working, please try again later. <button id="goBack">Go back</button>');
+        var json = JSON.parse(jqxhr.responseText);
+        var errorMessage = (json.text ? json.text : json.error);
+
+        if (jqxhr.status === 400 || jqxhr.status === 503) {
+            $('#warning').html('<b>Oops!</b> The Guild Wars 2 API is currently not working... # ' + errorMessage + ' # <span class="close">Close</span>');
+        } else if(jqxhr.status === 403) {
+            $('#warning').html('<b>Oops!</b> It looks like the API key you specified is invalid. Please make sure you granted all the necessary permissions. # ' + errorMessage + ' # <span class="close">Close</span>');
+        } else if (jqxhr.status === 404) {
+            $('#warning').html('<b>Oops!</b> A call to an API endpoint was made to an invalid endpoint or to one with an invalid item ID. # ' + errorMessage + ' # <span class="close">Close</span>');
+        } else if (jqxhr.status === 408) {
+            $('#warning').html('<b>Oops!</b> A call to an API endpoint took too long to complete. Please check your Internet connection. # ' + errorMessage + ' # <span class="close">Close</span>');
         } else {
-            $('#error').html('<b>Error!</b> The API key you specified is invalid. Please make sure you granted all the necessary permissions. <button id="goBack">Go back</button>');
+            $('#warning').html('<b>Oops!</b> Something went wrong. # ' + errorMessage + ' # <span class="close">Close</span>');
         }
 
-        $('#error').append('<div class="borderTop"></div>' +
-            '<div class="borderRight"></div>' +
-            '<div class="borderBottom"></div>' +
-            '<div class="borderLeft"></div>').show();
-
-        $('#intro, #menu, #main').hide();
-
-        //When something fails, stop everything
-        keepGoing = false;
+        $('#warning').show().position({my: 'left bottom', at: 'left bottom', of: window});
     }
 
     //Main loop. Calls itself every second. When the countdown reaches 0, it fetches the current items and updates the page.
@@ -271,7 +347,7 @@
             }
 
             //Adjust the next tick
-            var diff = (Date.now() - startedOn) - timeElapsed;
+            var diff = (Date.now() - initiatedOn) - timeElapsed;
             timeElapsed += 1000;
 
             window.setTimeout(tick, (1000 - diff));
@@ -294,19 +370,19 @@
                     '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(losses * 0.15)) + '</span>' +
                     '<br>Result: <span class="price">' + displayGold(losses - parseInt(losses * 0.15)) + '</span>');
 
+            goldPerHour = parseInt(((gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + goldDiff) * timeDiff);
+
             //Change color based on gains or losses
-            if ((gains - losses + goldDiff) > 0) {
+            if (goldPerHour > 0) {
                 $('#summary').addClass('positive').removeClass('negative');
                 $('#main').addClass('overlayPositive').removeClass('overlayNegative');
-            } else if(((gains - losses + goldDiff) < 0)) {
+            } else if(goldPerHour < 0) {
                 $('#summary').addClass('negative').removeClass('positive');
                 $('#main').addClass('overlayNegative').removeClass('overlayPositive');
             } else {
                 $('#summary').removeClass('positive negative');
                 $('#main').removeClass('overlayPositive overlayNegative');
             }
-
-            goldPerHour = parseInt(((gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + goldDiff) * timeDiff);
 
             $('#overallGoldDifference').html(displayGold(goldDiff));
             $('#overallGains').html(displayGold(gains));
@@ -325,6 +401,15 @@
         newItems = {};
         oldItems = {};
         currentIndex = {};
+
+        if(checkVersion) {
+            //Get the current version of the application and compare
+            $.getJSON('http://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/currentVersion.json').done(function(json) {
+                if(currentVersion !== json.number) {
+                    $('#newVersion').html('A new version of the application is now available (<a href="https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour/blob/master/CHANGELOG.md" target="_blank" alt="changelog">changelog</a>)! You can reload the page to access the new version. <span class="close">Got it!</span>').show().position({my: 'center top', at: 'center top', of: window});
+                }
+            });
+        }
 
         //Launch every ajax calls. Wait for every one to complete before continuing. Each of those function return a deferred object.
         $.when(fetchBank(first), fetchMaterials(first), fetchCharacters(first), fetchTradingPost(first), fetchWallet(first)).then(function () {
@@ -362,6 +447,16 @@
                 if(localStorage.getItem('playSound') === 'true') {
                     SOUND_EFFECT.play();
                 }
+            } else {
+                currentCurrencies.forEach(function(current, index) {
+                    var currency = $('[data-currencyID=' + current.id + ']');
+                    var initial = $.grep(initialCurrencies, function(e) {
+                        return e.id == current.id;
+                    })[0];
+
+                    currency.find('.currentCurrencyValue').html(current.value.format());
+                    currency.find('.currencyDifference').html((initial.value - current.value).format());
+                });
             }
         });
     }
@@ -376,11 +471,29 @@
         $('#currentGold').html(displayGold(currentGold));
 
         //Clear grids
+        $('.currency').removeClass('currencyPositive currencyNegative');
         $('#gridNew, #gridOld').html('');
         $('#totalNew, #totalOld').hide();
         $('#spinnerNew, #spinnerOld').show();
         gains = 0;
         losses = 0;
+
+        //Other currencies
+        currentCurrencies.forEach(function(current, index) {
+            var currency = $('[data-currencyID=' + current.id + ']');
+            var initial = $.grep(initialCurrencies, function(e) {
+                return e.id == current.id;
+            })[0];
+
+            currency.find('.currentCurrencyValue').html(current.value.format());
+            currency.find('.currencyDifference').html((current.value - initial.value).format());
+
+            if(current.value - initial.value > 0) {
+                currency.addClass('currencyPositive', ANIMATION_DURATION);
+            } else if (current.value - initial.value < 0) {
+                currency.addClass('currencyNegative', ANIMATION_DURATION);
+            }
+        });
 
         //Show new items
         if (Object.keys(newItems).length > 0) {
@@ -444,7 +557,7 @@
 
                                 deferredNew.resolve();
                             }).fail(function (jqxhr) {
-                                if (jqxhr.status === 400) {
+                                if (jqxhr.status !== 404) {
                                     failedRequest(jqxhr);
                                 } else {
                                     $('#spinnerNew').hide();
@@ -465,7 +578,7 @@
                                     deferredNew.resolve();
                                 }
                             });
-                        });
+                        }).fail(failedRequest);
                     })(itemIds);
 
                     //Empty the list, start over
@@ -541,7 +654,7 @@
 
                                 deferredOld.resolve();
                             }).fail(function (jqxhr) {
-                                if (jqxhr.status === 400) {
+                                if (jqxhr.status !== 404) {
                                     failedRequest(jqxhr);
                                 } else {
                                     $('#spinnerOld').hide();
@@ -888,8 +1001,33 @@
             if (first) {
                 initialGold = wallet[0].value;
                 currentGold = wallet[0].value;
+                wallet.shift();
+                initialCurrencies = wallet.sort(function(a, b) {
+                    if(a.id > b.id) {
+                        return 1;
+                    } else if(a.id < b.id) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+                currentCurrencies = initialCurrencies;
+
+                initialCurrencies.forEach(function(currency) {
+                    $('[data-currencyID=' + currency.id + '] .initialCurrencyValue').html(currency.value.format());
+                });
             } else {
                 currentGold = wallet[0].value;
+                wallet.shift();
+                currentCurrencies = wallet.sort(function(a, b) {
+                    if(a.id > b.id) {
+                        return 1;
+                    } else if(a.id < b.id) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
 
                 $('#currentTime').html(new Date().toLocaleString());
             }
@@ -974,7 +1112,7 @@
 
             //Show the item only if the item type is allowed by the user
             if(itemTypes.indexOf(type) >= 0) {
-                item.fadeIn(ANIMATION_DELAY);
+                item.fadeIn(ANIMATION_DURATION);
             }
 
             if(itemTypes.indexOf(type) >= 0 || localStorage.getItem('ignoreHidden') === 'false') {
@@ -1128,10 +1266,10 @@
     //Clicking the "About" link
     $('#about').on('click', function () {
         if($('#aboutPopup').is(':visible')) {
-            $('#aboutPopup').hide(ANIMATION_DELAY);
+            $('#aboutPopup').hide(ANIMATION_DURATION);
             $('#popupOverlay').hide();
         } else {
-            $('#aboutPopup').show().position({my: 'center center', at: 'center center', of: window, collision: 'flipfit'}).hide().toggle(ANIMATION_DELAY);
+            $('#aboutPopup').show().position({my: 'center center', at: 'center center', of: window, collision: 'flipfit'}).hide().toggle(ANIMATION_DURATION);
             $('#popupOverlay').show();
         }
     });
@@ -1139,10 +1277,10 @@
     //Clicking the "Settings" link
     $('#settings').on('click', function () {
         if($('#settingsPopup').is(':visible')) {
-            $('#settingsPopup').hide(ANIMATION_DELAY);
+            $('#settingsPopup').hide(ANIMATION_DURATION);
             $('#popupOverlay').hide();
         } else {
-            $('#settingsPopup').show().position({my: 'center center', at: 'center center', of: window, collision: 'flipfit'}).hide().toggle(ANIMATION_DELAY);
+            $('#settingsPopup').show().position({my: 'center center', at: 'center center', of: window, collision: 'flipfit'}).hide().toggle(ANIMATION_DURATION);
             $('#popupOverlay').show();
         }
     });
@@ -1151,7 +1289,7 @@
     $('html').on('click', function (event) {
         var target = $(event.target);
         if (!target.closest('#settingsPopup, #settings').length) {
-            $('#settingsPopup').hide(ANIMATION_DELAY);
+            $('#settingsPopup').hide(ANIMATION_DURATION);
             
             if (!target.closest('#aboutPopup, #about').length) {
                 $('#popupOverlay').hide();
@@ -1159,7 +1297,7 @@
         }
 
         if (!target.closest('#aboutPopup, #about').length) {
-            $('#aboutPopup').hide(ANIMATION_DELAY);
+            $('#aboutPopup').hide(ANIMATION_DURATION);
 
             if (!target.closest('#settingsPopup, #settings').length) {
                 $('#popupOverlay').hide();
@@ -1169,26 +1307,40 @@
 
     //Clicking the "Stop" button
     $('#stop').on('click', function () {
-        //Hide this button and the countdown, show the restart button
+        //Hide this button and the countdown, show the start over and resume buttons
         $(this).hide();
         $('#countdown').html('');
-        $('#restart').show();
+        $('#startOver, #resume').show();
 
         //Stop refreshing every second
         keepGoing = false;
 
         //Empty the chart's data
-        chartSeries.data = [];
+        //chartSeries.data = [];
     });
 
-    //Clicking the "Restart" button
-    $('#restart').on('click', function () {
+    //Clicking the "Start over" button
+    $('#startOver').on('click', function () {
         init();
     });
 
+    //Clicking the "Resume" button
+    $('#resume').on('click', function () {
+        $(this).hide();
+        $('#startOver').hide();
+        $('#stop').show();
+        initiatedOn = Date.now();
+        timeElapsed = 0;
+        intervalCount = 0;
+        keepGoing = true;
+        tick();
+    });
+
+
+
     //When toggling item details, show/hide item description
     $('#toggleDetails').on('change', function () {
-        $('.description').toggle(ANIMATION_DELAY);
+        $('.description').toggle(ANIMATION_DURATION);
         localStorage.setItem('showDetails', $(this).prop('checked'));
     });
 
@@ -1217,7 +1369,7 @@
         if ($(this).prop('checked')) {
             $('.itemType:not(:checked)').prop('checked', true);
 
-            $('.item').show(ANIMATION_DELAY, function() {
+            $('.item').show(ANIMATION_DURATION, function() {
                 if ($('#gridNew .item:visible').length === 0) {
                     $('#newItems .none').show();
                     $('#totalNew').hide();
@@ -1237,7 +1389,7 @@
         } else {
             $('.itemType:checked').prop('checked', false);
 
-            $('.item').hide(ANIMATION_DELAY, function() {
+            $('.item').hide(ANIMATION_DURATION, function() {
                 $('#newItems .none').show();
                 $('#totalNew').hide();
 
@@ -1282,7 +1434,7 @@
         });
 
         //Animate toggle, then show or hide totals
-        $('.' + $(this).data('type')).toggle(ANIMATION_DELAY, function() {
+        $('.' + $(this).data('type')).toggle(ANIMATION_DURATION, function() {
             if ($('#gridNew .item:visible').length === 0) {
                 $('#newItems .none').show();
                 $('#totalNew').hide();
@@ -1336,11 +1488,11 @@
         $('#ignoreHidden').prop('checked', false);
 
         //Reset everything
-        $('.description').show(ANIMATION_DELAY);
+        $('.description').show(ANIMATION_DURATION);
         $('.itemSellValue').show();
         $('.itemBuyValue').hide();
 
-        $('.item').show(ANIMATION_DELAY, function() {
+        $('.item').show(ANIMATION_DURATION, function() {
             if ($('#gridNew .item:visible').length === 0) {
                 $('#newItems .none').show();
                 $('#totalNew').hide();
@@ -1364,17 +1516,22 @@
 
     //Toggling the summary
     $('#toggleSummary').on('click', function() {
-        $('#header').toggle(ANIMATION_DELAY);
+        $('#header').toggle(ANIMATION_DURATION);
+    });
+
+    //Toggling the other currencies
+    $('#toggleCurrencies').on('click', function() {
+        $('#currencies').toggle(ANIMATION_DURATION);
     });
 
     //Toggling acquired items
     $('#toggleNew').on('click', function() {
-        $('#newItems').toggle(ANIMATION_DELAY);
+        $('#newItems').toggle(ANIMATION_DURATION);
     });
 
     //Toggling lost items
     $('#toggleOld').on('click', function() {
-        $('#oldItems').toggle(ANIMATION_DELAY);
+        $('#oldItems').toggle(ANIMATION_DURATION);
     });
 
     //Clear api key
@@ -1386,11 +1543,19 @@
         }
     });
 
-    //"Go back" button on error page
-    $('body').on('click', '#goBack', function() {
-        $('#error').hide();
-        $('#intro').show();
+    //Close warnings
+    $('#warning').on('click', '.close', function() {
+        $('#warning').hide(ANIMATION_DURATION);
     });
+
+    //Close new version
+    $('#newVersion').on('click', '.close', function() {
+        $('#newVersion').hide(ANIMATION_DURATION);
+        
+        if(!$(this).is('.first')) {
+            checkVersion = false;
+        }
+    })
 
     //Debug button
     $('#saveCurrentState').on('click', function() {

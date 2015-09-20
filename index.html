@@ -47,11 +47,12 @@
             <span class="separator">|</span>
             <span id="countdown"></span>
             <button id="stop">Stop</button>
-            <button id="restart">Restart</button>
+            <button id="resume">Resume</button>
+            <button id="startOver">Start over</button>
         </div>
         
         <div id="main">
-            <h2>Summary <span id="toggleSummary">(toggle)</span></h2>
+            <h2>Summary <span class="toggle" id="toggleSummary">(toggle)</span></h2>
             <div id="header">
                 <div id="headerLeft">
                     <table id="summary">
@@ -94,7 +95,7 @@
                 </div>
             </div>
             
-            <h2>Acquired items <span id="toggleNew">(toggle)</span></h2>
+            <h2>Acquired items <span class="toggle" id="toggleNew">(toggle)</span></h2>
             <div id="newItems">
                 <div id="gridNew"></div>
                 <div id="spinnerNew" class="spinner">
@@ -106,7 +107,7 @@
                 <div class="results" id="totalNew" style="display: none;"></div>
             </div>
             
-            <h2>Lost items <span id="toggleOld">(toggle)</span></h2>
+            <h2>Lost items <span class="toggle" id="toggleOld">(toggle)</span></h2>
             <div id="oldItems">
                 <div id="gridOld"></div>
                 <div id="spinnerOld" class="spinner">
@@ -118,16 +119,20 @@
                 <div class="results" id="totalOld" style="display: none;"></div>
             </div>
 
+            <h2>Other currencies <span class="toggle" id="toggleCurrencies">(toggle)</span></h2>
+            <div id="currencies"></div>
+
             <div class="borderTop"></div>
             <div class="borderRight"></div>
             <div class="borderBottom"></div>
             <div class="borderLeft"></div>
         </div>
 
-        <div id="error"></div>
+        <div id="newVersion"></div>
+        <div id="warning"></div>
 
         <footer>
-            Made by Deviljeff.1946 - <a href="https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour" target="_blank" title="Project on GitHub">Project on GitHub</a>
+            Made by Deviljeff.1946 - <a href="https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour" target="_blank" title="Project on GitHub">Project on GitHub (v. <span id="currentVersion"></span>)</a>
             <br>
             <span class="clearAPIKey">Reset my saved API key</span>
             <!--<br><button id="saveCurrentState">Debug</button>-->
