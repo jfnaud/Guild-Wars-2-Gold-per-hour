@@ -180,6 +180,53 @@ label {
     width: 100%;
 }
 
+#currencies {
+    margin-bottom: 15px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.currency {
+    display: inline-block;
+    width: 340px;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin: 4px;
+    border: 1px solid gray;
+    padding: 3px 8px;
+    background-color: white;
+    box-shadow: 0px 0px 5px gray;
+    text-align: left;
+}
+
+.currencyValue {
+    width: 100%;
+    text-align: center;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.currencyValue td, .currencyValue th {
+    width: 33%;
+    border: 1px solid gray;
+    padding: 1px 4px;
+}
+
+.currencyValue th {
+    background-color: #C5C5C5;
+    background: linear-gradient(#FFFFFF, #C5C5C5);
+}
+
+.currencyPositive {
+    background-color: #D4FFD4;
+    box-shadow: 0px 0px 5px green;
+}
+
+.currencyNegative {
+    background-color: #FFDFDF;
+    box-shadow: 0px 0px 5px red;
+}
+
 .price {
     width: 175px;
 }
@@ -210,7 +257,7 @@ label {
     margin: auto;
 }
 
-#toggleSummary, #toggleNew, #toggleOld {
+.toggle {
     color: #636363;
     font-size: 0.6em;
 }
@@ -267,11 +314,11 @@ label {
     vertical-align: top;
 }
 
-#menu #restart {
+#menu #startOver, #menu #resume {
     display: none;
 }
 
-#about, #settings, #toggleNew, #toggleOld, #toggleSummary {
+#about, #settings, .toggle {
     cursor: pointer;
     text-decoration: underline;
 }
@@ -513,22 +560,21 @@ span.clearAPIKey {
     cursor: pointer;
 }
 
-
-/* error page */
-#error {
-    background: url(../img/grey.png);
-    box-shadow: 0px 0px 65px 2px #000000;
-    box-sizing: border-box;
+/* Notifications */
+#newVersion, #warning {
+    background-color: #FDF6B3;
+    border: 1px solid #4C4C4C;
+    box-shadow: 0px 0px 25px #D6A212;
     display: none;
-    margin: auto;
-    padding: 30px;
-    position: relative;
-    width: 675px;
+    padding: 20px;
+    position: fixed;
+    z-index: 10;
 }
 
-#error button {
-    display: block;
-    margin: auto;
+.close {
+    cursor: pointer;
+    margin-left: 20px;
+    text-decoration: underline;
 }
 
 /* Responsive */
