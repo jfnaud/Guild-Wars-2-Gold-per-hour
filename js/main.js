@@ -76,7 +76,8 @@
 
         3: 17,  //Laurels
         18: 18, //Transmutation charges
-        4: 19   //Gems
+        4: 19,  //Gems
+        26: 20  //WvW claim tickets
     };
     var intialCurrencies = [];
     var currentCurrencies = [];
@@ -262,7 +263,7 @@
         chartSeries = chart.highcharts().series[0];
 
         //Fetch all currencies
-        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,27').done(function(currencies) {
+        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,26,27').done(function(currencies) {
             currencies.sort(function(a, b) {
                 if(currenciesOrder[a.id] > currenciesOrder[b.id]) {
                     return 1;
@@ -280,7 +281,7 @@
                         '<img width="25" height="25" src="' + currency.icon + '" alt="' + currency.name + '"> ' + currency.name + 
                         '<table class="currencyValue">' + 
                         '<thead><tr><th>Initial</th><th>Current</th><th>Difference</th></tr></thead>' +
-                        '<tbody><tr><td class="initialCurrencyValue"></td><td class="currentCurrencyValue"></td><td class="currencyDifference"></td></tr></body>' +
+                        '<tbody><tr><td class="initialCurrencyValue">0</td><td class="currentCurrencyValue">0</td><td class="currencyDifference">0</td></tr></body>' +
                         '</table>' +
                         '</div>');
             });
