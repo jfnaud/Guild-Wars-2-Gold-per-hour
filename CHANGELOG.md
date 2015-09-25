@@ -1,3 +1,6 @@
+# 1.2.1 (2015-09-24)
+- Fixed the Total acquired gold series on the graph.
+
 # 1.2 (2015-09-24)
 - The gold over time graph now also displays the total acquired gold. 
 - Better layout for the other currencies (now displayed in a table). Also, the currencies should always be displayed in english now.
