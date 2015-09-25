@@ -564,10 +564,6 @@
                 if(localStorage.getItem('playSound') === 'true') {
                     SOUND_EFFECT.play();
                 }
-
-                //Acquired gold
-                goldGain = (gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + (currentGold - initialGold);
-                goldSeries.addPoint([(new Date()).getTime(), goldGain], true, false);
             } else {
                 currentCurrencies.forEach(function(current, index) {
                     var currency = $('[data-currencyID=' + current.id + ']');
@@ -841,6 +837,10 @@
             //Update total
             updating = false;
             updateTotal();
+
+            //Acquired gold
+            goldGain = (gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + (currentGold - initialGold);
+            goldSeries.addPoint([(new Date()).getTime(), goldGain], true, false);
         });
     }
 
