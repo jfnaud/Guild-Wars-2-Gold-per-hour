@@ -1,5 +1,5 @@
 # 1.2 (2015-09-24)
-- The gold over time graph now also displays the total acquired gold.
+- The gold over time graph now also displays the total acquired gold. 
 - Better layout for the other currencies (now displayed in a table). Also, the currencies should always be displayed in english now.
 - A new graph displays currencies acquisition over time. You can hide the currencies you don't want on the graph by unchecking them. Your checked currencies will be saved for next time.
 - A new option lets you select how the gold per hour is calculated. You can either consider all the time elapsed since you've started the application, or the time elapsed while the application has been running. This second option can be useful if you start the application, take a long break ("Stop" button), then resume later.
