@@ -180,52 +180,56 @@ label {
     width: 100%;
 }
 
+#otherCurrencies {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#currencies, #currenciesGraph {
+    display: inline-block;
+    vertical-align: middle;
+    flex-grow: 1;
+}
+
 #currencies {
     margin-bottom: 15px;
     margin-top: 20px;
-    text-align: center;
 }
 
-.currency {
-    display: inline-block;
-    width: 340px;
-    font-weight: bold;
-    font-size: 0.9em;
-    margin: 4px;
-    border: 1px solid gray;
-    padding: 3px 8px;
-    background-color: white;
-    box-shadow: 0px 0px 5px gray;
-    text-align: left;
-}
-
-.currencyValue {
+#currenciesGraph {
+    margin: auto;
+    max-width: 750px;
     width: 100%;
-    text-align: center;
-    font-size: 0.9em;
-    margin-top: 5px;
 }
 
-.currencyValue td, .currencyValue th {
-    width: 33%;
+#currencies table {
+    background-color: #FFFFFF;
+    margin: auto;
+}
+
+#currencies td, #currencies th {
     border: 1px solid gray;
     padding: 1px 4px;
 }
 
-.currencyValue th {
-    background-color: #C5C5C5;
-    background: linear-gradient(#FFFFFF, #C5C5C5);
+.initialCurrencyValue, .currentCurrencyValue, .currencyDifference {
+    text-align: right;
+}
+
+#currencies th {
+    background-color: #A70000;
+    background: linear-gradient(#F52B2B, #A70000);
+    color: #FFFFFF;
 }
 
 .currencyPositive {
     background-color: #D4FFD4;
-    box-shadow: 0px 0px 5px green;
 }
 
 .currencyNegative {
     background-color: #FFDFDF;
-    box-shadow: 0px 0px 5px red;
 }
+
 
 .price {
     width: 175px;
@@ -377,7 +381,7 @@ label {
     width: 100%;
 }
 
-#settingsPopup label {
+#settingsPopup label, #currencies label {
     cursor: pointer;
 }
 
@@ -387,6 +391,10 @@ label {
 
 .twoCols td {
     width: 50%;
+}
+
+.threeCols td {
+    width: 33%;
 }
 
 #typesList {

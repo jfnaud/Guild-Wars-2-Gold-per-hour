@@ -120,7 +120,10 @@
             </div>
 
             <h2>Other currencies <span class="toggle" id="toggleCurrencies">(toggle)</span></h2>
-            <div id="currencies"></div>
+            <div id="otherCurrencies">
+                <div id="currencies"></div>
+                <div id="currenciesGraph"></div>
+            </div>
 
             <div class="borderTop"></div>
             <div class="borderRight"></div>
@@ -154,11 +157,11 @@
         <div id="settingsPopup">
             <h2>Settings</h2>
             <table>
-            <tr class="twoCols">
+            <tr class="threeCols">
                 <td><label for="toggleDetails"><input type="checkbox" id="toggleDetails"> Show item details</label></td>
-                <td><label for="toggleSound"><input type="checkbox" id="toggleSound"> Play a sound effect when refreshing</label></td>
+                <td colspan="2"><label for="toggleSound"><input type="checkbox" id="toggleSound"> Play a sound effect when refreshing</label></td>
             </tr>
-            <tr class="twoCols">
+            <tr class="threeCols">
                 <td>
                     <h3>Sort items by:</h3> 
                     <label for="sortByRarity"><input type="radio" value="rarity" name="sortBy" id="sortByRarity"> Rarity</label><br>
@@ -169,9 +172,14 @@
                     <label for="lowestSeller"><input type="radio" value="lowestSeller" name="valueFrom" id="lowestSeller"> Lowest seller (list items)</label><br>
                     <label for="highestBuyer"><input type="radio" value="highestBuyer" name="valueFrom" id="highestBuyer"> Highest buyer (sell instantly)</label>
                 </td>
+                <td>
+                    <h3>Gold per hour based on:</h3>
+                    <label for="sinceStart"><input type="radio" value="sinceStart" name="baseTime" id="sinceStart"> Time elapsed since the start</label><br>
+                    <label for="elapsed"><input type="radio" value="elapsed" name="baseTime" id="elapsed"> Time elapsed while running</label>
+                </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="3">
                     <table id="typesList">
                     <thead>
                         <th><input type="checkbox" id="checkAllTypes" checked="checked"></th>
@@ -223,7 +231,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="3">
                     <label for="ignoreHidden"><input type="checkbox" id="ignoreHidden"> Ignore the value of hidden items</label>
                 </td>
             </tr>

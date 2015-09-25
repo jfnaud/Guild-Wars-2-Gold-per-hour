@@ -22,7 +22,8 @@
     //Timer variables
     var keepGoing = true;
     var intervalCount = 0;
-    var timeElapsed;
+    var totalElapsedTime = 1;   //Total time that the graph is updating
+    var timeElapsed;            //Time elapsed the last "start" or "resume"
     //API key
     var token = '';
     //Initial gold
@@ -44,39 +45,42 @@
     var losses = 0;
     //List of item types to display
     var itemTypes = [];
-    //Gold per hour chart
-    var chartSeries;
+    //Gold per hour graph
+    var goldPerHourSeries;
+    var goldSeries;
+    //Currencies graph
+    var currenciesGraph;
+
     Highcharts.setOptions({
         global: {
             useUTC: false
         }
     });
-    //Are we currently updating the page? Used to avoid spikes on the chart
+    //Are we currently updating the page? Used to avoid spikes on the graph
     var updating = false;
     //Other currencies
     var currenciesOrder = {
-        5: 1,   //AC
-        9: 2,   //CM
-        11: 3,  //TA
-        10: 4,  //SE
-        13: 5,  //CoF
-        12: 6,  //HotW
-        14: 7,  //CoE
-        6: 8,   //Arah
+        4: 1,   //Gems
+        2: 2,   //Karma
+        23: 3,  //Spirit shards
+        3: 4,   //Laurels
+        18: 5,  //Transmutation charges
+        15: 6,  //Badges of honor
+        7: 7,   //Fractal relics
+        24: 8,  //Pristine fractal relics
+        16: 9,  //Guild commendations
+        25: 10, //Geodes
+        27: 11, //Bandit crests
 
-        7: 9,   //Fractal relics
-        24: 10, //Pristine fractal relics
-        25: 11, //Geodes
-        27: 12, //Bandit crests
-
-        2: 13,  //Karma
-        15: 14, //Badges of honor
-        16: 15, //Guild commendations
-        23: 16, //Spirit shards
-
-        3: 17,  //Laurels
-        18: 18, //Transmutation charges
-        4: 19,  //Gems
+        5: 12,  //AC
+        9: 13,  //CM
+        11: 14, //TA
+        10: 15, //SE
+        13: 16, //CoF
+        12: 17, //HotW
+        14: 18, //CoE
+        6: 19,  //Arah
+        
         26: 20  //WvW claim tickets
     };
     var intialCurrencies = [];
@@ -139,6 +143,16 @@
         $('#lowestSeller').prop('checked', true);
     }
 
+    //"Base time on"
+    if (localStorage.getItem('baseTime') === null) {
+        localStorage.setItem('baseTime', 'sinceStart');
+    }
+    if (localStorage.getItem('baseTime') === 'elapsed') {
+        $('#elapsed').prop('checked', true);
+    } else {
+        $('#sinceStart').prop('checked', true);
+    }
+
     //Allowed item types
     if (localStorage.getItem('itemTypes') === null) {
         localStorage.setItem('itemTypes', $.map($('.itemType'), function (n) {
@@ -146,7 +160,7 @@
         }).join(', '));
     }
     $('' + localStorage.getItem('itemTypes')).prop('checked', true).each(function() {
-        itemTypes.push($(this).data('type'))
+        itemTypes.push($(this).data('type'));
     });
 
     //Ignore value of discarded item types
@@ -170,7 +184,7 @@
 //Functions
     //Initialisation. Called after the user enters his API key and also when the user clicks the restart button.
     function init() {
-        var chart;
+        var goldGraph;
 
         //Reset variables
         startedOn = Date.now();
@@ -192,12 +206,13 @@
         $('#startTime').html(new Date().toLocaleString());
         $('#currentTime').html(new Date().toLocaleString());
 
-        //Chart of the gold per hour
-        chart = $('#chart').highcharts('StockChart', {
+        //Graph of the gold per hour
+        goldGraph = $('#chart').highcharts('StockChart', {
             chart: {
                 animation: Highcharts.svg, // don't animate in old IE
-                marginRight: 10,
-                height: 250
+                marginLeft: 110,
+                marginRight: 110,
+                height: 350
             },
             plotOptions: {
                 series: {
@@ -217,23 +232,38 @@
             },
             series: [{
                 name: 'Gold per hour',
-                data: []
+                data: [[(new Date()).getTime(), 0]],
+                yAxis: 0
+            }, {
+                name: 'Total acquired gold',
+                data: [[(new Date()).getTime(), 0]],
+                yAxis: 1
             }],
             title: {
-                text: 'Average gold per hour over time'
+                text: 'Gold over time'
             },
             xAxis: {
                 tickPixelInterval: 150
             },
-            yAxis: {
+            yAxis: [{
                 labels: {
                     useHTML: true,
                     formatter: function() {
-                        return '<div style="white-space: nowrap">' + displayGold(this.value) + '</div>';
+                        return '<span style="white-space: nowrap; color: #7CB5EC;">' + displayGold(this.value, false) + '</span>';
                     }
                 },
                 opposite: false
-            },
+            }, {
+                labels: {
+                    align: 'right',
+                    x: 95,
+                    useHTML: true,
+                    formatter: function() {
+                        return '<span style="white-space: nowrap; color: #434348;">' + displayGold(this.value, false) + '</span>';
+                    }
+                },
+                opposite: true
+            }],
             tooltip: {
                 hideDelay: 0,
                 animation: false,
@@ -248,7 +278,7 @@
                 enabled: false
             },
             legend: {
-                enabled: false
+                enabled: true
             },
             navigator: {
                 enabled: false
@@ -260,10 +290,13 @@
                 enabled: false
             }
         });
-        chartSeries = chart.highcharts().series[0];
+        goldPerHourSeries = goldGraph.highcharts().series[0];
+        goldSeries = goldGraph.highcharts().series[1];
 
         //Fetch all currencies
-        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,26,27').done(function(currencies) {
+        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,26,27&lang=en').done(function(currencies) {
+            var graphSeries = [];
+
             currencies.sort(function(a, b) {
                 if(currenciesOrder[a.id] > currenciesOrder[b.id]) {
                     return 1;
@@ -274,16 +307,89 @@
                 }
             });
 
-            $('#currencies').html('');
+            $('#currencies').html('<table><tr><th><input type="checkbox" id="checkAllCurrencies"></th><th>Currency</th><th>Initial</th><th>Current</th><th>Difference</th></tr></table>');
 
             currencies.forEach(function(currency) {
-                $('#currencies').append('<div class="currency" data-currencyID="' + currency.id + '">' +
-                        '<img width="25" height="25" src="' + currency.icon + '" alt="' + currency.name + '"> ' + currency.name + 
-                        '<table class="currencyValue">' + 
-                        '<thead><tr><th>Initial</th><th>Current</th><th>Difference</th></tr></thead>' +
-                        '<tbody><tr><td class="initialCurrencyValue">0</td><td class="currentCurrencyValue">0</td><td class="currencyDifference">0</td></tr></body>' +
-                        '</table>' +
-                        '</div>');
+                $('#currencies table').append('<tr data-currencyID="' + currency.id + '">' +
+                        '<td><input class="currencySelect" type="checkbox" value="' + currency.id + '" id="currency-' + currency.id +'"></td>' + 
+                        '<td><label for="currency-' + currency.id + '"><img width="25" height="25" src="' + currency.icon + '" alt="' + currency.name + '"> ' + currency.name + '</label></td>' +
+                        '<td class="initialCurrencyValue">0</td><td class="currentCurrencyValue">0</td><td class="currencyDifference">0</td>' +
+                        '</tr>');
+
+                graphSeries.push({id: 'currency-' + currency.id, name: currency.name, data: [], visible: false});
+            });
+
+            //Restore the series from the localStorage
+            if (localStorage.getItem('currencies') === null) {
+                localStorage.setItem('currencies', $.map($('.currencySelect'), function (n) {
+                    return '#' + $(n).attr('id');
+                }).join(', '));
+            }
+            $('' + localStorage.getItem('currencies')).prop('checked', true).each(function(index, item) {
+                graphSeries.forEach(function(series) {
+                    if(series.id == $(item).attr('id')) {
+                        series.visible = true;
+                    }
+                });
+            });
+
+            //Other currencies graph
+            currenciesGraph = $('#currenciesGraph').highcharts('StockChart', {
+                chart: {
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10,
+                    height: 500
+                },
+                plotOptions: {
+                    series: {
+                        dataGrouping: {
+                            groupPixelWidth: 1
+                        },
+                        marker: {
+                            enabled: null,
+                            radius: 3
+                        },
+                        states: {
+                            hover: {
+                                enabled: false
+                            }
+                        }
+                    }
+                },
+                series: graphSeries,
+                title: {
+                    text: 'Currencies acquisition over time'
+                },
+                xAxis: {
+                    tickPixelInterval: 150
+                },
+                yAxis: {
+                    opposite: false
+                },
+                tooltip: {
+                    hideDelay: 0,
+                    animation: false,
+                    headerFormat: '<small>{point.key}</small><table>',
+                    pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+                        '<td style="text-align: right"><b>{point.y}</b></td></tr>',
+                    footerFormat: '</table>',
+                    useHTML: true
+                },
+                exporting: {
+                    enabled: false
+                },
+                legend: {
+                    enabled: false
+                },
+                navigator: {
+                    enabled: false
+                },
+                rangeSelector: {
+                    enabled: false
+                },
+                scrollbar: {
+                    enabled: false
+                }
             });
         }).fail(failedRequest);
 
@@ -350,6 +456,7 @@
             //Adjust the next tick
             var diff = (Date.now() - initiatedOn) - timeElapsed;
             timeElapsed += 1000;
+            totalElapsedTime += 1000;
 
             window.setTimeout(tick, (1000 - diff));
         }
@@ -359,9 +466,15 @@
     function updateTotal() {
         //Don't do anything if we are currently fetching data and not everything is ready
         if(!updating) {
-            var timeDiff = 3600000 / (Date.now() - startedOn);
+            var timeDiff;
             var goldDiff = currentGold - initialGold;
             var goldPerHour;
+
+            if(localStorage.getItem('baseTime') === 'elapsed') {
+                timeDiff = 3600000 / totalElapsedTime;
+            } else {
+                timeDiff = 3600000 / (Date.now() - startedOn);
+            }
 
             $('#totalNew').html('Gains (' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'listing' : 'sell instantly') + ', before fees): <span class="price">' + displayGold(gains) + '</span>' +
                     '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(gains * 0.15)) + '</span>' +
@@ -393,7 +506,9 @@
             $('#overallAverage').html(displayGold(goldPerHour));
 
             //Update the chart. Highstock will group the data over time
-            chartSeries.addPoint([(new Date()).getTime(), goldPerHour], true, false);
+            if(!isNaN(goldPerHour)) {
+                goldPerHourSeries.addPoint([(new Date()).getTime(), goldPerHour], true, false);
+            }
         }
     }
 
@@ -414,6 +529,7 @@
 
         //Launch every ajax calls. Wait for every one to complete before continuing. Each of those function return a deferred object.
         $.when(fetchBank(first), fetchMaterials(first), fetchCharacters(first), fetchTradingPost(first), fetchWallet(first)).then(function () {
+            var currentTime = Date.now();
             if (!first) {
                 //Check for new items in the current index
                 Object.keys(currentIndex).forEach(function(item) {
@@ -448,6 +564,10 @@
                 if(localStorage.getItem('playSound') === 'true') {
                     SOUND_EFFECT.play();
                 }
+
+                //Acquired gold
+                goldGain = (gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + (currentGold - initialGold);
+                goldSeries.addPoint([(new Date()).getTime(), goldGain], true, false);
             } else {
                 currentCurrencies.forEach(function(current, index) {
                     var currency = $('[data-currencyID=' + current.id + ']');
@@ -456,7 +576,9 @@
                     })[0];
 
                     currency.find('.currentCurrencyValue').html(current.value.format());
-                    currency.find('.currencyDifference').html((initial.value - current.value).format());
+                    currency.find('.currencyDifference').html(((current.value - initial.value) > 0 ? '+' : '') + (current.value - initial.value).format());
+
+                    currenciesGraph.highcharts().get('currency-' + current.id).addPoint([currentTime, (current.value - initial.value)], true, false);
                 });
             }
         });
@@ -467,12 +589,13 @@
         var deferreds = [];
         var itemIds = [];
         var found;
+        var currentTime = Date.now();
 
         //Update the current gold
         $('#currentGold').html(displayGold(currentGold));
 
         //Clear grids
-        $('.currency').removeClass('currencyPositive currencyNegative');
+        $('#currencies tr').removeClass('currencyPositive currencyNegative');
         $('#gridNew, #gridOld').html('');
         $('#totalNew, #totalOld').hide();
         $('#spinnerNew, #spinnerOld').show();
@@ -487,13 +610,15 @@
             })[0];
 
             currency.find('.currentCurrencyValue').html(current.value.format());
-            currency.find('.currencyDifference').html((current.value - initial.value).format());
+            currency.find('.currencyDifference').html(((current.value - initial.value) > 0 ? '+' : '') + (current.value - initial.value).format());
 
             if(current.value - initial.value > 0) {
                 currency.addClass('currencyPositive', ANIMATION_DURATION);
             } else if (current.value - initial.value < 0) {
                 currency.addClass('currencyNegative', ANIMATION_DURATION);
             }
+
+            currenciesGraph.highcharts().get('currency-' + current.id).addPoint([currentTime, (current.value - initial.value)], true, false);
         });
 
         //Show new items
@@ -691,6 +816,8 @@
 
         //Show total of value gain / losses when it's ready. Wait for all deferreds to complete before continuing.
         $.when.apply($, deferreds).then(function () {
+            var goldGain;
+
             //Sort the items
             sortItems(localStorage.getItem('sortBy'));
 
@@ -1003,31 +1130,41 @@
                 initialGold = wallet[0].value;
                 currentGold = wallet[0].value;
                 wallet.shift();
-                initialCurrencies = wallet.sort(function(a, b) {
-                    if(a.id > b.id) {
-                        return 1;
-                    } else if(a.id < b.id) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-                currentCurrencies = initialCurrencies;
 
-                initialCurrencies.forEach(function(currency) {
-                    $('[data-currencyID=' + currency.id + '] .initialCurrencyValue').html(currency.value.format());
+                initialCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,26,27], function(e) {
+                    var c = {
+                        id: e,
+                        value: 0
+                    };
+
+                    wallet.forEach(function(currency) {
+                        if(currency.id === e) {
+                            c.value = currency.value;
+                            $('[data-currencyID=' + currency.id + '] .initialCurrencyValue').html(currency.value.format());
+                        }
+                    });
+
+                    return c;
                 });
+
+                currentCurrencies = initialCurrencies;
             } else {
                 currentGold = wallet[0].value;
                 wallet.shift();
-                currentCurrencies = wallet.sort(function(a, b) {
-                    if(a.id > b.id) {
-                        return 1;
-                    } else if(a.id < b.id) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
+
+                currentCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,26,27], function(e) {
+                    var c = {
+                        id: e,
+                        value: 0
+                    };
+
+                    wallet.forEach(function(currency) {
+                        if(currency.id === e) {
+                            c.value = currency.value;
+                        }
+                    });
+
+                    return c;
                 });
 
                 $('#currentTime').html(new Date().toLocaleString());
@@ -1218,7 +1355,7 @@
     }
 
     //Utility function to build the html for displaying gold based on a number of coppers
-    function displayGold(coppers) {
+    function displayGold(coppers, showCoppers) {
         var c, s, g;
         var negative = false;
 
@@ -1238,7 +1375,8 @@
             return ((negative ? '- ' : '') +
                     parseInt(g, 10) + ' <i class="goldIcon"></i> ' +
                     parseInt(s, 10).toString().paddingLeft('00') + ' <i class="silverIcon"></i> ' +
-                    parseInt(c, 10).toString().paddingLeft('00') + ' <i class="copperIcon"></i>');
+                    (showCoppers == false ? '' :
+                    parseInt(c, 10).toString().paddingLeft('00') + ' <i class="copperIcon"></i>'));
         }
     }
 
@@ -1317,7 +1455,7 @@
         keepGoing = false;
 
         //Empty the chart's data
-        //chartSeries.data = [];
+        //goldPerHourSeries.data = [];
     });
 
     //Clicking the "Start over" button
@@ -1362,6 +1500,11 @@
         $('.itemSellValue, .itemBuyValue').toggle();
         computeGainsAndLosses();
         sortItems(localStorage.getItem('sortBy'));
+    });
+
+    //Toggling "base time on"
+    $('[name=baseTime]').on('change', function () {
+        localStorage.setItem('baseTime', $(this).val());
     });
 
     //Checking all item types
@@ -1470,6 +1613,7 @@
         localStorage.setItem('playSound', false);
         localStorage.setItem('sortBy', 'rarity');
         localStorage.setItem('valueFrom', 'lowestSeller');
+        localStorage.setItem('baseTime', 'sinceStart');
         localStorage.setItem('itemTypes', $.map($('.itemType'), function (n) {
             return '#' + $(n).attr('id');
         }).join(', '));
@@ -1484,6 +1628,7 @@
         $('#toggleSound').prop('checked',false);
         $('#sortByRarity').prop('checked', true);
         $('#lowestSeller').prop('checked', true);
+        $('#sinceStart').prop('checked', true);
         $('.itemType').prop('checked', true);
         $('#checkAllTypes').prop('checked', true);
         $('#ignoreHidden').prop('checked', false);
@@ -1533,6 +1678,47 @@
     //Toggling lost items
     $('#toggleOld').on('click', function() {
         $('#oldItems').toggle(ANIMATION_DURATION);
+    });
+
+    //Toggling all currencies
+    $('#currencies').on('change', '#checkAllCurrencies', function() {
+        if($(this).prop('checked')) {
+            currenciesGraph.highcharts().series.forEach(function(series) {
+                series.setVisible(true, false);
+            });
+        } else {
+            currenciesGraph.highcharts().series.forEach(function(series) {
+                series.setVisible(false, false);
+            });
+        }
+        currenciesGraph.highcharts().redraw();
+
+        $('.currencySelect').prop('checked', $(this).prop('checked'));
+
+        //Save the selected currencies
+        localStorage.setItem('currencies', $.map($('.currencySelect:checked'), function (n) {
+            return '#' + $(n).attr('id');
+        }).join(', '));
+    });
+
+    //Toggling currencies for the graph
+    $('#currencies').on('change', '.currencySelect', function() {
+        if($(this).prop('checked')) {
+            currenciesGraph.highcharts().get('currency-' + $(this).val()).show();
+        } else {
+            currenciesGraph.highcharts().get('currency-' + $(this).val()).hide();
+        }
+
+        if (!$(this).prop('checked')) {
+            $('#checkAllCurrencies').prop('checked', false);
+        } else if ($('.currencySelect').length === $('.currencySelect:checked').length) {
+            $('#checkAllCurrencies').prop('checked', true);
+        }
+
+        //Save the selected currencies
+        localStorage.setItem('currencies', $.map($('.currencySelect:checked'), function (n) {
+            return '#' + $(n).attr('id');
+        }).join(', '));
     });
 
     //Clear api key
