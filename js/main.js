@@ -88,6 +88,7 @@
     //Current version of the application
     var currentVersion;
     var checkVersion = true;
+    var fetchCount = 0;
 
     //Utility function for padding zeroes when displaying gold
     String.prototype.paddingLeft = function (paddingValue) {
@@ -518,7 +519,10 @@
         oldItems = {};
         currentIndex = {};
 
-        if(checkVersion) {
+        fetchCount++;
+
+        if(checkVersion && fetchCount === 10) {
+            fetchCount = 0;
             //Get the current version of the application and compare
             $.getJSON('http://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/currentVersion.json').done(function(json) {
                 if(currentVersion !== json.number) {
