@@ -1,3 +1,7 @@
+# 1.2.2 (2015-10-12)
+- Integrated Google Analytics.
+- The ping to Github for checking if a new version is available now happens every 30 minutes instead of 3 minutes.
+
 # 1.2.1 (2015-09-24)
 - Fixed the Total acquired gold series on the graph.
 
