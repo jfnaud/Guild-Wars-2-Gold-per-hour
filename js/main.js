@@ -9,7 +9,7 @@
 (function () {
 //Constants
     //After how many ticks shall we fetch the data again
-    var REFRESH_RATE = 60;
+    var REFRESH_RATE = 180;
     //Animation duration - used for all animations
     var ANIMATION_DURATION = 200;
     //Sound effect
