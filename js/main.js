@@ -72,23 +72,23 @@
         25: 10, //Geodes
         27: 11, //Bandit crests
 
-        5: 12,  //AC
-        9: 13,  //CM
-        11: 14, //TA
-        10: 15, //SE
-        13: 16, //CoF
-        12: 17, //HotW
-        14: 18, //CoE
-        6: 19,  //Arah
+        19: 12, //Airship parts
+        22: 13, //Lumps of aurilium
+        20: 14, //Ley line crystals
+        28: 15, //Magnetite shards
+        30: 16, //PvP league tickets
+
+        5: 17,  //AC
+        9: 18,  //CM
+        11: 19, //TA
+        10: 20, //SE
+        13: 21, //CoF
+        12: 22, //HotW
+        14: 23, //CoE
+        6: 24,  //Arah
         
-        26: 20,  //WvW claim tickets
-	27: 21,
-	28: 22,
-	19: 23,
-	22:24,
-	20:25,
-	1:99,
-	
+        26: 25, //WvW claim tickets
+        29: 26  //Provisionner tokens
     };
     var initialCurrencies = [];
     var currentCurrencies = [];
@@ -108,6 +108,25 @@
         return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
     };
 
+    //Utility function to get the API key via the "key" parameter in the URL
+    function getKeyFromURL() {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1));
+        var sURLVariables = sPageURL.split('&');
+        var sParameterName;
+        var i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0].toLowerCase() === 'key') {
+                $('#apiKey').val(sParameterName[1]);
+                if(localStorage.getItem('saveAPIKey') === 'true') {
+                    localStorage.setItem('saveAPIKey', sParameterName[1]);
+                }
+            }
+        }
+    };
+
 //Launching the app
     //Restore API key and settings from the localStorage
     if (localStorage.getItem('saveAPIKey') === null) {
@@ -118,6 +137,9 @@
     if(localStorage.getItem('saveAPIKey') === 'true') {
         $('#apiKey').val(localStorage.getItem('APIKey'));
     }
+
+    //... or from the URL via the "key" argument
+    getKeyFromURL();
 
     //Show item details?
     if (localStorage.getItem('showDetails') === null) {
@@ -191,14 +213,14 @@
 
     // automatically load main if stored API key 
     if ($('#apiKey').val().length > 0) {
-            token = $('#apiKey').val();
-            //Save the API key for future use
-            localStorage.setItem('APIKey', token);
+        token = $('#apiKey').val();
+        //Save the API key for future use
+        localStorage.setItem('APIKey', token);
 
-            $('#intro').hide();
-            $('#main, #menu').show();
+        $('#intro').hide();
+        $('#main, #menu').show();
 
-            init();
+        init();
     }
 
 //Functions
