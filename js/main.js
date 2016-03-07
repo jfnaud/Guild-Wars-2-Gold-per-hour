@@ -108,6 +108,25 @@
         return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
     };
 
+    //Utility function to get the API key via the "key" parameter in the URL
+    function getKeyFromURL() {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1));
+        var sURLVariables = sPageURL.split('&');
+        var sParameterName;
+        var i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0].toLowerCase() === 'key') {
+                $('#apiKey').val(sParameterName[1]);
+                if(localStorage.getItem('saveAPIKey') === 'true') {
+                    localStorage.setItem('saveAPIKey', sParameterName[1]);
+                }
+            }
+        }
+    };
+
 //Launching the app
     //Restore API key and settings from the localStorage
     if (localStorage.getItem('saveAPIKey') === null) {
@@ -118,6 +137,9 @@
     if(localStorage.getItem('saveAPIKey') === 'true') {
         $('#apiKey').val(localStorage.getItem('APIKey'));
     }
+
+    //... or from the URL via the "key" argument
+    getKeyFromURL();
 
     //Show item details?
     if (localStorage.getItem('showDetails') === null) {
