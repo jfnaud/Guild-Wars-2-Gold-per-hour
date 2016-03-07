@@ -72,18 +72,25 @@
         25: 10, //Geodes
         27: 11, //Bandit crests
 
-        5: 12,  //AC
-        9: 13,  //CM
-        11: 14, //TA
-        10: 15, //SE
-        13: 16, //CoF
-        12: 17, //HotW
-        14: 18, //CoE
-        6: 19,  //Arah
+        19: 12, //Airship parts
+        22: 13, //Lumps of aurilium
+        20: 14, //Ley line crystals
+        28: 15, //Magnetite shards
+        30: 16, //PvP league tickets
+
+        5: 17,  //AC
+        9: 18,  //CM
+        11: 19, //TA
+        10: 20, //SE
+        13: 21, //CoF
+        12: 22, //HotW
+        14: 23, //CoE
+        6: 24,  //Arah
         
-        26: 20  //WvW claim tickets
+        26: 25, //WvW claim tickets
+        29: 26  //Provisionner tokens
     };
-    var intialCurrencies = [];
+    var initialCurrencies = [];
     var currentCurrencies = [];
     //Current version of the application
     var currentVersion;
@@ -171,7 +178,7 @@
     $('#ignoreHidden').prop('checked', (localStorage.getItem('ignoreHidden') === 'true' ? true : false));
 
     //Get the current version of the application
-    $.getJSON('http://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/currentVersion.json').done(function(json) {
+    $.getJSON('https://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/currentVersion.json').done(function(json) {
         currentVersion = json.number;
         $('#currentVersion').html(currentVersion);
 
@@ -181,6 +188,18 @@
 
         localStorage.setItem('currentVersion', currentVersion);
     });
+
+    // automatically load main if stored API key 
+    if ($('#apiKey').val().length > 0) {
+        token = $('#apiKey').val();
+        //Save the API key for future use
+        localStorage.setItem('APIKey', token);
+
+        $('#intro').hide();
+        $('#main, #menu').show();
+
+        init();
+    }
 
 //Functions
     //Initialisation. Called after the user enters his API key and also when the user clicks the restart button.
@@ -295,7 +314,7 @@
         goldSeries = goldGraph.highcharts().series[1];
 
         //Fetch all currencies
-        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,26,27&lang=en').done(function(currencies) {
+        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30&lang=en').done(function(currencies) {
             var graphSeries = [];
 
             currencies.sort(function(a, b) {
@@ -524,7 +543,7 @@
         if(checkVersion && fetchCount === 10) {
             fetchCount = 0;
             //Get the current version of the application and compare
-            $.getJSON('http://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/currentVersion.json').done(function(json) {
+            $.getJSON('https://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/currentVersion.json').done(function(json) {
                 if(currentVersion !== json.number) {
                     $('#newVersion').html('A new version of the application is now available (<a href="https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour/blob/master/CHANGELOG.md" target="_blank" alt="changelog">changelog</a>)! You can reload the page to access the new version. <span class="close">Got it!</span>').show().position({my: 'center top', at: 'center top', of: window});
                 }
@@ -1135,7 +1154,7 @@
                 currentGold = wallet[0].value;
                 wallet.shift();
 
-                initialCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,26,27], function(e) {
+                initialCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30], function(e) {
                     var c = {
                         id: e,
                         value: 0
@@ -1156,7 +1175,7 @@
                 currentGold = wallet[0].value;
                 wallet.shift();
 
-                currentCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,23,24,25,26,27], function(e) {
+                currentCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30], function(e) {
                     var c = {
                         id: e,
                         value: 0

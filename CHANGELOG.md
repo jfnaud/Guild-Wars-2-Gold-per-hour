@@ -1,3 +1,7 @@
+# 1.3 (2016-03-06)
+- Added Heart of thorns currencies.
+- If an API key is saved, you are now redirected automatically to the main screen (you skip the "login" part).
+
 # 1.2.2 (2015-10-12)
 - Integrated Google Analytics.
 - The ping to Github for checking if a new version is available now happens every 30 minutes instead of 3 minutes.
