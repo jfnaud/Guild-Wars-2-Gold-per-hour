@@ -1,6 +1,7 @@
 # 1.3 (2016-03-06)
 - Added Heart of thorns currencies.
 - If an API key is saved, you are now redirected automatically to the main screen (you skip the "login" part).
+- You can now specify your API key in the URL via the "key" argument. For example: http://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/?key=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 
 # 1.2.2 (2015-10-12)
 - Integrated Google Analytics.
