@@ -541,6 +541,7 @@
             }
 
             $('#overallGoldDifference').html(displayGold(goldDiff));
+            $('#currentGold').html(displayGold(currentGold));
             $('#overallGains').html(displayGold(gains));
             $('#overallFees').html(displayGold(parseInt(gains * 0.15)));
             $('#overallLosses').html(displayGold(losses - parseInt(losses * 0.15)));
@@ -573,7 +574,7 @@
         }
 
         //Launch every ajax calls. Wait for every one to complete before continuing. Each of those function return a deferred object.
-        $.when(fetchBank(first), fetchMaterials(first), fetchCharacters(first), fetchTradingPost(first), fetchWallet(first)).then(function () {
+        $.when(fetchSharedInventory(first), fetchBank(first), fetchMaterials(first), fetchCharacters(first), fetchTradingPost(first), fetchWallet(first)).then(function () {
             var currentTime = Date.now();
             if (!first) {
                 //Check for new items in the current index
@@ -944,6 +945,43 @@
         }
 
         updating = false;
+    }
+
+    //This function fetches the items from the shared inventory slots
+    function fetchSharedInventory(first) {
+        var def = $.Deferred();
+
+        $.getJSON('https://api.guildwars2.com/v2/account/inventory?access_token=' + token).done(function (json) {
+            //Building the index
+            json.forEach(function (item) {
+                if (item !== null && item.count) {
+                    if (first) {
+                        //If not already in the index we add it
+                        if (initialIndex[item.id] === undefined) {
+                            initialIndex[item.id] = {
+                                count: item.count
+                            };
+                        } else {
+                            //Else we add to the total count
+                            initialIndex[item.id].count += item.count;
+                        }
+                    } else {
+                        //Build an index for current items
+                        if (currentIndex[item.id] === undefined) {
+                            currentIndex[item.id] = {
+                                count: item.count
+                            };
+                        } else {
+                            currentIndex[item.id].count += item.count;
+                        }
+                    }
+                }
+            });
+
+            def.resolve();
+        }).fail(failedRequest);
+
+        return def;
     }
 
     //This function fetch the items from the trading post
