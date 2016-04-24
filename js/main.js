@@ -541,6 +541,7 @@
             }
 
             $('#overallGoldDifference').html(displayGold(goldDiff));
+            $('#currentGold').html(displayGold(currentGold));
             $('#overallGains').html(displayGold(gains));
             $('#overallFees').html(displayGold(parseInt(gains * 0.15)));
             $('#overallLosses').html(displayGold(losses - parseInt(losses * 0.15)));
