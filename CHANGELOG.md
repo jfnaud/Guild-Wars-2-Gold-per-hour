@@ -1,3 +1,6 @@
+# 1.3.1 (2016-10-02)
+- Added Unbound Magic and Proof of Heroics in the "Other currencies" table.
+
 # 1.3 (2016-03-06)
 - Added Heart of thorns currencies.
 - If an API key is saved, you are now redirected automatically to the main screen (you skip the "login" part).
