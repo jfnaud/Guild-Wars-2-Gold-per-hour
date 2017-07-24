@@ -139,6 +139,36 @@ label {
     background-image: url(../img/Copper_coin.png);
 }
 
+.tpDetail {
+    position: absolute;
+    z-index: 2;
+}
+
+.tpDetail .info {
+    position: relative;
+    top: 4px;
+    left: 4px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url(../img/help.png);
+}
+
+.tpDetail .hiddenGold {
+    position: absolute;
+    top: 4px;
+    left: 24px;
+    display: block;
+    border: 1px solid #C1C1C1;
+    padding: 5px 10px;
+    background-color: white;
+    width: 220px;
+    font-size: 1rem;
+    text-align: left;
+    color: #222;
+    display: none;
+}
+
 #main {
     background: url(../img/grey.png);
     box-sizing: border-box;
