@@ -28,12 +28,22 @@
     var token = '';
     //Initial gold
     var initialGold = 0;
+    //Initial gold in the trading post
+    var initialTPGold = 0;
     //Current gold
     var currentGold = 0;
+    //Current gold in the trading post
+    var currentTPGold = 0;
+    //Temporary current gold
+    var tempCurrentGold = 0;
+    //Temporary current gold in the trading post
+    var tempCurrentTPGold = 0;
     //Index of all the items owned by the account when the application is started (used for later comparisons)
     var initialIndex = {};
     //Index of all the current items owned by the account
     var currentIndex = {};
+    //Temporary index of the current items, because it takes a while to complete all the calls
+    var tempIndex = {};
     //Index of all the new items acquired since the launch of the application
     var newItems = {};
     //Index of all the items that were deleted from the account since the launch of the application
@@ -236,6 +246,7 @@
         timeElapsed = 0;
         initialIndex = {};
         currentIndex = {};
+        tempIndex = {};
         gains = 0;
         losses = 0;
         intervalCount = 0;
@@ -441,17 +452,22 @@
         $.getJSON('https://api.guildwars2.com/v2/account/wallet?access_token=' + token).done(function (wallet) {
             initialGold = wallet[0].value;
             currentGold = wallet[0].value;
-            //Display the initial amount of gold
-            $('#initialGold').html(displayGold(initialGold));
-            $('#currentGold').html(displayGold(initialGold));
 
-        }).fail(failedRequest).then(function() {
+        }).then(function() {
+            return $.getJSON('https://api.guildwars2.com/v2/commerce/delivery?access_token=' + token).done(function (json) {
+                initialTPGold = json.coins;
+                currentTPGold = json.coins;
+                //Display the initial amount of gold
+                $('#initialGold').html(displayGoldWithTP(initialGold, initialTPGold));
+                $('#currentGold').html(displayGoldWithTP(currentGold, currentTPGold));
+            });
+        }).then(function() {
             //Fetch the items for the first time. This will build an index of the initial items that will be used later to compare and find the new/lost items.
             fetchAll(true);
-
+            updateTotal(true);
             //Start the loop. This will tick once every second.
             tick();
-        });
+        }).fail(failedRequest);
     }
 
     //Handles failed request
@@ -488,7 +504,7 @@
             $('#countdown').html('Next refresh: ' + minutes + ':' + seconds);
 
             //Update the gold per hour and the chart
-            updateTotal();
+            updateTotal(false);
 
             intervalCount++;
             //When reaching 0, fetch everything and compare with the initial items/gold
@@ -507,11 +523,11 @@
     }
 
     //Updates the summary section, as well as the chart
-    function updateTotal() {
+    function updateTotal(updateAll) {
         //Don't do anything if we are currently fetching data and not everything is ready
         if(!updating) {
             var timeDiff;
-            var goldDiff = currentGold - initialGold;
+            var goldDiff = (currentGold + currentTPGold) - (initialGold + initialTPGold);
             var goldPerHour;
 
             if(localStorage.getItem('baseTime') === 'elapsed') {
@@ -542,12 +558,14 @@
                 $('#main').removeClass('overlayPositive overlayNegative');
             }
 
-            $('#overallGoldDifference').html(displayGold(goldDiff));
-            $('#currentGold').html(displayGold(currentGold));
-            $('#overallGains').html(displayGold(gains));
-            $('#overallFees').html(displayGold(parseInt(gains * 0.15)));
-            $('#overallLosses').html(displayGold(losses - parseInt(losses * 0.15)));
-            $('#overallResult').html(displayGold((gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + goldDiff));
+            if(updateAll) {
+                $('#overallGoldDifference').html(displayGold(goldDiff));
+                $('#currentGold').html(displayGoldWithTP(currentGold, currentTPGold));
+                $('#overallGains').html(displayGold(gains));
+                $('#overallFees').html(displayGold(parseInt(gains * 0.15)));
+                $('#overallLosses').html(displayGold(losses - parseInt(losses * 0.15)));
+                $('#overallResult').html(displayGold((gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + goldDiff));
+            }
             $('#overallAverage').html(displayGold(goldPerHour));
 
             //Update the chart. Highstock will group the data over time
@@ -559,9 +577,10 @@
 
     //This function fetches everything currently associated with the account. The "first" parameter is only used to build the initialIndex when the application is started.
     function fetchAll(first) {
-        newItems = {};
-        oldItems = {};
-        currentIndex = {};
+        //currentIndex = {};
+        tempIndex = {};
+        tempCurrentGold = 0;
+        tempCurrentTPGold = 0;
 
         fetchCount++;
 
@@ -576,7 +595,16 @@
         }
 
         //Launch every ajax calls. Wait for every one to complete before continuing. Each of those function return a deferred object.
-        $.when(fetchSharedInventory(first), fetchBank(first), fetchMaterials(first), fetchCharacters(first), fetchTradingPost(first), fetchWallet(first)).then(function () {
+        $.when(fetchSharedInventory(first), fetchBank(first), fetchMaterials(first), fetchCharacters(first), fetchWallet(first)).then(function() {
+            return fetchTradingPost(first);
+        }).then(function () {
+            //Now that all the calls are made, we can update currentGold and currentIndex
+            currentGold = tempCurrentGold;
+            currentTPGold = tempCurrentTPGold;
+            currentIndex = tempIndex;
+            varnewItems = {};
+            oldItems = {};
+
             var currentTime = Date.now();
             if (!first) {
                 //Check for new items in the current index
@@ -636,7 +664,7 @@
         var currentTime = Date.now();
 
         //Update the current gold
-        $('#currentGold').html(displayGold(currentGold));
+        $('#currentGold').html(displayGoldWithTP(currentGold, currentTPGold));
 
         //Clear grids
         $('#currencies tr').removeClass('currencyPositive currencyNegative');
@@ -884,10 +912,10 @@
 
             //Update total
             updating = false;
-            updateTotal();
+            updateTotal(true);
 
             //Acquired gold
-            goldGain = (gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + (currentGold - initialGold);
+            goldGain = (gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + ((currentGold + currentTPGold) - (initialGold + initialTPGold));
             goldSeries.addPoint([(new Date()).getTime(), goldGain], true, false);
         });
     }
@@ -969,12 +997,12 @@
                         }
                     } else {
                         //Build an index for current items
-                        if (currentIndex[item.id] === undefined) {
-                            currentIndex[item.id] = {
+                        if (tempIndex[item.id] === undefined) {
+                            tempIndex[item.id] = {
                                 count: item.count
                             };
                         } else {
-                            currentIndex[item.id].count += item.count;
+                            tempIndex[item.id].count += item.count;
                         }
                     }
                 }
@@ -991,6 +1019,7 @@
         var tpDef = $.Deferred();
         var buyDef = $.Deferred();
         var sellDef = $.Deferred();
+        var deliveryDef = $.Deferred();
 
         //Buy listings
         $.getJSON('https://api.guildwars2.com/v2/commerce/transactions/current/buys?access_token=' + token).done(function (json) {
@@ -1009,12 +1038,12 @@
                         }
                     } else {
                         //Build an index for current items
-                        if (currentIndex[item.item_id] === undefined) {
-                            currentIndex[item.item_id] = {
+                        if (tempIndex[item.item_id] === undefined) {
+                            tempIndex[item.item_id] = {
                                 count: item.quantity
                             };
                         } else {
-                            currentIndex[item.item_id].count += item.quantity;
+                            tempIndex[item.item_id].count += item.quantity;
                         }
                     }
                 }
@@ -1040,12 +1069,12 @@
                         }
                     } else {
                         //Build an index for current items
-                        if (currentIndex[item.item_id] === undefined) {
-                            currentIndex[item.item_id] = {
+                        if (tempIndex[item.item_id] === undefined) {
+                            tempIndex[item.item_id] = {
                                 count: item.quantity
                             };
                         } else {
-                            currentIndex[item.item_id].count += item.quantity;
+                            tempIndex[item.item_id].count += item.quantity;
                         }
                     }
                 }
@@ -1054,7 +1083,41 @@
             sellDef.resolve();
         }).fail(failedRequest);
 
-        $.when(buyDef, sellDef).then(function () {
+        //Delivery items and coins
+        $.getJSON('https://api.guildwars2.com/v2/commerce/delivery?access_token=' + token).done(function (json) {
+            //Add coins
+            tempCurrentTPGold = json.coins;
+            
+            //Building the index
+            json.items.forEach(function (item) {
+                if (item !== null && item.quantity) {
+                    if (first) {
+                        //If not already in the index we add it
+                        if (initialIndex[item.item_id] === undefined) {
+                            initialIndex[item.item_id] = {
+                                count: item.quantity
+                            };
+                        } else {
+                            //Else we add to the total count
+                            initialIndex[item.item_id].count += item.quantity;
+                        }
+                    } else {
+                        //Build an index for current items
+                        if (tempIndex[item.item_id] === undefined) {
+                            tempIndex[item.item_id] = {
+                                count: item.quantity
+                            };
+                        } else {
+                            tempIndex[item.item_id].count += item.quantity;
+                        }
+                    }
+                }
+            });
+
+            deliveryDef.resolve();
+        }).fail(failedRequest);
+
+        $.when(buyDef, sellDef, deliveryDef).then(function () {
             tpDef.resolve();
         });
 
@@ -1081,12 +1144,12 @@
                         }
                     } else {
                         //Build an index for current items
-                        if (currentIndex[item.id] === undefined) {
-                            currentIndex[item.id] = {
+                        if (tempIndex[item.id] === undefined) {
+                            tempIndex[item.id] = {
                                 count: item.count
                             };
                         } else {
-                            currentIndex[item.id].count += item.count;
+                            tempIndex[item.id].count += item.count;
                         }
                     }
                 }
@@ -1118,12 +1181,12 @@
                         }
                     } else {
                         //Build an index for current items
-                        if (currentIndex[item.id] === undefined) {
-                            currentIndex[item.id] = {
+                        if (tempIndex[item.id] === undefined) {
+                            tempIndex[item.id] = {
                                 count: item.count
                             };
                         } else {
-                            currentIndex[item.id].count += item.count;
+                            tempIndex[item.id].count += item.count;
                         }
                     }
                 }
@@ -1157,12 +1220,12 @@
                             }
                         } else {
                             //Build an index for current items
-                            if (currentIndex[item.id] === undefined) {
-                                currentIndex[item.id] = {
+                            if (tempIndex[item.id] === undefined) {
+                                tempIndex[item.id] = {
                                     count: 1
                                 };
                             } else {
-                                currentIndex[item.id].count += 1;
+                                tempIndex[item.id].count += 1;
                             }
                         }
                     }
@@ -1186,12 +1249,12 @@
                                     }
                                 } else {
                                     //Build an index for current items
-                                    if (currentIndex[item.id] === undefined) {
-                                        currentIndex[item.id] = {
+                                    if (tempIndex[item.id] === undefined) {
+                                        tempIndex[item.id] = {
                                             count: item.count
                                         };
                                     } else {
-                                        currentIndex[item.id].count += item.count;
+                                        tempIndex[item.id].count += item.count;
                                     }
                                 }
                             }
@@ -1211,11 +1274,10 @@
         var def = $.Deferred();
 
         $.getJSON('https://api.guildwars2.com/v2/account/wallet?access_token=' + token).done(function (wallet) {
-            if (first) {
-                initialGold = wallet[0].value;
-                currentGold = wallet[0].value;
-                wallet.shift();
+            tempCurrentGold = wallet[0].value;
+            wallet.shift();
 
+            if (first) {
                 initialCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32], function(e) {
                     var c = {
                         id: e,
@@ -1234,9 +1296,6 @@
 
                 currentCurrencies = initialCurrencies;
             } else {
-                currentGold = wallet[0].value;
-                wallet.shift();
-
                 currentCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32], function(e) {
                     var c = {
                         id: e,
@@ -1465,6 +1524,19 @@
         }
     }
 
+    //Utility function to build the html for displaying gold, with an extra detail for the coins in the trading post
+    function displayGoldWithTP(fromAccount, fromTP) {
+        return displayGold(fromAccount + fromTP) + 
+            '<span class="tpDetail">' +
+                '<span class="info"></span>' +
+                '<span class="hiddenGold">' +
+                    'In your wallet:<br>' + displayGold(fromAccount) +
+                    '<br>' +
+                    'Waiting in the trading post:<br>' + displayGold(fromTP) +
+                '</span>' +
+            '</span>';
+    }
+
 //Events binding
     //Toggling "Save my API key"
     $('#saveAPIKey').on('change', function() {
@@ -1560,7 +1632,12 @@
         tick();
     });
 
-
+    //Hovering a .tpDetail .info to display the gold from TP
+    $('#summary').on('mouseover', '.tpDetail .info', function() {
+        $(this).next().show();
+    }).on('mouseout', '.tpDetail .info', function() {
+        $(this).next().hide();
+    });
 
     //When toggling item details, show/hide item description
     $('#toggleDetails').on('change', function () {

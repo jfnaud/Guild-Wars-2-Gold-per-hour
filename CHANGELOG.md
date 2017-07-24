@@ -1,3 +1,7 @@
+# 1.4 (2017-07-23)
+- The initial and current gold as well as the current items now take in consideration the trading post delivery.
+- The application should now continue running while the browser tab is inactive.
+
 # 1.3.1 (2016-10-02)
 - Added Unbound Magic and Proof of Heroics in the "Other currencies" table.
 
