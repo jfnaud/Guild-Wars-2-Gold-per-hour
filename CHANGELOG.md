@@ -1,3 +1,6 @@
+# 1.4.1 (2017-08-04)
+- Fixed an issue where acquired items were not updated correctly.
+
 # 1.4 (2017-07-23)
 - The initial and current gold as well as the current items now take in consideration the trading post delivery.
 - The application should now continue running while the browser tab is inactive.
