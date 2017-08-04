@@ -602,7 +602,7 @@
             currentGold = tempCurrentGold;
             currentTPGold = tempCurrentTPGold;
             currentIndex = tempIndex;
-            varnewItems = {};
+            newItems = {};
             oldItems = {};
 
             var currentTime = Date.now();
