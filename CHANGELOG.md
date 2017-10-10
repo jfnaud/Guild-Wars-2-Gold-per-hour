@@ -1,3 +1,6 @@
+# 1.5 (2017-10-10)
+- Added Path of Fire currencies.
+
 # 1.4.1 (2017-08-04)
 - Fixed an issue where acquired items were not updated correctly.
 
