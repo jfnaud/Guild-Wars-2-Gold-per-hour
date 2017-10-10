@@ -87,20 +87,26 @@
         20: 14, //Ley line crystals
         28: 15, //Magnetite shards
         32: 16, //Unbound magic
-        30: 17, //PvP league tickets
-        31: 18, //Proof of heroics
+        34: 17, //Trade Contract
+        35: 18, //Elegy Mosaic
 
-        5: 19,  //AC
-        9: 20,  //CM
-        11: 21, //TA
-        10: 22, //SE
-        13: 23, //CoF
-        12: 24, //HotW
-        14: 25, //CoE
-        6: 26,  //Arah
+        33: 19, //Ascended Shards of Glory
+        30: 20, //PvP league tickets
+        31: 21, //Proof of heroics
+        36: 22, //Testimony of Heroics
+
+        5: 23,  //AC
+        9: 23,  //CM
+        11: 24, //TA
+        10: 25, //SE
+        13: 26, //CoF
+        12: 27, //HotW
+        14: 28, //CoE
+        6: 29,  //Arah
         
-        26: 27, //WvW claim tickets
-        29: 28  //Provisionner tokens
+        26: 30, //WvW claim tickets
+        29: 31  //Provisionner tokens
+
     };
     var initialCurrencies = [];
     var currentCurrencies = [];
@@ -349,7 +355,7 @@
         goldSeries = goldGraph.highcharts().series[1];
 
         //Fetch all currencies
-        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32&lang=en').done(function(currencies) {
+        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36&lang=en').done(function(currencies) {
             var graphSeries = [];
 
             currencies.sort(function(a, b) {
@@ -1278,7 +1284,7 @@
             wallet.shift();
 
             if (first) {
-                initialCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32], function(e) {
+                initialCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36], function(e) {
                     var c = {
                         id: e,
                         value: 0
@@ -1296,7 +1302,7 @@
 
                 currentCurrencies = initialCurrencies;
             } else {
-                currentCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32], function(e) {
+                currentCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36], function(e) {
                     var c = {
                         id: e,
                         value: 0
