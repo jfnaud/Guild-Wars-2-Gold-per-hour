@@ -103,7 +103,7 @@
         12: 27, //HotW
         14: 28, //CoE
         6: 29,  //Arah
-
+        
         26: 30, //WvW claim tickets
         29: 31  //Provisionner tokens
 
@@ -114,17 +114,6 @@
     var currentVersion;
     var checkVersion = true;
     var fetchCount = 0;
-
-    var lang = 'en';
-    var wiki_url = 'https://wiki.guildwars2.com/index.php?search=';
-
-    if (typeof(i18n) != 'undefined' && i18n['lang']) {
-      lang = i18n['lang'];
-    }
-
-    if (typeof(i18n) != 'undefined' && i18n['wiki_url']) {
-      wiki_url = i18n['wiki_url'];
-    }
 
     //Utility function for padding zeroes when displaying gold
     String.prototype.paddingLeft = function (paddingValue) {
@@ -240,7 +229,7 @@
         localStorage.setItem('currentVersion', currentVersion);
     });
 
-    // automatically load main if stored API key
+    // automatically load main if stored API key 
     if ($('#apiKey').val().length > 0) {
         token = $('#apiKey').val();
         //Save the API key for future use
@@ -303,16 +292,16 @@
                 }
             },
             series: [{
-                name: _('Gold per hour'),
+                name: 'Gold per hour',
                 data: [[(new Date()).getTime(), 0]],
                 yAxis: 0
             }, {
-                name: _('Total acquired gold'),
+                name: 'Total acquired gold',
                 data: [[(new Date()).getTime(), 0]],
                 yAxis: 1
             }],
             title: {
-                text: _('Gold over time')
+                text: 'Gold over time'
             },
             xAxis: {
                 tickPixelInterval: 150
@@ -366,7 +355,7 @@
         goldSeries = goldGraph.highcharts().series[1];
 
         //Fetch all currencies
-        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36&lang='+lang).done(function(currencies) {
+        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36&lang=en').done(function(currencies) {
             var graphSeries = [];
 
             currencies.sort(function(a, b) {
@@ -379,11 +368,11 @@
                 }
             });
 
-            $('#currencies').html('<table><tr><th><input type="checkbox" id="checkAllCurrencies"></th><th>'+_('Currency')+'</th><th>'+_('Initial')+'</th><th>'+_('Current')+'</th><th>'+_('Difference')+'</th></tr></table>');
+            $('#currencies').html('<table><tr><th><input type="checkbox" id="checkAllCurrencies"></th><th>Currency</th><th>Initial</th><th>Current</th><th>Difference</th></tr></table>');
 
             currencies.forEach(function(currency) {
                 $('#currencies table').append('<tr data-currencyID="' + currency.id + '">' +
-                        '<td><input class="currencySelect" type="checkbox" value="' + currency.id + '" id="currency-' + currency.id +'"></td>' +
+                        '<td><input class="currencySelect" type="checkbox" value="' + currency.id + '" id="currency-' + currency.id +'"></td>' + 
                         '<td><label for="currency-' + currency.id + '"><img width="25" height="25" src="' + currency.icon + '" alt="' + currency.name + '"> ' + currency.name + '</label></td>' +
                         '<td class="initialCurrencyValue">0</td><td class="currentCurrencyValue">0</td><td class="currencyDifference">0</td>' +
                         '</tr>');
@@ -430,7 +419,7 @@
                 },
                 series: graphSeries,
                 title: {
-                    text: _('Currencies acquisition over time')
+                    text: 'Currencies acquisition over time'
                 },
                 xAxis: {
                     tickPixelInterval: 150
@@ -518,7 +507,7 @@
             seconds = (remaining % 60) | 0;
             minutes = minutes < 10 ? '0' + minutes : minutes;
             seconds = seconds < 10 ? '0' + seconds : seconds;
-            $('#countdown').html(_('Next refresh:') + ' ' + minutes + ':' + seconds);
+            $('#countdown').html('Next refresh: ' + minutes + ':' + seconds);
 
             //Update the gold per hour and the chart
             updateTotal(false);
@@ -553,13 +542,13 @@
                 timeDiff = 3600000 / (Date.now() - startedOn);
             }
 
-            $('#totalNew').html(_('Gains') + ' (' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? _('listing') : _('sell instantly')) + ', '+_('before fees')+'): <span class="price">' + displayGold(gains) + '</span>' +
-                    '<br>'+_('Listing and selling fees')+' (15%): <span class="price">' + displayGold(parseInt(gains * 0.15)) + '</span>' +
-                    '<br>'+_('Result:')+' <span class="price">' + displayGold(gains - parseInt(gains * 0.15)) + '</span>');
+            $('#totalNew').html('Gains (' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'listing' : 'sell instantly') + ', before fees): <span class="price">' + displayGold(gains) + '</span>' +
+                    '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(gains * 0.15)) + '</span>' +
+                    '<br>Result: <span class="price">' + displayGold(gains - parseInt(gains * 0.15)) + '</span>');
 
-            $('#totalOld').html(_('Losses') + ' (' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? _('listing') : _('sell instantly')) + ', '+_('before fees')+'): <span class="price">' + displayGold(losses) + '</span>' +
-                    '<br>'+_('Listing and selling fees')+' (15%): <span class="price">' + displayGold(parseInt(losses * 0.15)) + '</span>' +
-                    '<br>'+_('Result:')+' <span class="price">' + displayGold(losses - parseInt(losses * 0.15)) + '</span>');
+            $('#totalOld').html('Losses (' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'listing' : 'sell instantly') + ', before fees): <span class="price">' + displayGold(losses) + '</span>' +
+                    '<br>Listing and selling fees (15%): <span class="price">' + displayGold(parseInt(losses * 0.15)) + '</span>' +
+                    '<br>Result: <span class="price">' + displayGold(losses - parseInt(losses * 0.15)) + '</span>');
 
             goldPerHour = parseInt(((gains - parseInt(gains * 0.15)) - (losses - parseInt(losses * 0.15)) + goldDiff) * timeDiff);
 
@@ -722,7 +711,7 @@
                         var deferredNew = $.Deferred();
                         deferreds.push(deferredNew);
 
-                        $.getJSON('https://api.guildwars2.com/v2/items?lang='+lang+'&ids=' + list.join(',')).done(function (items) {
+                        $.getJSON('https://api.guildwars2.com/v2/items?lang=en&ids=' + list.join(',')).done(function (items) {
                             //Compute value of new items
                             $.getJSON('https://api.guildwars2.com/v2/commerce/prices?ids=' + list.join(',')).done(function (prices) {
                                 $('#spinnerNew').hide();
@@ -818,7 +807,7 @@
                         var deferredOld = $.Deferred();
                         deferreds.push(deferredOld);
 
-                        $.getJSON('https://api.guildwars2.com/v2/items?lang='+lang+'&ids=' + list.join(',')).done(function (items) {
+                        $.getJSON('https://api.guildwars2.com/v2/items?lang=en&ids=' + list.join(',')).done(function (items) {
                             //Compute value of old items
                             $.getJSON('https://api.guildwars2.com/v2/commerce/prices?ids=' + list.join(',')).done(function (prices) {
                                 $('#spinnerOld').hide();
@@ -1104,7 +1093,7 @@
         $.getJSON('https://api.guildwars2.com/v2/commerce/delivery?access_token=' + token).done(function (json) {
             //Add coins
             tempCurrentTPGold = json.coins;
-
+            
             //Building the index
             json.items.forEach(function (item) {
                 if (item !== null && item.quantity) {
@@ -1374,7 +1363,7 @@
             var item = $('<div class="item ' + rarity + ' ' + type + '" style="display:none;"' +
                     'data-id="' + id + '" data-type="' + type + '"' +
                     'data-rarity="' + rarityLevel + '" data-name="' + name + '" ' +
-                    'data-sellvalue="' + totalSell + '" ' +
+                    'data-sellvalue="' + totalSell + '" ' + 
                     'data-buyvalue="' + totalBuy + '" ' + '>' +
                     '<table><tr><td class="icon"></td><td><div class="description"' + ($('#toggleDetails').prop('checked') ? '' : 'style="display:none;"') + '></div></td></tr></table>' +
                     '</div>');
@@ -1382,17 +1371,17 @@
             item.find('.icon').css('background-image', 'url(' + icon + ')')
                 .append('<span class="count">' + count + '</span>');
 
-            item.find('.description').html('<div class="itemName"><a title="'+_('View item on the wiki (opens in a new tab)')+'" href="' + wiki_url + encodeURIComponent(name) + '" target="_blank">' + name + '</a></div>');
+            item.find('.description').html('<div class="itemName"><a title="View item on the wiki (opens in a new tab)" href="https://wiki.guildwars2.com/index.php?search=' + encodeURIComponent(name) + '" target="_blank">' + name + '</a></div>');
 
 
             if(sellValue !== null) {
-                item.find('.description').append('<div class="itemSellValue" ' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? '' : 'style="display: none;"') + '>'+_('Unit value:')+' ' + displayGold(sellValue) +
-                        '<br>'+_('Total value:')+' ' + displayGold(totalSell) + '</div>');
+                item.find('.description').append('<div class="itemSellValue" ' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? '' : 'style="display: none;"') + '>Unit value : ' + displayGold(sellValue) +
+                        '<br>Total value : ' + displayGold(totalSell) + '</div>');
             }
 
             if(buyValue !== null) {
-                 item.find('.description').append('<div class="itemBuyValue" ' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'style="display: none;"' : '') + '>'+_('Unit value:')+' ' + displayGold(buyValue) +
-                        '<br>'+_('Total value:')+' ' + displayGold(totalBuy) + '</div>');
+                 item.find('.description').append('<div class="itemBuyValue" ' + (localStorage.getItem('valueFrom') === 'lowestSeller' ? 'style="display: none;"' : '') + '>Unit value : ' + displayGold(buyValue) +
+                        '<br>Total value : ' + displayGold(totalBuy) + '</div>');
             }
 
             if(container === 'new') {
@@ -1543,26 +1532,15 @@
 
     //Utility function to build the html for displaying gold, with an extra detail for the coins in the trading post
     function displayGoldWithTP(fromAccount, fromTP) {
-        return displayGold(fromAccount + fromTP) +
+        return displayGold(fromAccount + fromTP) + 
             '<span class="tpDetail">' +
                 '<span class="info"></span>' +
                 '<span class="hiddenGold">' +
-                    _('In your wallet:') + '<br>' + displayGold(fromAccount) +
+                    'In your wallet:<br>' + displayGold(fromAccount) +
                     '<br>' +
-                    _('Waiting in the trading post:') + '<br>' + displayGold(fromTP) +
+                    'Waiting in the trading post:<br>' + displayGold(fromTP) +
                 '</span>' +
             '</span>';
-    }
-
-    /*
-        i18n
-     */
-
-    function _(s) {
-      if (typeof(i18n) != 'undefined' && i18n[s]) {
-        return i18n[s];
-      }
-      return s;
     }
 
 //Events binding
@@ -1614,7 +1592,7 @@
         var target = $(event.target);
         if (!target.closest('#settingsPopup, #settings').length) {
             $('#settingsPopup').hide(ANIMATION_DURATION);
-
+            
             if (!target.closest('#aboutPopup, #about').length) {
                 $('#popupOverlay').hide();
             }
@@ -1913,10 +1891,10 @@
 
     //Clear api key
     $('.clearAPIKey').on('click', function() {
-        if(confirm(_('Are you sure you want to clear your saved API key?'))) {
+        if(confirm('Are you sure you want to clear your saved API key?')) {
             $('#apiKey').val('');
             localStorage.setItem('APIKey', '');
-            alert(_('Your saved API key has been cleared!'));
+            alert('Your saved API key has been cleared!');
         }
     });
 
@@ -1928,7 +1906,7 @@
     //Close new version
     $('#newVersion').on('click', '.close', function() {
         $('#newVersion').hide(ANIMATION_DURATION);
-
+        
         if(!$(this).is('.first')) {
             checkVersion = false;
         }
