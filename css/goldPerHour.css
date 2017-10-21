@@ -1,644 +1,640 @@
 /* Basic elements */
 a {
-    color: #565656;
+  color: #565656;
 }
 
 body {
-    background-image: url(../img/dark_mosaic.png);
-    color: #565656;
-    font-family: 'Source Sans Pro', sans-serif;
-    padding-bottom: 25px;
+  background-image: url(../img/dark_mosaic.png);
+  color: #565656;
+  font-family: 'Source Sans Pro', sans-serif;
+  padding-bottom: 25px;
 }
 
 button {
-    background: linear-gradient(#F52B2B, #A70000);
-    border: 1px solid gray;
-    color: white;
-    padding: 5px 10px;
-    vertical-align: middle;
+  background: linear-gradient(#F52B2B, #A70000);
+  border: 1px solid gray;
+  color: white;
+  padding: 5px 10px;
+  vertical-align: middle;
 }
 
 button:hover {
-    background: linear-gradient(#FF7E7E, #E80404);
+  background: linear-gradient(#FF7E7E, #E80404);
 }
 
 footer {
-    color: #8A8A8A;
-    margin-top: 30px;
-    text-align: center;
+  color: #8A8A8A;
+  margin-top: 30px;
+  text-align: center;
 }
 
 footer a {
-    color: #8A8A8A;
+  color: #8A8A8A;
 }
 
 h1 {
-    color: white;
-    margin-left: 3%;
-    text-shadow: 0px 0px 15px #A9A9A9;
+  color: white;
+  margin-left: 3%;
+  text-shadow: 0px 0px 15px #A9A9A9;
 }
 
 h2 {
-    margin-top: 0px;
-    text-align: center;
+  margin-top: 0px;
+  text-align: center;
 }
 
 h3 {
-    margin: 0px;
+  margin: 0px;
 }
 
 label {
-    margin-right: 10px;
+  margin-right: 10px;
+}
+
+/* Language selection */
+#language {
+  position: absolute;
+  top: 1.3em;
+  right: 1.3em;
 }
 
 /* Borders */
 .borderTop {
-    background-image: url(../img/border-top.png);
-    position: absolute;
-
-    left: 0;
-    top: -15px;
-
-    height: 15px;
-    width: 100%;
+  background-image: url(../img/border-top.png);
+  position: absolute;
+  left: 0;
+  top: -15px;
+  height: 15px;
+  width: 100%;
 }
 
 .borderRight {
-    background-image: url(../img/border-right.png);
-    position: absolute;
-
-    right: -18px;
-    top: 0;
-
-    height: 100%;
-    width: 19px;
+  background-image: url(../img/border-right.png);
+  position: absolute;
+  right: -18px;
+  top: 0;
+  height: 100%;
+  width: 19px;
 }
 
 .borderBottom {
-    background-image: url(../img/border-bottom.png);
-    position: absolute;
-
-    bottom: -10px;
-    left: 0;
-
-    height: 14px;
-    width: 100%;
+  background-image: url(../img/border-bottom.png);
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  height: 14px;
+  width: 100%;
 }
 
 .borderLeft {
-    background-image: url(../img/border-left.png);
-    position: absolute;
-
-    left: -20px;
-    top: 0;
-
-    width: 20px;
-    height: 100%;
+  background-image: url(../img/border-left.png);
+  position: absolute;
+  left: -20px;
+  top: 0;
+  width: 20px;
+  height: 100%;
 }
 
 /* Intro page */
 #intro {
-    background: url(../img/grey.png);
-    box-shadow: 0px 0px 65px 2px #000000;
-    box-sizing: border-box;
-    margin: auto;
-    padding: 30px;
-    position: relative;
-    width: 675px;
+  background: url(../img/grey.png);
+  box-shadow: 0px 0px 65px 2px #000000;
+  box-sizing: border-box;
+  margin: auto;
+  padding: 30px;
+  position: relative;
+  width: 675px;
 }
 
 #apiKey {
-    font-family: courrier;
-    font-size: 14px;
-    padding: 10px 5px;
-    text-align: center;
-    vertical-align: middle;
-    width: 550px;
+  font-family: courrier;
+  font-size: 14px;
+  padding: 10px 5px;
+  text-align: center;
+  vertical-align: middle;
+  width: 550px;
 }
-
 
 /* Main page */
 .goldIcon, .silverIcon, .copperIcon {
-    height: 15px;
-    width: 15px;
-    background-repeat: no-repeat;
-    display: inline-block;
-    vertical-align: middle;
-    margin-top: 1px;
+  height: 15px;
+  width: 15px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 1px;
 }
 
 .goldIcon {
-    background-image: url(../img/Gold_coin.png);
+  background-image: url(../img/Gold_coin.png);
 }
 
 .silverIcon {
-    background-image: url(../img/Silver_coin.png);
+  background-image: url(../img/Silver_coin.png);
 }
 
 .copperIcon {
-    background-image: url(../img/Copper_coin.png);
+  background-image: url(../img/Copper_coin.png);
 }
 
 .tpDetail {
-    position: absolute;
-    z-index: 2;
+  position: absolute;
+  z-index: 2;
 }
 
 .tpDetail .info {
-    position: relative;
-    top: 4px;
-    left: 4px;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-image: url(../img/help.png);
+  position: relative;
+  top: 4px;
+  left: 4px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url(../img/help.png);
 }
 
 .tpDetail .hiddenGold {
-    position: absolute;
-    top: 4px;
-    left: 24px;
-    display: block;
-    border: 1px solid #C1C1C1;
-    padding: 5px 10px;
-    background-color: white;
-    width: 220px;
-    font-size: 1rem;
-    text-align: left;
-    color: #222;
-    display: none;
+  position: absolute;
+  top: 4px;
+  left: 24px;
+  display: block;
+  border: 1px solid #C1C1C1;
+  padding: 5px 10px;
+  background-color: white;
+  width: 220px;
+  font-size: 1rem;
+  text-align: left;
+  color: #222;
+  display: none;
 }
 
 #main {
-    background: url(../img/grey.png);
-    box-sizing: border-box;
-    display: none;
-    margin: auto;
-    padding: 30px;
-    position: relative;
-    transition: box-shadow 1s ease-in-out;
-    width: 94%;
+  background: url(../img/grey.png);
+  box-sizing: border-box;
+  display: none;
+  margin: auto;
+  padding: 30px;
+  position: relative;
+  transition: box-shadow 1s ease-in-out;
+  width: 94%;
 }
 
 #summary {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin: 15px auto;
-    text-align: right;
-    transition: color 0.3s linear;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 15px auto;
+  text-align: right;
+  transition: color 0.3s linear;
 }
 
 #header {
-    display: flex;
-    flex-wrap: wrap;
-    border-bottom: 1px solid #C1C1C1;
-    border-top: 1px solid #C1C1C1;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    margin-bottom: 10px;
-    margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #C1C1C1;
+  border-top: 1px solid #C1C1C1;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 #headerLeft, #headerRight {
-    display: inline-block;
-    flex-grow: 1;
+  display: inline-block;
+  flex-grow: 1;
 }
 
 #headerRight {
-    margin:auto;
-    max-width: 750px;
-    width: 100%;
+  margin: auto;
+  max-width: 750px;
+  width: 100%;
 }
 
 #otherCurrencies {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 #currencies, #currenciesGraph {
-    display: inline-block;
-    vertical-align: middle;
-    flex-grow: 1;
+  display: inline-block;
+  vertical-align: middle;
+  flex-grow: 1;
 }
 
 #currencies {
-    margin-bottom: 15px;
-    margin-top: 20px;
+  margin-bottom: 15px;
+  margin-top: 20px;
 }
 
 #currenciesGraph {
-    margin: auto;
-    max-width: 750px;
-    width: 100%;
+  margin: auto;
+  max-width: 750px;
+  width: 100%;
 }
 
 #currencies table {
-    background-color: #FFFFFF;
-    margin: auto;
+  background-color: #FFFFFF;
+  margin: auto;
 }
 
 #currencies td, #currencies th {
-    border: 1px solid gray;
-    padding: 1px 4px;
+  border: 1px solid gray;
+  padding: 1px 4px;
 }
 
 .initialCurrencyValue, .currentCurrencyValue, .currencyDifference {
-    text-align: right;
+  text-align: right;
 }
 
 #currencies th {
-    background-color: #A70000;
-    background: linear-gradient(#F52B2B, #A70000);
-    color: #FFFFFF;
+  background-color: #A70000;
+  background: linear-gradient(#F52B2B, #A70000);
+  color: #FFFFFF;
 }
 
 .currencyPositive {
-    background-color: #D4FFD4;
+  background-color: #D4FFD4;
 }
 
 .currencyNegative {
-    background-color: #FFDFDF;
+  background-color: #FFDFDF;
 }
 
-
 .price {
-    width: 175px;
+  width: 175px;
 }
 
 .bottomBorder {
-    border-bottom: 1px solid gray;
+  border-bottom: 1px solid gray;
 }
 
 .positive {
-    color: #13A013;
+  color: #13A013;
 }
 
 .overlayPositive {
-    box-shadow: 0px 0px 65px 2px #13A013;
+  box-shadow: 0px 0px 65px 2px #13A013;
 }
 
 .negative {
-    color: #D20000;
+  color: #D20000;
 }
 
 .overlayNegative {
-    box-shadow: 0px 0px 65px 2px #D60303;
+  box-shadow: 0px 0px 65px 2px #D60303;
 }
 
 .highcharts-container {
-    border: 1px solid gray;
-    box-shadow: 0px 0px 10px gray;
-    margin: auto;
+  border: 1px solid gray;
+  box-shadow: 0px 0px 10px gray;
+  margin: auto;
 }
 
 .toggle {
-    color: #636363;
-    font-size: 0.6em;
+  color: #636363;
+  font-size: 0.6em;
 }
 
 .small {
-    font-size: 0.8em;
-    font-style: italic;
+  font-size: 0.8em;
+  font-style: italic;
 }
 
 #newItems, #oldItems {
-    background-image: url(../img/squairy_light.png);
-    border: 1px solid gray;
-    box-shadow: 0px 0px 10px -2px black;
-    margin-bottom: 1em;
-    padding: 15px;
-    text-align: center;
+  background-image: url(../img/squairy_light.png);
+  border: 1px solid gray;
+  box-shadow: 0px 0px 10px -2px black;
+  margin-bottom: 1em;
+  padding: 15px;
+  text-align: center;
 }
 
 #gridNew, #gridOld {
-    text-align: center;
+  text-align: center;
 }
 
 .none {
-    text-align: center;
-    font-size: 1.2em;
-    margin: 0;
+  text-align: center;
+  font-size: 1.2em;
+  margin: 0;
 }
 
 .results {
-    font-weight: bold;
-    margin-top: 10px;
-    text-align: right;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: right;
 }
 
 #spinnerNew, #spinnerOld {
-    display: none;
+  display: none;
 }
-
 
 /* Menu */
 #menu {
-    color: white;
-    display: inline-block;
-    float: right;
-    margin-bottom: 7px;
-    margin-right: 3%;
-    margin-top: -60px;
-    position: relative;
-    z-index: 3;
+  color: white;
+  display: inline-block;
+  float: right;
+  margin-bottom: 7px;
+  margin-right: 3%;
+  margin-top: -60px;
+  position: relative;
+  z-index: 3;
 }
 
 #menu button {
-    display: inline-block;
-    vertical-align: top;
+  display: inline-block;
+  vertical-align: top;
 }
 
 #menu #startOver, #menu #resume {
-    display: none;
+  display: none;
 }
 
 #about, #settings, .toggle {
-    cursor: pointer;
-    text-decoration: underline;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .separator {
-    margin: 0px 10px;
+  margin: 0px 10px;
 }
 
 #countdown {
-    font-size: 1.5em;
-    margin-right: 10px;
+  font-size: 1.5em;
+  margin-right: 10px;
 }
 
 /* "About" popup */
 #aboutPopup {
-    background-color: white;
-    border: 1px solid black;
-    box-shadow: 0px 0px 20px #6F6F6F;
-    box-sizing: border-box;
-    color: #565656;
-    display: none;
-    padding: 25px;
-    position: absolute;
-    max-width: 800px;
-    width: 100%;
-    z-index: 3;
+  background-color: white;
+  border: 1px solid black;
+  box-shadow: 0px 0px 20px #6F6F6F;
+  box-sizing: border-box;
+  color: #565656;
+  display: none;
+  padding: 25px;
+  position: absolute;
+  max-width: 800px;
+  width: 100%;
+  z-index: 3;
 }
 
 /* "Settings" popup */
 #settingsPopup {
-    background-color: white;
-    border: 1px solid black;
-    box-shadow: 0px 0px 20px #6F6F6F;
-    box-sizing: border-box;
-    color: #565656;
-    display: none;
-    padding: 25px;
-    position: absolute;
-    max-width: 800px;
-    width: 100%;
-    z-index: 3;
+  background-color: white;
+  border: 1px solid black;
+  box-shadow: 0px 0px 20px #6F6F6F;
+  box-sizing: border-box;
+  color: #565656;
+  display: none;
+  padding: 25px;
+  position: absolute;
+  max-width: 800px;
+  width: 100%;
+  z-index: 3;
 }
 
 #popupOverlay {
-    background-color: rgba(0,0,0,0.2);
-    display: none;
-    height: 100%;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 2;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: none;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
 }
 
 #settingsPopup table {
-    width: 100%;
+  width: 100%;
 }
 
 #settingsPopup label, #currencies label {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #settingsPopup hr {
-    margin: 0.5em 0;
+  margin: 0.5em 0;
 }
 
 .twoCols td {
-    width: 50%;
+  width: 50%;
 }
 
 .threeCols td {
-    width: 33%;
+  width: 33%;
 }
 
 #typesList {
-    margin: auto;
-    width: 100%;
+  margin: auto;
+  width: 100%;
 }
 
 #typesList td, #typesList th {
-    border: 1px solid gray;
-    padding: 3px 5px;
+  border: 1px solid gray;
+  padding: 3px 5px;
 }
 
 #typesList tbody tr {
-    transition: background-color 0.3s linear;
+  transition: background-color 0.3s linear;
 }
 
 #typesList th {
-    background: linear-gradient(#F52B2B, #A70000);
-    color: white;
+  background: linear-gradient(#F52B2B, #A70000);
+  color: white;
 }
 
 #typesList {
-    background-color: white;
-    margin: 8px 0;
+  background-color: white;
+  margin: 8px 0;
 }
 
 #settingsButtons {
-    text-align: center;
+  text-align: center;
 }
 
 /* Items */
 .item {
-    display: inline-block;
-    line-height: 1em;
-    margin: 3px;
-    vertical-align: top;
+  display: inline-block;
+  line-height: 1em;
+  margin: 3px;
+  vertical-align: top;
 }
 
 .itemName {
-    overflow: hidden;
-    white-space: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .item table {
-    font-size: 0.75em;
-    font-weight: bold;
-    width: 100%;
+  font-size: 0.75em;
+  font-weight: bold;
+  width: 100%;
 }
 
 .description {
-    box-sizing: border-box;
-    height: 64px;
-    padding: 5px;
-    text-align: center;
-    width: 205px;
+  box-sizing: border-box;
+  height: 64px;
+  padding: 5px;
+  text-align: center;
+  width: 205px;
 }
 
 .icon {
-    background-size: 64px;
-    display: inline-block;
-    height: 64px;
-    position: relative;
-    vertical-align: middle;
-    width: 64px;
+  background-size: 64px;
+  display: inline-block;
+  height: 64px;
+  position: relative;
+  vertical-align: middle;
+  width: 64px;
 }
 
 .icon::after {
-    content: '';
-    display: block;
-    height: 100%;
-    width: 100%;
+  content: '';
+  display: block;
+  height: 100%;
+  width: 100%;
 }
 
 .icon .count {
-    color: #FFFFCB;
-    position: absolute;
-    right: 3px;
-    text-shadow: 2px 2px 1px #000, 2px -2px 1px #000, -2px 2px 1px #000, -2px -2px 1px #000;
-    top: 1px;
+  color: #FFFFCB;
+  position: absolute;
+  right: 3px;
+  text-shadow: 2px 2px 1px #000, 2px -2px 1px #000, -2px 2px 1px #000, -2px -2px 1px #000;
+  top: 1px;
 }
 
 .itemValue {
-    font-family: courrier;
-    text-align: right;
+  font-family: courrier;
+  text-align: right;
 }
 
 /* Item rarities */
 .Junk {
-    background-color: #CECECE;
-    border: 3px solid #6F6F6F;
-    box-shadow: 0px 0px 10px #6F6F6F;
+  background-color: #CECECE;
+  border: 3px solid #6F6F6F;
+  box-shadow: 0px 0px 10px #6F6F6F;
 }
 
 .Junk .icon::after {
-    background-color: rgba(111, 111, 111, 0.15);
+  background-color: rgba(111, 111, 111, 0.15);
 }
 
 .Basic {
-    background-color: #FFF;
-    border: 3px solid #FFF;
-    box-shadow: 0px 0px 10px #FFF;
+  background-color: #FFF;
+  border: 3px solid #FFF;
+  box-shadow: 0px 0px 10px #FFF;
 }
 
 .Basic .icon::after {
-    background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .Fine {
-    background-color: #A4D6FF;
-    border: 3px solid #62A4DA;
-    box-shadow: 0px 0px 10px #62A4DA;
+  background-color: #A4D6FF;
+  border: 3px solid #62A4DA;
+  box-shadow: 0px 0px 10px #62A4DA;
 }
 
 .Fine .icon::after {
-    background-color: rgba(98, 164, 218, 0.15);
+  background-color: rgba(98, 164, 218, 0.15);
 }
 
 .Masterwork {
-    background-color: #8CD280;
-    border: 3px solid #1a9306;
-    box-shadow: 0px 0px 10px #1a9306;
+  background-color: #8CD280;
+  border: 3px solid #1a9306;
+  box-shadow: 0px 0px 10px #1a9306;
 }
 
 .Masterwork .icon::after {
-    background-color: rgba(26, 147, 6, 0.15);
+  background-color: rgba(26, 147, 6, 0.15);
 }
 
 .Rare {
-    background-color: #FFF1B2;
-    border: 3px solid #fcd00b;
-    box-shadow: 0px 0px 10px #fcd00b;
+  background-color: #FFF1B2;
+  border: 3px solid #fcd00b;
+  box-shadow: 0px 0px 10px #fcd00b;
 }
 
 .Rare .icon::after {
-    background-color: rgba(252, 208, 11, 0.15);
+  background-color: rgba(252, 208, 11, 0.15);
 }
 
 .Exotic {
-    background-color: #FFCA6D;
-    border: 3px solid #ffa405;
-    box-shadow: 0px 0px 10px #ffa405;
+  background-color: #FFCA6D;
+  border: 3px solid #ffa405;
+  box-shadow: 0px 0px 10px #ffa405;
 }
 
 .Exotic .icon::after {
-    background-color: rgba(255, 164, 5, 0.15);
+  background-color: rgba(255, 164, 5, 0.15);
 }
 
 .Ascended {
-    background-color: #FFB3D3;
-    border: 3px solid #fb3e8d;
-    box-shadow: 0px 0px 10px #fb3e8d;
+  background-color: #FFB3D3;
+  border: 3px solid #fb3e8d;
+  box-shadow: 0px 0px 10px #fb3e8d;
 }
 
 .Ascended .icon::after {
-    background-color: rgba(251, 62, 141, 0.15);
+  background-color: rgba(251, 62, 141, 0.15);
 }
 
 .Legendary {
-    background-color: #B987FF;
-    border: 3px solid #4C139D;
-    box-shadow: 0px 0px 10px #4C139D;
+  background-color: #B987FF;
+  border: 3px solid #4C139D;
+  box-shadow: 0px 0px 10px #4C139D;
 }
 
 .Legendary .icon::after {
-    background-color: rgba(76, 19, 157, 0.15);
+  background-color: rgba(76, 19, 157, 0.15);
 }
 
 /* footer */
 span.clearAPIKey {
-    text-decoration: underline;
-    cursor: pointer;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 /* Notifications */
 #newVersion, #warning {
-    background-color: #FDF6B3;
-    border: 1px solid #4C4C4C;
-    box-shadow: 0px 0px 25px #D6A212;
-    display: none;
-    padding: 20px;
-    position: fixed;
-    z-index: 10;
+  background-color: #FDF6B3;
+  border: 1px solid #4C4C4C;
+  box-shadow: 0px 0px 25px #D6A212;
+  display: none;
+  padding: 20px;
+  position: fixed;
+  z-index: 10;
 }
 
 .close {
-    cursor: pointer;
-    margin-left: 20px;
-    text-decoration: underline;
+  cursor: pointer;
+  margin-left: 20px;
+  text-decoration: underline;
 }
 
 /* Responsive */
 @media (max-width: 970px) {
-    h1 {
-        white-space: nowrap;
-    }
+  h1 {
+    white-space: nowrap;
+  }
 
-    #intro {
-        width: 75%;
-    }
+  #intro {
+    width: 75%;
+  }
 
-    #apiKey {
-        width: 75%;
-    }
+  #apiKey {
+    width: 75%;
+  }
 
-    #menu {
-        display: block;
-        float: none;
-        margin-bottom: 15px;
-        margin-left: 3%;
-        margin-top: -20px;
-        white-space: nowrap;
-    }
+  #menu {
+    display: block;
+    float: none;
+    margin-bottom: 15px;
+    margin-left: 3%;
+    margin-top: -20px;
+    white-space: nowrap;
+  }
 
-    #aboutPopup, #settingsPopup {
-        max-width: 650px;
-    }
+  #aboutPopup, #settingsPopup {
+    max-width: 650px;
+  }
 }

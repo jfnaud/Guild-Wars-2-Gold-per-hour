@@ -20,74 +20,74 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <h1>Guild Wars 2 - Gold per Hour</h1>
+        <h1>Guild Wars 2 - Or par heure</h1>
 
-        <a id="language" href="index-fr.html"><img src="img/fr.svg" alt="Français" title="Français" width="20px"></a>
+        <a id="language" href="index.html"><img src="img/us.svg" alt="English" title="English" width="20px"></a>
 
         <div id="intro">
-            <h2>Welcome to Guild Wars 2 - Gold per Hour</h2>
-            <p>This application tracks everything that is going on with your account and displays how much gold you would get if you were to sell all the items you acquired, and how much gold you've lost from the items that were removed from your account (sold, destroyed, consumed, etc.).</p>
-            <p>Note that in some case, it might take 2 or 3 refreshes for the acquired or lost items to appear. The API doesn't return live data each time it's called, so please be patient :)</p>
+            <h2>Bienvenue sur Guild Wars 2 - Or par heure</h2>
+            <p>Cette application permet de suivre tout ce qui se passe avec votre compte et affiche la quantité d'or que vous obtiendriez si vous vendiez tous les objets que vous avez acquis et la quantité d'or que vous avez perdu des objets supprimés de votre compte (vendus, détruits, consommés, etc.).</p>
+            <p>Notez que dans certains cas, 2 ou 3 rafraîchissements sont nécessaires pour que les éléments acquis ou perdus apparaissent. L'API ne renvoie pas les données en direct à chaque fois qu'elle est appelée, alors soyez patients :)</p>
             <hr>
-            <h2>To begin, enter your API key here:</h2>
+            <h2>Pour commencer, entrez votre clé d'API&nbsp;:</h2>
             <input type="text" id="apiKey" maxwidth="100" value="">
             <button id="continueIntro">Go!</button>
             <br>
-            <label class="small" for="saveAPIKey"><input type="checkbox" id="saveAPIKey"> Save my API key locally, so I won't have to enter it next time</label>
-            
-            <p>You don't have one? Go to <a href="https://www.guildwars2.com/" target="_blank">guildwars2.com</a> and log in to your account. Then, in the <strong>Applications</strong> tab, create a new API key. Make sure you grant <em>wallet, tradingpost, account, inventories</em> and <em>characters</em> permissions.</p>
+            <label class="small" for="saveAPIKey"><input type="checkbox" id="saveAPIKey"> Enregistrer localement ma clé d'API, pour ne pas avoir à la saisir la prochaine fois</label>
+
+            <p>Vous n'en avez pas &nbsp;? Rendez-vous sur <a href="https://www.guildwars2.com/" target="_blank">guildwars2.com</a> et connectez-vous à votre compte. Ensuite, dans l'onglet <strong>Applications</strong>, créez une nouvelle clé d'API. Assurez-vous d'avoir bien sélectionné les permissions <em>wallet, tradingpost, account, inventories</em> et <em>characters</em>.</p>
             <div class="borderTop"></div>
             <div class="borderRight"></div>
             <div class="borderBottom"></div>
             <div class="borderLeft"></div>
         </div>
-        
+
         <div id="menu" style="display:none;">
-            <span id="about"><img src="img/about.png" alt="about" title="About">About</span>
+            <span id="about"><img src="img/about.png" alt="about" title="About">À propos</span>
             <span class="separator">|</span>
-            <span id="settings"><img src="img/settings.png" alt="settings" title="Settings">Settings</span>
+            <span id="settings"><img src="img/settings.png" alt="settings" title="Settings">Paramètres</span>
             <span class="separator">|</span>
             <span id="countdown"></span>
-            <button id="stop">Stop</button>
-            <button id="resume">Resume</button>
-            <button id="startOver">Start over</button>
+            <button id="stop">Arrêter</button>
+            <button id="resume">Reprendre</button>
+            <button id="startOver">Recommencer</button>
         </div>
-        
+
         <div id="main">
-            <h2>Summary <span class="toggle" id="toggleSummary">(toggle)</span></h2>
+            <h2>Sommaire <span class="toggle" id="toggleSummary">(afficher/masquer)</span></h2>
             <div id="header">
                 <div id="headerLeft">
                     <table id="summary">
                         <tr>
-                            <td>Initial gold (<span id="startTime"></span>):</td>
+                            <td>Or de départ (<span id="startTime"></span>):</td>
                             <td id="initialGold"></td>
                         </tr>
                         <tr>
-                            <td class="bottomBorder">Current gold (<span id="currentTime"></span>):</td>
+                            <td class="bottomBorder">Or actuel (<span id="currentTime"></span>):</td>
                             <td id="currentGold" class="price bottomBorder"></td>
                         </tr>
                         <tr>
-                            <td>Gold difference: </td>
+                            <td>Différence&nbsp;: </td>
                             <td id="overallGoldDifference" class="price"></td>
                         </tr>
                         <tr>
-                            <td>+ Gains from acquired items (before fees): </td>
+                            <td>+ Gains des objets acquis (avant taxes)&nbsp;: </td>
                             <td id="overallGains" class="price"></td>
                         </tr>
                         <tr>
-                            <td>- Listing and selling fees (15%): </td>
+                            <td>- Cotation et frais de vente (15%)&nbsp;: </td>
                             <td id="overallFees" class="price"></td>
                         </tr>
                         <tr>
-                            <td class="bottomBorder">- Losses from lost items (<em>including</em> fees): </td>
+                            <td class="bottomBorder">- Pertes d'objets perdus (<em>incluant</em> les taxes)&nbsp;: </td>
                             <td id="overallLosses" class="price bottomBorder"></td>
                         </tr>
                         <tr>
-                            <td class="bottomBorder">Result: </td>
+                            <td class="bottomBorder">Résultat&nbsp;: </td>
                             <td id="overallResult" class="price bottomBorder"></td>
                         </tr>
                         <tr>
-                            <td>Average gold per hour: </td>
+                            <td>Moyenne d'or par heure&nbsp;: </td>
                             <td id="overallAverage" class="price"></td>
                         </tr>
                     </table>
@@ -96,8 +96,8 @@
                     <div id="chart"></div>
                 </div>
             </div>
-            
-            <h2>Acquired items <span class="toggle" id="toggleNew">(toggle)</span></h2>
+
+            <h2>Objets acquis <span class="toggle" id="toggleNew">(afficher/masquer)</span></h2>
             <div id="newItems">
                 <div id="gridNew"></div>
                 <div id="spinnerNew" class="spinner">
@@ -105,11 +105,11 @@
                     <div class="bounce2"></div>
                     <div class="bounce3"></div>
                 </div>
-                <p class="none">None so far...</p>
+                <p class="none">Aucun jusqu'à présent...</p>
                 <div class="results" id="totalNew" style="display: none;"></div>
             </div>
-            
-            <h2>Lost items <span class="toggle" id="toggleOld">(toggle)</span></h2>
+
+            <h2>Objets perdus <span class="toggle" id="toggleOld">(afficher/masquer)</span></h2>
             <div id="oldItems">
                 <div id="gridOld"></div>
                 <div id="spinnerOld" class="spinner">
@@ -117,11 +117,11 @@
                     <div class="bounce2"></div>
                     <div class="bounce3"></div>
                 </div>
-                <p class="none">None so far...</p>
+                <p class="none">Aucun jusqu'à présent...</p>
                 <div class="results" id="totalOld" style="display: none;"></div>
             </div>
 
-            <h2>Other currencies <span class="toggle" id="toggleCurrencies">(toggle)</span></h2>
+            <h2>Autres monnaies <span class="toggle" id="toggleCurrencies">(afficher/masquer)</span></h2>
             <div id="otherCurrencies">
                 <div id="currencies"></div>
                 <div id="currenciesGraph"></div>
@@ -137,46 +137,46 @@
         <div id="warning"></div>
 
         <footer>
-            Made by Deviljeff.1946 - <a href="https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour" target="_blank" title="Project on GitHub">Project on GitHub (v. <span id="currentVersion"></span>)</a>
+            Développé par Deviljeff.1946 - Traduit par <a href="http://lebusmagique.fr" target="_blank">Le Bus Magique</a> - <a href="https://github.com/jfnaud/Guild-Wars-2-Gold-per-hour" target="_blank" title="Project on GitHub">Projet sur GitHub (v. <span id="currentVersion"></span>)</a>
             <br>
-            <span class="clearAPIKey">Reset my saved API key</span>
+            <span class="clearAPIKey">Réinitialiser ma clé API</span>
             <!--<br><button id="saveCurrentState">Debug</button>-->
         </footer>
 
         <div id="popupOverlay"></div>
 
         <div id="aboutPopup">
-            <h2>About</h2>
-            <p>This application tracks everything that is going on with your account and displays how much gold you would get if you were to sell all the items you acquired, and how much gold you've lost from the items that were removed from your account (sold, destroyed, consumed, etc.).</p>
-            <p>Note that in some case, it might take 2 or 3 refreshes for the acquired or lost items to appear. The API doesn't return live data each time it's called, so please be patient :)</p>
+            <h2>À propos</h2>
+            <p>Cette application permet de suivre tout ce qui se passe avec votre compte et affiche la quantité d'or que vous obtiendriez si vous vendiez tous les objets que vous avez acquis et la quantité d'or que vous avez perdu des objets supprimés de votre compte (vendus, détruits, consommés, etc.).</p>
+            <p>Notez que dans certains cas, 2 ou 3 rafraîchissements sont nécessaires pour que les éléments acquis ou perdus apparaissent. L'API ne renvoie pas les données en direct à chaque fois qu'elle est appelée, alors soyez patient :)</p>
             <hr>
-            <p>Check out the <strong>Settings</strong> to customize the interface and your preferences. These settings will be saved locally for the next time you use this application!<p>
+            <p>Consultez les <strong>Paramètres</strong> pour personnaliser l'interface et vos préférences. Ces paramètres seront enregistrés localement et seront utilisés lors de votre prochaine utilisation de cette application&nbsp;!<p>
             <hr>
-            <p>I had some free time and I wanted to do something useful for the community. I hope you enjoy it as much as I had doing this project! A special thanks to my friends who helped me test this application. If you find bugs or have any suggestion on how I could improve it, send me an in-game mail at <strong>Deviljeff.1946</strong> or a private message on <a href="https://www.reddit.com/message/compose/?to=Deviljeff" target="_blank" title="Send a private message on reddit">Reddit</a>.</p>
+            <p>J'ai eu du temps libre et je voulais faire quelque chose d'utile pour la communauté. J'espère que vous apprécierez ce projet autant que moi à le réaliser&nbsp;! Un grand merci à mes amis qui m'ont aidé à tester cette application. Si vous trouvez des bugs ou si vous avez des suggestions sur la façon dont je pourrais l'améliorer, envoyez-moi un message dans le jeu à <strong>Deviljeff.1946</strong> ou un message privé sur <a href="https://www.reddit.com/message/compose/?to=Deviljeff" target="_blank" title="Send a private message on reddit">Reddit</a>.</p>
         </div>
 
         <div id="settingsPopup">
-            <h2>Settings</h2>
+            <h2>Paramètres</h2>
             <table>
             <tr class="threeCols">
-                <td><label for="toggleDetails"><input type="checkbox" id="toggleDetails"> Show item details</label></td>
-                <td colspan="2"><label for="toggleSound"><input type="checkbox" id="toggleSound"> Play a sound effect when refreshing</label></td>
+                <td><label for="toggleDetails"><input type="checkbox" id="toggleDetails"> Afficher le détail des objets</label></td>
+                <td colspan="2"><label for="toggleSound"><input type="checkbox" id="toggleSound"> Jouer un son au rafraîchissement</label></td>
             </tr>
             <tr class="threeCols">
                 <td>
-                    <h3>Sort items by:</h3> 
-                    <label for="sortByRarity"><input type="radio" value="rarity" name="sortBy" id="sortByRarity"> Rarity</label><br>
-                    <label for="sortByValue"><input type="radio" value="value" name="sortBy" id="sortByValue"> Descending value</label>
+                    <h3>Ordonner les objets par&nbsp;:</h3>
+                    <label for="sortByRarity"><input type="radio" value="rarity" name="sortBy" id="sortByRarity"> Rareté</label><br>
+                    <label for="sortByValue"><input type="radio" value="value" name="sortBy" id="sortByValue"> Valeur (descendant)</label>
                 </td>
                 <td>
-                    <h3>For item values, use:</h3>
-                    <label for="lowestSeller"><input type="radio" value="lowestSeller" name="valueFrom" id="lowestSeller"> Lowest seller (list items)</label><br>
-                    <label for="highestBuyer"><input type="radio" value="highestBuyer" name="valueFrom" id="highestBuyer"> Highest buyer (sell instantly)</label>
+                    <h3>Pour les valeurs des objets, utiliser&nbsp;:</h3>
+                    <label for="lowestSeller"><input type="radio" value="lowestSeller" name="valueFrom" id="lowestSeller"> Vendeur le plus bas (liste d'ojets)</label><br>
+                    <label for="highestBuyer"><input type="radio" value="highestBuyer" name="valueFrom" id="highestBuyer"> Acheteur le plus haut (vente instantanée)</label>
                 </td>
                 <td>
-                    <h3>Gold per hour based on:</h3>
-                    <label for="sinceStart"><input type="radio" value="sinceStart" name="baseTime" id="sinceStart"> Time elapsed since the start</label><br>
-                    <label for="elapsed"><input type="radio" value="elapsed" name="baseTime" id="elapsed"> Time elapsed while running</label>
+                    <h3>Or par heure basé sur&nbsp;:</h3>
+                    <label for="sinceStart"><input type="radio" value="sinceStart" name="baseTime" id="sinceStart"> Temps passé depuis le début</label><br>
+                    <label for="elapsed"><input type="radio" value="elapsed" name="baseTime" id="elapsed"> Temps passé sur le lancement</label>
                 </td>
             </tr>
             <tr>
@@ -184,28 +184,28 @@
                     <table id="typesList">
                     <thead>
                         <th><input type="checkbox" id="checkAllTypes" checked="checked"></th>
-                        <th colspan="7">Show items of these types:</th>
+                        <th colspan="7">Afficher les types d'objets suivant&nbsp;:</th>
                     </thead>
                     <tbody>
                         <tr>
                             <td><input type="checkbox" data-type="Armor" id="ArmorItem" class="itemType"></td>
-                            <td><label for="ArmorItem">Armor</label></td>
+                            <td><label for="ArmorItem">Armure</label></td>
                             <td><input type="checkbox" data-type="Back" id="BackItem" class="itemType"></td>
-                            <td><label for="BackItem">Back item</label></td>
+                            <td><label for="BackItem">Objets de dos</label></td>
                             <td><input type="checkbox" data-type="Bag" id="BagItem" class="itemType"></td>
-                            <td><label for="BagItem">Bags</label></td>
+                            <td><label for="BagItem">Sacs</label></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox" data-type="Consumable" id="ConsumableItem" class="itemType"></td>
-                            <td><label for="ConsumableItem">Consumables</label></td>
+                            <td><label for="ConsumableItem">Consommables</label></td>
                             <td><input type="checkbox" data-type="Container" id="ContainerItem" class="itemType"></td>
-                            <td><label for="ContainerItem">Containers</label></td>
+                            <td><label for="ContainerItem">Contenants</label></td>
                             <td><input type="checkbox" data-type="CraftingMaterial" id="CraftingMaterialItem" class="itemType"></td>
-                            <td><label for="CraftingMaterialItem">Crafting materials</label></td>
+                            <td><label for="CraftingMaterialItem">Matériaux d'artisanat</label></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox" data-type="Gathering" id="GatheringItem" class="itemType"></td>
-                            <td><label for="GatheringItem">Gathering tools</label></td>
+                            <td><label for="GatheringItem">Outils de récolte</label></td>
                             <td><input type="checkbox" data-type="Gizmo" id="GizmoItem" class="itemType"></td>
                             <td><label for="GizmoItem">Gizmos</label></td>
                             <td><input type="checkbox" data-type="MiniPet" id="MiniPetItem" class="itemType"></td>
@@ -213,19 +213,19 @@
                         </tr>
                         <tr>
                             <td><input type="checkbox" data-type="Tool" id="ToolItem" class="itemType"></td>
-                            <td><label for="ToolItem">Salvage kits</label></td>
+                            <td><label for="ToolItem">Kits de recyclage</label></td>
                             <td><input type="checkbox" data-type="Trait" id="TraitItem" class="itemType"></td>
-                            <td><label for="TraitItem">Trait guides</label></td>
+                            <td><label for="TraitItem">Guides d'aptitudes</label></td>
                             <td><input type="checkbox" data-type="Trinket" id="TrinketItem" class="itemType"></td>
-                            <td><label for="TrinketItem">Trinkets</label></td>
+                            <td><label for="TrinketItem">Babioles</label></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox" data-type="Trophy" id="TrophyItem" class="itemType"></td>
-                            <td><label for="TrophyItem">Trophies</label></td>
+                            <td><label for="TrophyItem">Trophées</label></td>
                             <td><input type="checkbox" data-type="UpgradeComponent" id="UpgradeComponentItem" class="itemType"></td>
-                            <td><label for="UpgradeComponentItem">Upgrade components</label></td>
+                            <td><label for="UpgradeComponentItem">Composants d'amélioration</label></td>
                             <td><input type="checkbox" data-type="Weapon" id="WeaponItem" class="itemType"></td>
-                            <td><label for="WeaponItem">Weapons</label></td>
+                            <td><label for="WeaponItem">Armes</label></td>
                         </tr>
                     </tbody>
                 </table>
@@ -233,15 +233,15 @@
             </tr>
             <tr>
                 <td colspan="3">
-                    <label for="ignoreHidden"><input type="checkbox" id="ignoreHidden"> Ignore the value of hidden items</label>
+                    <label for="ignoreHidden"><input type="checkbox" id="ignoreHidden"> Ignorer la valeur des objets cachés</label>
                 </td>
             </tr>
             </table>
-            
+
             <hr>
             <div id="settingsButtons">
-                <button id="restoreDefaults">Restore default settings</button>
-                <button class="clearAPIKey">Reset my saved API key</button>
+                <button id="restoreDefaults">Réinitialiser les paramètres par défaut</button>
+                <button class="clearAPIKey">Réinitialiser ma clé API</button>
             </div>
         </div>
 
@@ -250,6 +250,7 @@
         <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
         <script src="js/vendor/highstock.js"></script>
         <script src="js/console.js"></script>
+        <script src="js/lang/fr.js"></script>
         <script src="js/main.js"></script>
 
         <!-- Google analytics -->
