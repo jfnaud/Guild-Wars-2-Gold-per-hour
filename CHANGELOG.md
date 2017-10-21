@@ -1,3 +1,6 @@
+# 1.6 (2017-10-21)
+- Added French translation. Thank you Le Bus Magique!
+
 # 1.5 (2017-10-10)
 - Added Path of Fire currencies.
 
