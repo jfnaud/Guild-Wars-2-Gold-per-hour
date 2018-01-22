@@ -126,6 +126,9 @@
       wiki_url = i18n['wiki_url'];
     }
 
+    //Prevent caching
+    $.ajaxSetup({ cache: false });
+
     //Utility function for padding zeroes when displaying gold
     String.prototype.paddingLeft = function (paddingValue) {
         return String(paddingValue + this).slice(-paddingValue.length);
