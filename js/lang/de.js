@@ -19,7 +19,7 @@ var i18n = {
     'before fees': 'Vor den Gebühren',
     'Listing and selling fees': 'Angebots- und Verkaufsgebühren',
     'Result:': 'Ergebnis:',
-    'Verluste': 'Pertes',
+    'Losses': 'Verluste',
     'Are you sure you want to clear your saved API key?': 'Bist du dir sicher deinen API Schlüssel zurückzusetzen?',
     'Your saved API key has been cleared!': 'Dein API Schlüssel wurde zurückgesetzt!',
     'View item on the wiki (opens in a new tab)': 'Zeige das Item im Wiki (öffnet einen neuen Tab)'
