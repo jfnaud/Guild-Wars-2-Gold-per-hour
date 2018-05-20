@@ -52,7 +52,7 @@ label {
 }
 
 /* Language selection */
-#language {
+.language {
   position: absolute;
   top: 1.3em;
   right: 1.3em;
