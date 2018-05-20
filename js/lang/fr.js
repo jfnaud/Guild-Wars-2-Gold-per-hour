@@ -22,5 +22,5 @@ var i18n = {
   'Losses': 'Pertes',
   'Are you sure you want to clear your saved API key?': 'Êtes-vous sûr de vouloir réinitialiser votre clé API ?',
   'Your saved API key has been cleared!': 'Votre clé d\'API a été réinitialisée !',
-  'View item on the wiki (opens in a new tab)': 'Afficher l\'objet sur le wiki (s\'ouvre dans une nouvelle fenêtre)',
+  'View item on the wiki (opens in a new tab)': 'Afficher l\'objet sur le wiki (s\'ouvre dans une nouvelle fenêtre)'
 };
