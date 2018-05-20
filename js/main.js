@@ -70,43 +70,47 @@
     var updating = false;
     //Other currencies
     var currenciesOrder = {
-        4: 1,   //Gems
+        4: 1,   //Gem
         2: 2,   //Karma
-        23: 3,  //Spirit shards
-        3: 4,   //Laurels
-        18: 5,  //Transmutation charges
-        15: 6,  //Badges of honor
-        7: 7,   //Fractal relics
-        24: 8,  //Pristine fractal relics
-        16: 9,  //Guild commendations
-        25: 10, //Geodes
-        27: 11, //Bandit crests
-
-        19: 12, //Airship parts
-        22: 13, //Lumps of aurilium
-        20: 14, //Ley line crystals
-        28: 15, //Magnetite shards
-        32: 16, //Unbound magic
-        34: 17, //Trade Contract
-        35: 18, //Elegy Mosaic
-
-        33: 19, //Ascended Shards of Glory
-        30: 20, //PvP league tickets
-        31: 21, //Proof of heroics
-        36: 22, //Testimony of Heroics
-
-        5: 23,  //AC
-        9: 23,  //CM
-        11: 24, //TA
-        10: 25, //SE
-        13: 26, //CoF
-        12: 27, //HotW
-        14: 28, //CoE
-        6: 29,  //Arah
-
-        26: 30, //WvW claim tickets
-        29: 31  //Provisionner tokens
-
+        23: 3,  //Spirit Shard
+        3: 4,   //Laurel
+        16: 5,  //Guild Commendation
+        18: 6,  //Transmutation Charge
+        30: 7,  //PvP League Ticket
+        33: 8,  //Ascended Shards of Glory
+        15: 9,  //Badge of Honor
+        26: 10, //WvW Skirmish Claim Ticket
+        31: 11, //Proof of Heroics
+        36: 12, //Testimony of Heroics
+        25: 13, //Geode
+        43: 14, //Zephyrite Lockpick
+        27: 15, //Bandit Crest
+        40: 16, //Bandit Skeleton Key
+        19: 17, //Airship Part
+        41: 18, //Pact Crowbar
+        22: 19, //Lump of Aurillium
+        37: 20, //Exalted Key
+        20: 21, //Ley Line Crystal
+        42: 22, //Vial of Chak Acid
+        38: 23, //Machete
+        29: 24, //Provisioner Token
+        28: 25, //Magnetite Shard
+        32: 26, //Unbound Magic
+        34: 27, //Trade Contract
+        35: 28, //Elegy Mosaic
+        44: 29, //Trader's Key
+        39: 30, //Gaeting Crystal
+        45: 31, //Volatile Magic
+        7: 32,  //Fractal Relic
+        24: 33, //Pristine Fractal Relic
+        5: 34,  //Ascalonian Tear
+        9: 35,  //Seal of Beetletun
+        11: 36, //Deadly Bloom
+        10: 37, //Manifesto of the Moletariate
+        13: 38, //Flame Legion Charr Carving
+        12: 39, //Symbol of Koda
+        14: 40, //Knowledge Crystal
+        6: 41   //Shard of Zhaitan
     };
     var initialCurrencies = [];
     var currentCurrencies = [];
@@ -369,7 +373,7 @@
         goldSeries = goldGraph.highcharts().series[1];
 
         //Fetch all currencies
-        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36&lang='+lang).done(function(currencies) {
+        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45&lang='+lang).done(function(currencies) {
             var graphSeries = [];
 
             currencies.sort(function(a, b) {
@@ -1298,7 +1302,7 @@
             wallet.shift();
 
             if (first) {
-                initialCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36], function(e) {
+                initialCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45], function(e) {
                     var c = {
                         id: e,
                         value: 0
@@ -1316,7 +1320,7 @@
 
                 currentCurrencies = initialCurrencies;
             } else {
-                currentCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36], function(e) {
+                currentCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45], function(e) {
                     var c = {
                         id: e,
                         value: 0
