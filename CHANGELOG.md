@@ -1,5 +1,6 @@
 # 1.7 (2018-05-20)
 - Added German translation. Thank you Durzan666!
+- Added new currencies and keys.
 
 # 1.6 (2017-10-21)
 - Added French translation. Thank you Le Bus Magique!
