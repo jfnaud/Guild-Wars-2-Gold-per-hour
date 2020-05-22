@@ -69,49 +69,7 @@
     //Are we currently updating the page? Used to avoid spikes on the graph
     var updating = false;
     //Other currencies
-    var currenciesOrder = {
-        4: 1,   //Gem
-        2: 2,   //Karma
-        23: 3,  //Spirit Shard
-        3: 4,   //Laurel
-        16: 5,  //Guild Commendation
-        18: 6,  //Transmutation Charge
-        30: 7,  //PvP League Ticket
-        33: 8,  //Ascended Shards of Glory
-        15: 9,  //Badge of Honor
-        26: 10, //WvW Skirmish Claim Ticket
-        31: 11, //Proof of Heroics
-        36: 12, //Testimony of Heroics
-        25: 13, //Geode
-        43: 14, //Zephyrite Lockpick
-        27: 15, //Bandit Crest
-        40: 16, //Bandit Skeleton Key
-        19: 17, //Airship Part
-        41: 18, //Pact Crowbar
-        22: 19, //Lump of Aurillium
-        37: 20, //Exalted Key
-        20: 21, //Ley Line Crystal
-        42: 22, //Vial of Chak Acid
-        38: 23, //Machete
-        29: 24, //Provisioner Token
-        28: 25, //Magnetite Shard
-        32: 26, //Unbound Magic
-        34: 27, //Trade Contract
-        35: 28, //Elegy Mosaic
-        44: 29, //Trader's Key
-        39: 30, //Gaeting Crystal
-        45: 31, //Volatile Magic
-        7: 32,  //Fractal Relic
-        24: 33, //Pristine Fractal Relic
-        5: 34,  //Ascalonian Tear
-        9: 35,  //Seal of Beetletun
-        11: 36, //Deadly Bloom
-        10: 37, //Manifesto of the Moletariate
-        13: 38, //Flame Legion Charr Carving
-        12: 39, //Symbol of Koda
-        14: 40, //Knowledge Crystal
-        6: 41   //Shard of Zhaitan
-    };
+    var currencyIds = [];
     var initialCurrencies = [];
     var currentCurrencies = [];
     //Current version of the application
@@ -373,17 +331,17 @@
         goldSeries = goldGraph.highcharts().series[1];
 
         //Fetch all currencies
-        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45&lang='+lang).done(function(currencies) {
+        $.getJSON('https://api.guildwars2.com/v2/currencies?ids=all&lang='+lang).done(function(currencies) {
             var graphSeries = [];
 
-            currencies.sort(function(a, b) {
-                if(currenciesOrder[a.id] > currenciesOrder[b.id]) {
-                    return 1;
-                } else if(currenciesOrder[a.id] < currenciesOrder[b.id]) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+            currencies = currencies.sort(function(a, b) {
+                return a.order - b.order;
+            }).filter(function(currency) {
+                return currency.id !== 1;
+            });
+
+            currencyIds = currencies.map(function(currency) {
+                return currency.id;
             });
 
             $('#currencies').html('<table><tr><th><input type="checkbox" id="checkAllCurrencies"></th><th>'+_('Currency')+'</th><th>'+_('Initial')+'</th><th>'+_('Current')+'</th><th>'+_('Difference')+'</th></tr></table>');
@@ -1302,7 +1260,7 @@
             wallet.shift();
 
             if (first) {
-                initialCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45], function(e) {
+                initialCurrencies = $.map(currencyIds, function(e) {
                     var c = {
                         id: e,
                         value: 0
@@ -1320,7 +1278,7 @@
 
                 currentCurrencies = initialCurrencies;
             } else {
-                currentCurrencies = $.map([2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45], function(e) {
+                currentCurrencies = $.map(currencyIds, function(e) {
                     var c = {
                         id: e,
                         value: 0

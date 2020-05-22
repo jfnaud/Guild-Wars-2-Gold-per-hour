@@ -1,3 +1,6 @@
+# 1.7 (2020-05-22)
+- Added new currencies. Future ones should now be added automatically.
+
 # 1.7 (2018-05-20)
 - Added German translation. Thank you Durzan666!
 - Added new currencies and keys.
