@@ -9,7 +9,7 @@ var i18n = {
     'Initial': 'Initial',
     'Current': 'Momentan',
     'Difference': 'Differenz',
-    'Currencies acquisition over time': 'Wärhungszuwachs über Zeit',
+    'Currencies acquisition over time': 'Währungszuwachs über Zeit',
     'In your wallet:': 'In deiner Geldbörse:',
     'Waiting in the trading post:': 'Im Handelsposten wartend:',
     'Unit value:': 'Stückpreis:',
@@ -20,7 +20,7 @@ var i18n = {
     'Listing and selling fees': 'Angebots- und Verkaufsgebühren',
     'Result:': 'Ergebnis:',
     'Losses': 'Verluste',
-    'Are you sure you want to clear your saved API key?': 'Bist du dir sicher deinen API Schlüssel zurückzusetzen?',
+    'Are you sure you want to clear your saved API key?': 'Bist du dir sicher das du deinen API Schlüssel zurückzusetzen willst?',
     'Your saved API key has been cleared!': 'Dein API Schlüssel wurde zurückgesetzt!',
     'View item on the wiki (opens in a new tab)': 'Zeige das Item im Wiki (öffnet einen neuen Tab)'
 };
