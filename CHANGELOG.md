@@ -1,4 +1,7 @@
-# 1.7 (2020-05-22)
+# 1.9 (2020-08-02)
+- Fixed typos in german translations.
+
+# 1.8 (2020-05-22)
 - Added new currencies. Future ones should now be added automatically.
 
 # 1.7 (2018-05-20)
