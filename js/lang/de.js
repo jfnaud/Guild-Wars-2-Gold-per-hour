@@ -22,5 +22,6 @@ var i18n = {
     'Losses': 'Verluste',
     'Are you sure you want to clear your saved API key?': 'Bist du dir sicher das du deinen API Schlüssel zurückzusetzen willst?',
     'Your saved API key has been cleared!': 'Dein API Schlüssel wurde zurückgesetzt!',
-    'View item on the wiki (opens in a new tab)': 'Zeige das Item im Wiki (öffnet einen neuen Tab)'
+    'View item on the wiki (opens in a new tab)': 'Zeige das Item im Wiki (öffnet einen neuen Tab)',
+    'equipment_scan_warning_message': 'Sie haben gerade den Geräte-Scan-Typ geändert, was zu verwirrenden Ergebnissen führen kann. Sie sollten die Seite neu laden.'
 };

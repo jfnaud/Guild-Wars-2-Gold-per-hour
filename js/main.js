@@ -48,6 +48,8 @@
     var newItems = {};
     //Index of all the items that were deleted from the account since the launch of the application
     var oldItems = {};
+    //Index of all legendary items that are in the armory
+    var armoryItems = {};
     //Interval ID of the refresh
     var refreshID;
     //Gains and losses since the start
@@ -192,6 +194,16 @@
         localStorage.setItem('ignoreHidden', false);
     }
     $('#ignoreHidden').prop('checked', (localStorage.getItem('ignoreHidden') === 'true' ? true : false));
+
+    //Equipment scan type
+    if (localStorage.getItem('equipmentScanType') === null) {
+        localStorage.setItem('equipmentScanType', 'currentlyEquipped');
+    }
+    if (localStorage.getItem('equipmentScanType') === 'currentlyEquipped') {
+        $('#currentlyEquipped').prop('checked', true);
+    } else {
+        $('#allTabs').prop('checked', true);
+    }
 
     //Get the current version of the application
     $.getJSON('https://jfnaud.github.io/Guild-Wars-2-Gold-per-hour/currentVersion.json').done(function(json) {
@@ -577,7 +589,14 @@
         }
 
         //Launch every ajax calls. Wait for every one to complete before continuing. Each of those function return a deferred object.
-        $.when(fetchSharedInventory(first), fetchBank(first), fetchMaterials(first), fetchCharacters(first), fetchWallet(first)).then(function() {
+        $.when(
+            fetchArmory(first),
+            fetchSharedInventory(first),
+            fetchBank(first),
+            fetchMaterials(first),
+            fetchCharacters(first),
+            fetchWallet(first)
+        ).then(function() {
             return fetchTradingPost(first);
         }).then(function () {
             //Now that all the calls are made, we can update currentGold and currentIndex
@@ -996,7 +1015,7 @@
         return def;
     }
 
-    //This function fetch the items from the trading post
+    //This function fetches the items from the trading post
     function fetchTradingPost(first) {
         var tpDef = $.Deferred();
         var buyDef = $.Deferred();
@@ -1106,7 +1125,7 @@
         return tpDef;
     }
 
-    //This function fetch the items from the bank
+    //This function fetches the items from the bank
     function fetchBank(first) {
         var def = $.Deferred();
 
@@ -1143,7 +1162,7 @@
         return def;
     }
 
-    //This function fetch the items from the materials storage
+    //This function fetches the items from the materials storage
     function fetchMaterials(first) {
         var def = $.Deferred();
 
@@ -1180,40 +1199,54 @@
         return def;
     }
 
-    //This function fetch the items from the characters' inventory
+    //This function fetches the legendary items in the armory
+    function fetchArmory(first) {
+        var def = $.Deferred();
+        armoryItems = {};
+
+        $.getJSON('https://api.guildwars2.com/v2/account/legendaryarmory?access_token=' + token).done(function (items) {
+            //Building the index
+            items.forEach(function (item) {
+                if (item !== null && item.count) {
+                    armoryItems[item.id] = item;
+                    if (first) {
+                        //If not already in the index we add it
+                        if (initialIndex[item.id] === undefined) {
+                            initialIndex[item.id] = {
+                                count: item.count
+                            };
+                        } else {
+                            //Else we add to the total count
+                            initialIndex[item.id].count += item.count;
+                        }
+                    } else {
+                        //Build an index for current items
+                        if (tempIndex[item.id] === undefined) {
+                            tempIndex[item.id] = {
+                                count: item.count
+                            };
+                        } else {
+                            tempIndex[item.id].count += item.count;
+                        }
+                    }
+                }
+            });
+
+            def.resolve();
+        }).fail(failedRequest);
+
+        return def;
+    }
+
+    //This function fetches the items from the characters' inventory
     function fetchCharacters(first) {
         var def = $.Deferred();
+        var equipmentTabsRequests = [];
 
         $.getJSON('https://api.guildwars2.com/v2/characters?page=0&access_token=' + token).done(function (json) {
             //Building the index
             json.forEach(function (character) {
-                //Currently equipped items
-                character.equipment.forEach(function (item) {
-                    if(item !== null) {
-                        if (first) {
-                            //If not already in the index we add it
-                            if (initialIndex[item.id] === undefined) {
-                                initialIndex[item.id] = {
-                                    count: 1
-                                };
-                            } else {
-                                //Else we add to the total count
-                                initialIndex[item.id].count += 1;
-                            }
-                        } else {
-                            //Build an index for current items
-                            if (tempIndex[item.id] === undefined) {
-                                tempIndex[item.id] = {
-                                    count: 1
-                                };
-                            } else {
-                                tempIndex[item.id].count += 1;
-                            }
-                        }
-                    }
-                });
-
-                //Look also in the inventory (scan each bags)
+                //Look in the inventory (scan each bags)
                 character.bags.forEach(function (bag) {
                     if (bag !== null) {
                         //Loop on each slots
@@ -1243,10 +1276,88 @@
                         });
                     }
                 });
+
+
+                if (localStorage.getItem('equipmentScanType') === 'currentlyEquipped') {
+                    //Currently equipped items
+                    character.equipment.forEach(function (item) {
+                        if(item !== null && armoryItems[item.id] === undefined) {
+                            if (first) {
+                                //If not already in the index we add it
+                                if (initialIndex[item.id] === undefined) {
+                                    initialIndex[item.id] = {
+                                        count: 1
+                                    };
+                                } else {
+                                    //Else we add to the total count
+                                    initialIndex[item.id].count += 1;
+                                }
+                            } else {
+                                //Build an index for current items
+                                if (tempIndex[item.id] === undefined) {
+                                    tempIndex[item.id] = {
+                                        count: 1
+                                    };
+                                } else {
+                                    tempIndex[item.id].count += 1;
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    equipmentTabsRequests.push(fetchCharacterTabs(character.name, first));
+                }
             });
 
-            def.resolve();
+            if (localStorage.getItem('equipmentScanType') === 'currentlyEquipped') {
+                def.resolve();
+            } else {
+                // Resolve when all equipmentTabs have been processed
+                $.when.apply($, equipmentTabsRequests).then(function() {
+                    def.resolve();
+                });
+            }
         }).fail(failedRequest);
+
+        return def;
+    }
+
+    function fetchCharacterTabs(characterName, first) {
+        var def = $.Deferred();
+
+        //All equipment tabs
+        $.getJSON('https://api.guildwars2.com/v2/characters/' + characterName + '/equipmenttabs?page=0&access_token=' + token)
+            .done(function (equipmentTabs) {
+                equipmentTabs.forEach(function (equipmentTab) {
+                    equipmentTab.equipment.forEach(function (item) {
+                        if(item !== null && armoryItems[item.id] === undefined) {
+                            if (first) {
+                                //If not already in the index we add it
+                                if (initialIndex[item.id] === undefined) {
+                                    initialIndex[item.id] = {
+                                        count: 1
+                                    };
+                                } else {
+                                    //Else we add to the total count
+                                    initialIndex[item.id].count += 1;
+                                }
+                            } else {
+                                //Build an index for current items
+                                if (tempIndex[item.id] === undefined) {
+                                    tempIndex[item.id] = {
+                                        count: 1
+                                    };
+                                } else {
+                                    tempIndex[item.id].count += 1;
+                                }
+                            }
+                        }
+                    });
+                });
+
+                def.resolve();
+            })
+            .fail(failedRequest);
 
         return def;
     }
@@ -1761,6 +1872,16 @@
         computeGainsAndLosses();
     });
 
+    //Equipment scan type
+    var equipmentWarningMessage = 'You just changed the Equipment scan type. It may result in confusing results. You should consider reloading the page.';
+    if (typeof(i18n) != 'undefined' && i18n['equipment_scan_warning_message']) {
+      equipmentWarningMessage = i18n['equipment_scan_warning_message'];
+    }
+    $('[name=equipmentScanType]').on('change', function () {
+        alert(equipmentWarningMessage);
+        localStorage.setItem('equipmentScanType', $(this).val());
+    });
+
     //Restoring defaults settings
     $('#restoreDefaults').on('click', function() {
         localStorage.setItem('saveAPIKey', true);
@@ -1777,6 +1898,7 @@
             itemTypes.push($(this).data('type'));
         });
         localStorage.setItem('ignoreHidden', false);
+        localStorage.setItem('equipmentScanType', 'currentlyEquipped');
 
         $('#saveAPIKey').prop('checked', true);
         $('#toggleDetails').prop('checked', true);
@@ -1787,6 +1909,10 @@
         $('.itemType').prop('checked', true);
         $('#checkAllTypes').prop('checked', true);
         $('#ignoreHidden').prop('checked', false);
+        if ($('#allTabs').prop('checked')) {
+            alert(equipmentWarningMessage);
+        }
+        $('#currentlyEquipped').prop('checked', true);
 
         //Reset everything
         $('.description').show(ANIMATION_DURATION);

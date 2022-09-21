@@ -1,3 +1,7 @@
+# 1.10 (2022-09-20)
+- Added a new setting to scan all equipment templates instead of only the currently equipped items.
+- Legendary items that are bound to the account will no longer appear as gained or lost when changing equipment template.
+
 # 1.9 (2020-08-02)
 - Fixed typos in german translations.
 
