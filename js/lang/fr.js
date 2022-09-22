@@ -21,7 +21,7 @@ var i18n = {
   'Result:': 'Résultat :',
   'Losses': 'Pertes',
   'Are you sure you want to clear your saved API key?': 'Êtes-vous sûr de vouloir réinitialiser votre clé API ?',
-  'Your saved API key has been cleared!': 'Votre clé d\'API a été réinitialisée !',
+  'Your saved API key has been cleared!': 'Votre clé d\'API a été réinitialisée! Veuillez recharger la page pour saisir à nouveau votre clé.',
   'View item on the wiki (opens in a new tab)': 'Afficher l\'objet sur le wiki (s\'ouvre dans une nouvelle fenêtre)',
   'equipment_scan_warning_message': 'Vous venez de changer le type de scan pour l\'équipement, ce qui peut mener à des résultats étranges. Vous devriez considérer recharger la page.'
 };
