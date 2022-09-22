@@ -1,3 +1,6 @@
+# 1.10.1 (2022-09-21)
+- The application now handles the error that occurs when the "unlocks" permission is not granted.
+
 # 1.10 (2022-09-20)
 - Added a new setting to scan all equipment templates instead of only the currently equipped items.
 - Legendary items that are bound to the account will no longer appear as gained or lost when changing equipment template.
