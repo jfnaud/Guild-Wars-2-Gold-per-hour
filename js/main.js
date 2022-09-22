@@ -466,7 +466,11 @@
 
     //Handles failed request
     function failedRequest(jqxhr) {
-        var json = JSON.parse(jqxhr.responseText);
+        var json = jqxhr.responseText ?
+            JSON.parse(jqxhr.responseText) : 
+            {
+                error: 'Make sure all the required permissions are granted in your API key. The "unlocks" permissions is now required.'
+            };
         var errorMessage = (json.text ? json.text : json.error);
 
         if (jqxhr.status === 400 || jqxhr.status === 503) {
@@ -478,7 +482,7 @@
         } else if (jqxhr.status === 408) {
             $('#warning').html('<b>Oops!</b> A call to an API endpoint took too long to complete. Please check your Internet connection. # ' + errorMessage + ' # <span class="close">Close</span>');
         } else {
-            $('#warning').html('<b>Oops!</b> Something went wrong. # ' + errorMessage + ' # <span class="close">Close</span>');
+            $('#warning').html('<b>Oops!</b> Something went wrong. ' + errorMessage + ' <span class="close">Close</span>');
         }
 
         $('#warning').show().position({my: 'left bottom', at: 'left bottom', of: window});
