@@ -2011,7 +2011,7 @@
         if(confirm(_('Are you sure you want to clear your saved API key?'))) {
             $('#apiKey').val('');
             localStorage.setItem('APIKey', '');
-            alert(_('Your saved API key has been cleared!'));
+            alert(_('Your saved API key has been cleared! Please reload the page to enter your key again.'));
         }
     });
 
